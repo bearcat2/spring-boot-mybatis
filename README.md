@@ -9,11 +9,11 @@ spring boot + mybatis + pagehelper
 
 #### 安装教程
 
-1. 在数据中导入 resource下sql目录下的table_data.sql脚本
+1. 数据库导入 resources目录下sql目录下的table_data.sql脚本
 
 #### 使用说明
 
-1. 运行test目录下的SysUserMapperTest类的junit测试方法
+1. 运行test目录下的SysUserMapperTest类的junit单元测试方法
 
 #### 参与贡献
 
