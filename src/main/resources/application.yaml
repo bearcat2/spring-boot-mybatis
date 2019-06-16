@@ -43,13 +43,17 @@ spring:
             # 配置监控统计拦截的filters
             filters: stat,wall
             async-init: true
+    # thymeleaf 配置
+    thymeleaf:
+        # 控制不缓存页面,避免刷新不显示最新内容,线上时记得开启,提升页面响应速度
+        cache: false
 
 # mybatis 配置
 mybatis:
     # mybatis主配置文件所在路径
     config-location: classpath:mybatis/mybatis.cfg.xml
     # 给下面包及所有子包下的类取别名(默认为类名)
-    type-aliases-package: com.bearcat2.entity
+    #    type-aliases-package: com.bearcat2.entity
     # 指定mapper映射文件的位置
     mapper-locations:
         - classpath:mybatis/mapper/**/*.xml
@@ -61,3 +65,8 @@ pagehelper:
     reasonable: true
     supportMethodsArguments: true
     params: count=countSql
+
+# 配置项目名,默认 /
+#server:
+#    servlet:
+#        context-path: /bearcat2

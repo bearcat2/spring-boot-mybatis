@@ -1,106 +1,108 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.bearcat2.mapper.system.SysUserMapper" >
-  <resultMap id="BaseResultMap" type="com.bearcat2.entity.system.SysUser" >
-    <id column="su_id" property="suId" jdbcType="INTEGER" />
-    <result column="su_login_name" property="suLoginName" jdbcType="VARCHAR" />
-    <result column="su_real_name" property="suRealName" jdbcType="VARCHAR" />
-    <result column="su_password" property="suPassword" jdbcType="VARCHAR" />
-    <result column="su_create_time" property="suCreateTime" jdbcType="TIMESTAMP" />
-    <result column="su_update_time" property="suUpdateTime" jdbcType="TIMESTAMP" />
-  </resultMap>
-  <sql id="Example_Where_Clause" >
-    <where >
-      <foreach collection="oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue" >
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue" >
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue" >
-                  and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
+<mapper namespace="com.bearcat2.mapper.system.SysUserMapper">
+    <resultMap id="BaseResultMap" type="com.bearcat2.entity.system.SysUser">
+        <id column="su_id" property="suId" jdbcType="INTEGER"/>
+        <result column="su_login_name" property="suLoginName" jdbcType="VARCHAR"/>
+        <result column="su_real_name" property="suRealName" jdbcType="VARCHAR"/>
+        <result column="su_password" property="suPassword" jdbcType="VARCHAR"/>
+        <result column="su_create_time" property="suCreateTime" jdbcType="TIMESTAMP"/>
+        <result column="su_update_time" property="suUpdateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
             </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Update_By_Example_Where_Clause" >
-    <where >
-      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue" >
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue" >
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue" >
-                  and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
             </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Base_Column_List" >
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
     su_id, su_login_name, su_real_name, su_password, su_create_time, su_update_time
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.bearcat2.entity.system.SysUserExample" >
-    select
-    <if test="distinct" >
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    from sys_user
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null" >
-      order by ${orderByClause}
-    </if>
-  </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
-    <include refid="Base_Column_List" />
-    from sys_user
-    where su_id = #{suId,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.bearcat2.entity.system.SysUserExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from sys_user
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_user
+        where su_id = #{suId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from sys_user
     where su_id = #{suId,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.bearcat2.entity.system.SysUserExample" >
-    delete from sys_user
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-  </delete>
-  <insert id="insert" parameterType="com.bearcat2.entity.system.SysUser" >
+    <delete id="deleteByExample" parameterType="com.bearcat2.entity.system.SysUserExample">
+        delete from sys_user
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.bearcat2.entity.system.SysUser">
     insert into sys_user (su_id, su_login_name, su_real_name, 
       su_password, su_create_time, su_update_time
       )
@@ -108,115 +110,116 @@
       #{suPassword,jdbcType=VARCHAR}, #{suCreateTime,jdbcType=TIMESTAMP}, #{suUpdateTime,jdbcType=TIMESTAMP}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.bearcat2.entity.system.SysUser" >
-    insert into sys_user
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="suId != null" >
-        su_id,
-      </if>
-      <if test="suLoginName != null" >
-        su_login_name,
-      </if>
-      <if test="suRealName != null" >
-        su_real_name,
-      </if>
-      <if test="suPassword != null" >
-        su_password,
-      </if>
-      <if test="suCreateTime != null" >
-        su_create_time,
-      </if>
-      <if test="suUpdateTime != null" >
-        su_update_time,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="suId != null" >
-        #{suId,jdbcType=INTEGER},
-      </if>
-      <if test="suLoginName != null" >
-        #{suLoginName,jdbcType=VARCHAR},
-      </if>
-      <if test="suRealName != null" >
-        #{suRealName,jdbcType=VARCHAR},
-      </if>
-      <if test="suPassword != null" >
-        #{suPassword,jdbcType=VARCHAR},
-      </if>
-      <if test="suCreateTime != null" >
-        #{suCreateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="suUpdateTime != null" >
-        #{suUpdateTime,jdbcType=TIMESTAMP},
-      </if>
-    </trim>
-  </insert>
-  <select id="countByExample" parameterType="com.bearcat2.entity.system.SysUserExample" resultType="java.lang.Integer" >
-    select count(*) from sys_user
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-  </select>
-  <update id="updateByExampleSelective" parameterType="map" >
-    update sys_user
-    <set >
-      <if test="record.suId != null" >
-        su_id = #{record.suId,jdbcType=INTEGER},
-      </if>
-      <if test="record.suLoginName != null" >
+    <insert id="insertSelective" parameterType="com.bearcat2.entity.system.SysUser">
+        insert into sys_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="suId != null">
+                su_id,
+            </if>
+            <if test="suLoginName != null">
+                su_login_name,
+            </if>
+            <if test="suRealName != null">
+                su_real_name,
+            </if>
+            <if test="suPassword != null">
+                su_password,
+            </if>
+            <if test="suCreateTime != null">
+                su_create_time,
+            </if>
+            <if test="suUpdateTime != null">
+                su_update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="suId != null">
+                #{suId,jdbcType=INTEGER},
+            </if>
+            <if test="suLoginName != null">
+                #{suLoginName,jdbcType=VARCHAR},
+            </if>
+            <if test="suRealName != null">
+                #{suRealName,jdbcType=VARCHAR},
+            </if>
+            <if test="suPassword != null">
+                #{suPassword,jdbcType=VARCHAR},
+            </if>
+            <if test="suCreateTime != null">
+                #{suCreateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="suUpdateTime != null">
+                #{suUpdateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.bearcat2.entity.system.SysUserExample"
+            resultType="java.lang.Integer">
+        select count(*) from sys_user
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update sys_user
+        <set>
+            <if test="record.suId != null">
+                su_id = #{record.suId,jdbcType=INTEGER},
+            </if>
+            <if test="record.suLoginName != null">
+                su_login_name = #{record.suLoginName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.suRealName != null">
+                su_real_name = #{record.suRealName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.suPassword != null">
+                su_password = #{record.suPassword,jdbcType=VARCHAR},
+            </if>
+            <if test="record.suCreateTime != null">
+                su_create_time = #{record.suCreateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.suUpdateTime != null">
+                su_update_time = #{record.suUpdateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update sys_user
+        set su_id = #{record.suId,jdbcType=INTEGER},
         su_login_name = #{record.suLoginName,jdbcType=VARCHAR},
-      </if>
-      <if test="record.suRealName != null" >
         su_real_name = #{record.suRealName,jdbcType=VARCHAR},
-      </if>
-      <if test="record.suPassword != null" >
         su_password = #{record.suPassword,jdbcType=VARCHAR},
-      </if>
-      <if test="record.suCreateTime != null" >
         su_create_time = #{record.suCreateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.suUpdateTime != null" >
-        su_update_time = #{record.suUpdateTime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    <if test="_parameter != null" >
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExample" parameterType="map" >
-    update sys_user
-    set su_id = #{record.suId,jdbcType=INTEGER},
-      su_login_name = #{record.suLoginName,jdbcType=VARCHAR},
-      su_real_name = #{record.suRealName,jdbcType=VARCHAR},
-      su_password = #{record.suPassword,jdbcType=VARCHAR},
-      su_create_time = #{record.suCreateTime,jdbcType=TIMESTAMP},
-      su_update_time = #{record.suUpdateTime,jdbcType=TIMESTAMP}
-    <if test="_parameter != null" >
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.bearcat2.entity.system.SysUser" >
-    update sys_user
-    <set >
-      <if test="suLoginName != null" >
-        su_login_name = #{suLoginName,jdbcType=VARCHAR},
-      </if>
-      <if test="suRealName != null" >
-        su_real_name = #{suRealName,jdbcType=VARCHAR},
-      </if>
-      <if test="suPassword != null" >
-        su_password = #{suPassword,jdbcType=VARCHAR},
-      </if>
-      <if test="suCreateTime != null" >
-        su_create_time = #{suCreateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="suUpdateTime != null" >
-        su_update_time = #{suUpdateTime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where su_id = #{suId,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.bearcat2.entity.system.SysUser" >
+        su_update_time = #{record.suUpdateTime,jdbcType=TIMESTAMP}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.bearcat2.entity.system.SysUser">
+        update sys_user
+        <set>
+            <if test="suLoginName != null">
+                su_login_name = #{suLoginName,jdbcType=VARCHAR},
+            </if>
+            <if test="suRealName != null">
+                su_real_name = #{suRealName,jdbcType=VARCHAR},
+            </if>
+            <if test="suPassword != null">
+                su_password = #{suPassword,jdbcType=VARCHAR},
+            </if>
+            <if test="suCreateTime != null">
+                su_create_time = #{suCreateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="suUpdateTime != null">
+                su_update_time = #{suUpdateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where su_id = #{suId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.bearcat2.entity.system.SysUser">
     update sys_user
     set su_login_name = #{suLoginName,jdbcType=VARCHAR},
       su_real_name = #{suRealName,jdbcType=VARCHAR},

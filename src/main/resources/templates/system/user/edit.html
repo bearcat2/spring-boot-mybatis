@@ -1,0 +1,24 @@
+<form class="layui-form" id="layui-form-page" th:object="${sysUser}">
+    <input type="hidden" name="suId" th:value="*{suId}">
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">登录名</label>
+        <div class="layui-input-block">
+            <input type="text" name="suLoginName" th:value="*{suLoginName}" placeholder="请输入登录名" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">真实姓名</label>
+        <div class="layui-input-block">
+            <input type="text" name="suRealName" th:value="*{suRealName}" placeholder="请输入真实姓名" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="form">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>

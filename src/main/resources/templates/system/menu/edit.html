@@ -1,0 +1,80 @@
+<style>
+    #tree1 ul + ul {
+        border-top: 1px dashed #dddddd;
+    }
+
+    .layui-row {
+        margin-top: 16px;
+    }
+
+    .layui-form-item {
+        width: 510px;
+    }
+</style>
+<div class="layui-row">
+    <div class="layui-col-12">
+        <form class="layui-form" th:object="${menu}">
+
+            <input type="hidden" name="spId" th:value="*{spId}">
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">菜单名</label>
+                <div class="layui-input-block">
+                    <input type="text" name="spName" lay-verify="required" th:value="*{spName}"
+                           autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">URL</label>
+                <div class="layui-input-block">
+                    <input type="text" name="spUri" th:value="*{spUri}" placeholder="请输入URL"
+                           autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">资源类型</label>
+                <div class="layui-input-block">
+                    <select name="spType" lay-verify="required">
+                        <option value="1" th:selected="*{spType == 1}">模块</option>
+                        <option value="2" th:selected="*{spType == 2}">菜单</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">上级菜单</label>
+                <div class="layui-input-block">
+                    <div class="layui-unselect layui-form-select">
+                        <div class="layui-select-title" style="position: relative;">
+                            <input type="text" placeholder="上级菜单" autocomplete="off"
+                                   class="layui-input layui-unselect">
+                            <input type="hidden" name="spParentId" id="pId">
+                            <i class="layui-edge"></i>
+                        </div>
+                        <div id="tree1" class="layui-anim"
+                             style="display: none;border: 1px solid #e2e2e2;padding: 5px;margin-top: 5px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">序号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="spOrderd" lay-verify="required" th:value="*{spOrderd}"
+                           autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="form">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

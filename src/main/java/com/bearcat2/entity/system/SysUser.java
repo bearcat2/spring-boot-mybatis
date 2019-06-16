@@ -1,9 +1,11 @@
 package com.bearcat2.entity.system;
 
+import com.bearcat2.entity.common.BaseEntity;
+
 import java.io.Serializable;
 import java.util.Date;
 
-public class SysUser implements Serializable {
+public class SysUser extends BaseEntity implements Serializable {
     /**
      * 用户id,自增
      */
