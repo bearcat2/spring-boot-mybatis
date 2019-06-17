@@ -106,6 +106,7 @@ layui.use(['treeTable', 'commonTable', 'treeSelect', 'layer', 'jquery'], functio
             search: true,
             // 点击回调
             click: function (data) {
+                // 设置父节点id 到表单隐藏域
                 $('#spParentId').val(data.current.id);
             }
         });
