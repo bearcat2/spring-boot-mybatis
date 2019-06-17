@@ -1,6 +1,7 @@
-layui.use(['treeTable', 'layer', 'jquery', 'commonTable'], function () {
+layui.use(['treeTable', 'commonTable', 'treeSelect', 'layer', 'jquery'], function () {
     var treeTable = layui.treeTable,
         commonTable = layui.commonTable,
+        treeSelect = layui.treeSelect,
         layer = layui.layer,
         $ = layui.jquery;
 
@@ -89,4 +90,24 @@ layui.use(['treeTable', 'layer', 'jquery', 'commonTable'], function () {
             }
         );
     });
+
+    // 定义回调成功函数,type 1 新增,2
+    window.layerPageSuccessCallback = function (type) {
+        treeSelect.render({
+            // 选择器
+            elem: '#treeSelect',
+            // 数据
+            data: '/sysMenu/getTreeSelectNode',
+            // 异步加载方式：get/post，默认get
+            type: 'post',
+            // 占位符
+            placeholder: '请选择上级菜单',
+            // 是否开启搜索功能：true/false，默认false
+            search: true,
+            // 点击回调
+            click: function (data) {
+                $('#spParentId').val(data.current.id);
+            }
+        });
+    };
 });

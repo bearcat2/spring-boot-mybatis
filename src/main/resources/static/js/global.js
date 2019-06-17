@@ -7,8 +7,7 @@ layui.config({
 
 // 日期时间格式
 const DATE_TIME_FORMAT = "yyyy-MM-dd hh:mm:ss";
-// 日期格式
-const DATE_FORMAT = "yyyy-MM-dd";
+
 // 像后台发起请求，成功时返回的code值
 const REQUEST_SUCCESS_CODE = 0;
 

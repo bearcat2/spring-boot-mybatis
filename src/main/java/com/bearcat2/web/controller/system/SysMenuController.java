@@ -1,6 +1,7 @@
 package com.bearcat2.web.controller.system;
 
 import com.bearcat2.entity.common.LayuiResult;
+import com.bearcat2.entity.common.TreeSelectNode;
 import com.bearcat2.entity.common.TreeTableNode;
 import com.bearcat2.entity.system.SysPrivilege;
 import com.bearcat2.service.system.SysPrivilegeService;
@@ -39,7 +40,7 @@ public class SysMenuController {
     @ResponseBody
     @PostMapping("/list")
     public List<TreeTableNode> list() {
-        return this.sysPrivilegeService.getMenu();
+        return this.sysPrivilegeService.getTreeTableNode();
     }
 
     @GetMapping("/edit_ui")
@@ -75,5 +76,11 @@ public class SysMenuController {
     public LayuiResult delete(TreeTableNode treeTableNode) {
         this.sysPrivilegeService.deleteByPrimaryKey(treeTableNode.getId());
         return LayuiResult.success();
+    }
+
+    @ResponseBody
+    @PostMapping("/getTreeSelectNode")
+    public List<TreeSelectNode> getTreeSelectNode() {
+        return this.sysPrivilegeService.getTreeSelectNode();
     }
 }

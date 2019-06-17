@@ -1,6 +1,7 @@
 package com.bearcat2.service.system;
 
 import com.bearcat2.entity.common.LayuiResult;
+import com.bearcat2.entity.common.TreeSelectNode;
 import com.bearcat2.entity.common.TreeTableNode;
 import com.bearcat2.entity.system.SysPrivilege;
 import com.bearcat2.entity.system.SysPrivilegeExample;
@@ -75,10 +76,17 @@ public interface SysPrivilegeService extends CommonService<SysPrivilege, SysPriv
     List<SysRolePrivilege> findByRoleId(Integer roleId);
 
     /**
-     * 获取系统所有菜单
+     * 获取前端treeTable插件所需内容
      *
      * @return TreeTableNode - 前端treetable插件所需格式
      */
-    List<TreeTableNode> getMenu();
+    List<TreeTableNode> getTreeTableNode();
 
+
+    /**
+     * 获取前端 treeSelect 插件所需内容
+     *
+     * @return TreeSelectNode - 前端 treeSelect 插件所需格式
+     */
+    List<TreeSelectNode> getTreeSelectNode();
 }

@@ -45,16 +45,8 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">上级菜单</label>
                 <div class="layui-input-block">
-                    <div class="layui-unselect layui-form-select">
-                        <div class="layui-select-title" style="position: relative;">
-                            <input type="text" placeholder="上级菜单" autocomplete="off"
-                                   class="layui-input layui-unselect">
-                            <input type="hidden" name="spParentId" id="pId">
-                            <i class="layui-edge"></i>
-                        </div>
-                        <div id="tree1" class="layui-anim"
-                             style="display: none;border: 1px solid #e2e2e2;padding: 5px;margin-top: 5px;"></div>
-                    </div>
+                    <input type="text" id="treeSelect" lay-filter="treeSelect" class="layui-input">
+                    <input type="hidden" id="spParentId" name="spParentId">
                 </div>
             </div>
 

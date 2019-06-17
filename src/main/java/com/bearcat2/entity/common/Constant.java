@@ -18,4 +18,13 @@ public class Constant {
 
     /** yyyy-MM-dd'T'HH:mm:ss 日期格式 */
     public static final String DATA_T_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
+
+    /** 权限类型为模块 */
+    public static final int MODULE_PRIVILEGE_TYPE = 1;
+
+    /** 权限类型为菜单 */
+    public static final int MENU_PRIVILEGE_TYPE = 2;
+
+    /** 权限类型为按钮 */
+    public static final int BUTTON_PRIVILEGE_TYPE = 3;
 }

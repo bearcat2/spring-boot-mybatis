@@ -1,7 +1,10 @@
 package com.bearcat2.service.impl.system;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
+import com.bearcat2.entity.common.Constant;
 import com.bearcat2.entity.common.LayuiResult;
+import com.bearcat2.entity.common.TreeSelectNode;
 import com.bearcat2.entity.common.TreeTableNode;
 import com.bearcat2.entity.system.SysPrivilege;
 import com.bearcat2.entity.system.SysPrivilegeExample;
@@ -109,12 +112,8 @@ public class SysPrivilegeServiceImpl extends CommonServiceImpl<SysPrivilege, Sys
     }
 
     @Override
-    public List<TreeTableNode> getMenu() {
-        SysPrivilegeExample example = new SysPrivilegeExample();
-        example.createCriteria()
-                .andSpTypeIn(Arrays.asList(1, 2));
-        example.setOrderByClause("sp_orderd");
-        List<SysPrivilege> sysPrivileges = this.selectByExample(example);
+    public List<TreeTableNode> getTreeTableNode() {
+        List<SysPrivilege> sysPrivileges = this.getSysMenu();
 
         List<TreeTableNode> treeTableNodes = new ArrayList<>(sysPrivileges.size());
         for (SysPrivilege sysPrivilege : sysPrivileges) {
@@ -128,5 +127,65 @@ public class SysPrivilegeServiceImpl extends CommonServiceImpl<SysPrivilege, Sys
             treeTableNodes.add(treeTableNode);
         }
         return treeTableNodes;
+    }
+
+    @Override
+    public List<TreeSelectNode> getTreeSelectNode() {
+        List<TreeSelectNode> treeSelectNodes = new ArrayList<>();
+
+        List<SysPrivilege> sysPrivileges = this.getSysMenu();
+        for (SysPrivilege sysPrivilege : sysPrivileges) {
+            if (sysPrivilege.getSpType() == Constant.MODULE_PRIVILEGE_TYPE) {
+                // 权限为模块
+                TreeSelectNode treeSelectNode = new TreeSelectNode();
+                treeSelectNode.setId(sysPrivilege.getSpId());
+                treeSelectNode.setName(sysPrivilege.getSpName());
+
+                // 设置子节点内容,即找出该模块下所有子菜单设置到子节点中
+                setChildren(sysPrivileges, treeSelectNode);
+                treeSelectNodes.add(treeSelectNode);
+            }
+        }
+        return treeSelectNodes;
+    }
+
+    /**
+     * 设置子节点内容
+     *
+     * @param sysPrivileges  系统权限集合
+     * @param treeSelectNode 前端treeSelect插件所需格式对象
+     */
+    private void setChildren(List<SysPrivilege> sysPrivileges, TreeSelectNode treeSelectNode) {
+        List<TreeSelectNode> childrens = new ArrayList<>();
+        for (SysPrivilege sysPrivilege : sysPrivileges) {
+            if (sysPrivilege.getSpType() == Constant.MENU_PRIVILEGE_TYPE &&
+                    sysPrivilege.getSpParentId().equals(treeSelectNode.getId())) {
+                TreeSelectNode childrenTreeSelectNode = new TreeSelectNode();
+                childrenTreeSelectNode.setId(sysPrivilege.getSpId());
+                childrenTreeSelectNode.setName(sysPrivilege.getSpName());
+
+                // 递归设置子节点内容
+                setChildren(sysPrivileges, childrenTreeSelectNode);
+
+                childrens.add(childrenTreeSelectNode);
+            }
+        }
+
+        if(CollUtil.isNotEmpty(childrens)){
+            treeSelectNode.setChildren(childrens);
+        }
+    }
+
+    /**
+     * 获取系统菜单
+     *
+     * @return 系统菜单集合
+     */
+    private List<SysPrivilege> getSysMenu() {
+        SysPrivilegeExample example = new SysPrivilegeExample();
+        example.createCriteria()
+                .andSpTypeIn(Arrays.asList(Constant.MODULE_PRIVILEGE_TYPE, Constant.MENU_PRIVILEGE_TYPE));
+        example.setOrderByClause("sp_orderd");
+        return this.selectByExample(example);
     }
 }

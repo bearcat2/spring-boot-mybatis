@@ -1,0 +1,68 @@
+<!DOCTYPE html >
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>用户登陆</title>
+
+    <style type="text/css">
+        body {
+            background-color: #f1faff;
+        }
+    </style>
+
+    <link rel="stylesheet" href="../static/libs/layui/css/layui.css" th:href="@{/libs/layui/css/layui.css}">
+</head>
+<body>
+<div>
+    <div class="layui-container" style="position: absolute;top: 25%; left: 10%">
+        <div class="layui-row">
+            <div class="layui-col-md6 layui-col-md-offset4">
+                <form class="layui-form layui-form-pane">
+                    <input type="hidden" id="baseUrl" th:value="${#httpServletRequest.contextPath}">
+                    <div class="layui-form-item">
+                        <h3>通用前端管理系统登录</h3>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">用户名：</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="username" class="layui-input" lay-verify="required"
+                                   placeholder="请输入用户名" autocomplete="on" maxlength="20"/>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">密码：</label>
+                        <div class="layui-input-inline">
+                            <input type="password" name="password" class="layui-input" lay-verify="required"
+                                   placeholder="请输入密码" maxlength="20"/>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">验证码：</label>
+                            <div class="layui-input-inline" style="width: 100px;">
+                                <input type="text" name="clientCaptcha" class="layui-input" lay-verify="required"
+                                       placeholder="请输入验证码" maxlength="4"/>
+                            </div>
+
+                            <div class="layui-input-inline">
+                                <img src="#" th:src="@{/getCaptcha}" title="单击刷新验证码" id="captcha">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <button type="reset" class="layui-btn layui-btn-danger btn-reset">重置</button>
+                        <button type="button" class="layui-btn btn-submit" lay-submit lay-filter="login">立即登录</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../static/libs/layui/layui.js" th:src="@{/libs/layui/layui.js}"></script>
+<script src="../static/js/login.js" th:src="@{/js/login.js}"></script>
+</body>
+</html>

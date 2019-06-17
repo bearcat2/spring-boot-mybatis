@@ -78,6 +78,8 @@ layui.define(['table', 'jquery', 'form'], function (exports) {
         var defaultTilte = '';
         var defaultWidth = 'auto';
         var defaultHeight = 'auto';
+        // 页面弹出成功是否开启回调函数便于在外部处理一些逻辑,默认不开启
+        var defaultIsCallback = false;
 
 
         switch (type) {
@@ -110,9 +112,13 @@ layui.define(['table', 'jquery', 'form'], function (exports) {
             var tilte = $selector.data('title');
             var width = $selector.data('width');
             var height = $selector.data('height');
+            var isCallback = $selector.data('callback');
+
+            // 优先使用外部配置的属性,外部没配置的使用默认设置
             tilte = tilte ? tilte : defaultTilte;
             width = width ? width + 'px' : defaultWidth;
             height = height ? height + 'px' : defaultHeight;
+            isCallback = isCallback ? true : defaultIsCallback;
             var area = [];
             area.push(width);
             area.push(height);
@@ -122,6 +128,7 @@ layui.define(['table', 'jquery', 'form'], function (exports) {
                 type: 1,
                 title: tilte,
                 skin: 'layui-layer-lan',
+                // maxmin: true,
                 area: area,
                 content: data,
                 // resize: false,
@@ -129,11 +136,15 @@ layui.define(['table', 'jquery', 'form'], function (exports) {
                     // 渲染表单元素
                     form.render();
 
+
                     // 页面加载成功,改变下布局
                     $('#layui-form-page').css({
                         marginTop: '20px',
                         marginRight: '30px'
                     });
+
+                    // 避免select框被页面覆盖
+                    $('.layui-layer-page .layui-layer-content').css('overflow', 'visible');
 
                     if (isSubmit) {
                         // 监控表单提交
@@ -162,6 +173,11 @@ layui.define(['table', 'jquery', 'form'], function (exports) {
                             //阻止表单跳转(同步)
                             return false;
                         });
+                    }
+
+                    // 回调函数
+                    if (isCallback) {
+                        layerPageSuccessCallback(type);
                     }
                 },
                 cancel: function () {

@@ -8,7 +8,7 @@
     <body>
 
         <div class="layui-btn-container" style="margin-top: 10px">
-            <button type="button" class="layui-btn layui-btn-normal layui-btn-sm" id="add">增加</button>
+            <button type="button" class="layui-btn layui-btn-normal layui-btn-sm" id="add">新增</button>
             <!--<button type="button" class="layui-btn layui-btn-danger layui-btn-sm batchDelete">批量删除</button>-->
         </div>
 
@@ -16,8 +16,10 @@
 
         <div>
             <!--定义页面层所需的一些配置，比如title，width,height等,如果宽高未设置默认为auto.-->
-            <input type="hidden" id="addConfig" data-title="新增菜单" data-width="550" data-height="390">
-            <input type="hidden" id="editConfig" data-title="编辑菜单" data-width="550" data-height="390">
+            <input type="hidden" id="addConfig" data-title="新增菜单" data-width="550" data-height="390"
+                   data-callback="true">
+            <input type="hidden" id="editConfig" data-title="编辑菜单" data-width="550" data-height="390"
+                   data-callback="true">
         </div>
 
         <script src="../../../static/libs/layui/layui.js" th:src="@{/libs/layui/layui.js}"></script>
