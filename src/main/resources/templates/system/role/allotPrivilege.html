@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>分配权限</title>
+
+    <link rel="stylesheet" href="../../../static/libs/layui/css/layui.css" th:href="@{/libs/layui/css/layui.css}">
+</head>
+<body>
+
+
+<div class="layui-btn-container" style="position: absolute;right: 0;top: 8px;z-index: 1;">
+    <button class="layui-btn layui-btn-sm" id="checkAll">全选</button>
+    <button class="layui-btn layui-btn-sm" id="noCheckAll">全不选</button>
+    <button class="layui-btn layui-btn-sm" id="reverseChcek">反选</button>
+    <button class="layui-btn layui-btn-sm" id="affirm">确认</button>
+</div>
+
+<div style="clear: both"></div>
+
+
+<!--权限树节点父容器-->
+<div id="allotPrivilege"></div>
+
+<input type="hidden" id="roleId" th:value="${roleId}">
+
+<script src="../../../static/libs/layui/layui.js" th:src="@{/libs/layui/layui.js}"></script>
+<script src="../../../static/js/global.js" th:src="@{/js/global.js}"></script>
+<script src="../../../static/js/system/role/list.js" th:src="@{/js/system/role/list.js}"></script>
+
+<script>
+    layui.use(['tree', 'jquery', 'form', 'layer'], function () {
+        var tree = layui.tree,
+            form = layui.form,
+            layer = layui.layer;
+        $ = layui.jquery;
+
+        var data = {roleId: $('#roleId').val()};
+        $.post('/sysRole/getLayuiTreeNode', data, function (res) {
+            tree.render({
+                elem: '#allotPrivilege',
+                data: res,
+                showCheckbox: true,
+                id: 'treeNode'
+            });
+
+            form.render();
+        }, 'json');
+
+        // 全选
+        $('#checkAll').on('click', function () {
+            $(":checkbox").prop('checked', true);
+            form.render();
+        });
+
+        // 全不选
+        $('#noCheckAll').on('click', function () {
+            $(":checkbox").prop('checked', false);
+            form.render();
+        });
+
+        // 反选
+        $('#reverseChcek').on('click', function () {
+            $(":checkbox").prop('checked', function (i, attr) {
+                return !attr;
+            });
+            form.render();
+        });
+
+        // 确认
+        $('#affirm').on('click', function () {
+            // 获取用户所有选中的菜单并拼装后台所需的格式
+            var checkData = tree.getChecked('treeNode');
+            if (checkData.length === 0) {
+                layer.msg("您没有选中任何权限,无法提交");
+                return;
+            }
+
+            var objArr = [];
+            recursionHandleCheckedData(checkData, objArr);
+            $.ajax({
+                url: '/sysRole/allotPrivilege',
+                data: JSON.stringify(objArr),
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (data) {
+                    if (data.code === REQUEST_SUCCESS_CODE) {
+                        // 关闭当前iframe层
+                        var index = parent.layer.getFrameIndex(window.name);
+                        parent.layer.close(index);
+                        layer.msg('权限分配成功');
+                    } else {
+                        layer.msg('出错了,错误原因' + data.msg);
+                    }
+                },
+                error: function (data) {
+                    console.error("调用出错", data);
+                }
+            });
+        });
+
+        // 递归处理用户选中数据
+        function recursionHandleCheckedData(data, objArr) {
+            var roleId = $('#roleId').val();
+            $.each(data, function (i, e) {
+                var obj = {};
+                obj.srpRoleId = roleId;
+                obj.srpPrivilegeId = e.id;
+                objArr.push(obj);
+                if (e.children) {
+                    // 有子节点,递归处理
+                    recursionHandleCheckedData(e.children, objArr);
+                }
+            });
+        }
+    });
+</script>
+
+</body>
+</html>
+

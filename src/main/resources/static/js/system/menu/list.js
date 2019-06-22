@@ -91,7 +91,7 @@ layui.use(['treeTable', 'commonTable', 'treeSelect', 'layer', 'jquery'], functio
         );
     });
 
-    // 定义回调成功函数,type 1 新增,2
+    // 定义回调成功函数,type 1 新增,2编辑
     window.layerPageSuccessCallback = function (type) {
         treeSelect.render({
             // 选择器

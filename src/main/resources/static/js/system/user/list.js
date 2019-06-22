@@ -2,7 +2,6 @@ layui.use(['commonTable', 'jquery'], function () {
     var commonTable = layui.commonTable,
         $ = layui.jquery;
 
-
     // 渲染表格
     var customConfig = {
         cols: [[

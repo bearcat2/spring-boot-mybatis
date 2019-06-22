@@ -67,7 +67,7 @@ layui.define(['table', 'jquery', 'form'], function (exports) {
     function commonLayerPage(type, params) {
         // 后台对应功能的ui地址，前端点击增加或编辑等先向后台返回对应操作也的html页面
         var htmlUrl = '';
-        // 弹出页面需要监控表单提交按钮,true - 需要 ,false 不需要
+        // 弹出页面是否需要监控表单提交按钮,true - 需要 ,false 不需要
         var isSubmit = true;
         // 在isSubmit为true起作用,异步表单提交地址
         var ajaxFormSubmitUrl = '';
@@ -80,7 +80,6 @@ layui.define(['table', 'jquery', 'form'], function (exports) {
         var defaultHeight = 'auto';
         // 页面弹出成功是否开启回调函数便于在外部处理一些逻辑,默认不开启
         var defaultIsCallback = false;
-
 
         switch (type) {
             case 1:
@@ -136,7 +135,6 @@ layui.define(['table', 'jquery', 'form'], function (exports) {
                     // 渲染表单元素
                     form.render();
 
-
                     // 页面加载成功,改变下布局
                     $('#layui-form-page').css({
                         marginTop: '20px',
@@ -144,7 +142,7 @@ layui.define(['table', 'jquery', 'form'], function (exports) {
                     });
 
                     // 避免select框被页面覆盖
-                    $('.layui-layer-page .layui-layer-content').css('overflow', 'visible');
+                    // $('.layui-layer-page .layui-layer-content').css('overflow', 'visible');
 
                     if (isSubmit) {
                         // 监控表单提交
@@ -186,7 +184,7 @@ layui.define(['table', 'jquery', 'form'], function (exports) {
                 end: function () {
                     // 页面关闭后,执行表格重载
                     if (isCancel) {
-                        // 点击右上角取消,不重载表格减少像服务请求
+                        // 点击右上角取消按钮,不重载表格减少向服务请求
                         return;
                     }
                     if (tableIns) {

@@ -70,3 +70,7 @@ pagehelper:
 #server:
 #    servlet:
 #        context-path: /bearcat2
+
+# 自定义属性
+bearcat2:
+    systemName: 通用前端管理系统

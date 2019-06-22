@@ -5,10 +5,9 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.bearcat2.entity.common.LayuiResult;
 import com.bearcat2.entity.common.LoginUser;
-import com.bearcat2.entity.system.SysPrivilege;
-import com.bearcat2.entity.system.SysUser;
-import com.bearcat2.entity.system.SysUserExample;
+import com.bearcat2.entity.system.*;
 import com.bearcat2.enumeration.CodeMsgEnum;
+import com.bearcat2.mapper.system.SysUserRoleMapper;
 import com.bearcat2.service.common.CommonServiceImpl;
 import com.bearcat2.service.system.SysPrivilegeService;
 import com.bearcat2.service.system.SysUserService;
@@ -21,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * <p> Description: 用户管理的service接口实现类 </p>
@@ -35,6 +35,9 @@ public class SysUserServiceImpl extends CommonServiceImpl<SysUser, SysUserExampl
 
     @Autowired
     private SysPrivilegeService sysPrivilegeService;
+
+    @Autowired
+    private SysUserRoleMapper sysUserRoleMapper;
 
     @Override
     public LayuiResult login(String loginName, String password) {
@@ -77,6 +80,37 @@ public class SysUserServiceImpl extends CommonServiceImpl<SysUser, SysUserExampl
         List<SysUser> sysUsers = super.selectByExample(example);
         PageInfo<SysUser> pageInfo = new PageInfo<>(sysUsers);
         return LayuiResult.success(pageInfo.getList(), pageInfo.getTotal());
+    }
+
+    @Override
+    public List<Integer> findByUserId(Integer userId) {
+        SysUserRoleExample example = new SysUserRoleExample();
+        example.createCriteria()
+                .andSurUserIdEqualTo(userId);
+        List<SysUserRole> sysUserRoles = this.sysUserRoleMapper.selectByExample(example);
+        List<Integer> roleIds = sysUserRoles.stream()
+                .map(SysUserRole::getSurRoleId)
+                .collect(Collectors.toList());
+        return roleIds;
+    }
+
+    @Override
+    public int insertUserRoleRelation(Integer userId, Integer roleId) {
+        SysUserRole sysUserRole = new SysUserRole();
+        sysUserRole.setSurUserId(userId);
+        sysUserRole.setSurRoleId(roleId);
+        return this.sysUserRoleMapper.insertSelective(sysUserRole);
+    }
+
+    @Override
+    public int updateUserRoleRelationByUserId(Integer userId, Integer roleId) {
+        SysUserRoleExample example = new SysUserRoleExample();
+        example.createCriteria()
+                .andSurUserIdEqualTo(userId);
+
+        SysUserRole sysUserRole = new SysUserRole();
+        sysUserRole.setSurRoleId(roleId);
+        return this.sysUserRoleMapper.updateByExampleSelective(sysUserRole, example);
     }
 
     /**

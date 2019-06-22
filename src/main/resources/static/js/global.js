@@ -13,7 +13,7 @@ const REQUEST_SUCCESS_CODE = 0;
 
 /**
  * 获取项目名称
- * @returns string类型 - 项目名称
+ * @returns string - 项目名称
  */
 function getProjectName() {
     // 获取路径

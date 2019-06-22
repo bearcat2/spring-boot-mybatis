@@ -20,7 +20,8 @@ public enum CodeMsgEnum {
 
     // 用户相关错误吗
     LOGIN_ERROR(100, "用户名或密码错误"),
-    CAPTCHA_ERROR(101, "验证码错误");
+    CAPTCHA_ERROR(101, "验证码错误"),
+    PRIVILEGER_IS_NULL(102,"您没有选中任何权限,无法提交");
 
     /** 响应码 */
     private int code;

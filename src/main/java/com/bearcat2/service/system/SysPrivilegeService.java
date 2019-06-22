@@ -1,6 +1,7 @@
 package com.bearcat2.service.system;
 
 import com.bearcat2.entity.common.LayuiResult;
+import com.bearcat2.entity.common.LayuiTreeNode;
 import com.bearcat2.entity.common.TreeSelectNode;
 import com.bearcat2.entity.common.TreeTableNode;
 import com.bearcat2.entity.system.SysPrivilege;
@@ -82,11 +83,26 @@ public interface SysPrivilegeService extends CommonService<SysPrivilege, SysPriv
      */
     List<TreeTableNode> getTreeTableNode();
 
-
     /**
      * 获取前端 treeSelect 插件所需内容
      *
      * @return TreeSelectNode - 前端 treeSelect 插件所需格式
      */
     List<TreeSelectNode> getTreeSelectNode();
+
+    /**
+     * 获取角色拥有的权限
+     *
+     * @param roleId 角色id
+     * @return LayuiTreeNode - layui tree模块所需格式
+     */
+    List<LayuiTreeNode> getLayuiTreeNode(Integer roleId);
+
+    /**
+     * 给当前角色分配权限
+     *
+     * @param sysRolePrivileges 角色权限集合
+     * @return
+     */
+    LayuiResult allotPrivilege(List<SysRolePrivilege> sysRolePrivileges);
 }

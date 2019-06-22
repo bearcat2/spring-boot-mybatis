@@ -1,15 +1,16 @@
 package com.bearcat2.web.controller.system;
 
 import com.bearcat2.entity.common.LayuiResult;
+import com.bearcat2.entity.common.LayuiTreeNode;
 import com.bearcat2.entity.system.SysRole;
-import com.bearcat2.entity.system.SysUserRole;
+import com.bearcat2.entity.system.SysRolePrivilege;
+import com.bearcat2.service.system.SysPrivilegeService;
 import com.bearcat2.service.system.SysRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -27,6 +28,9 @@ public class SysRoleController {
 
     @Autowired
     private SysRoleService sysRoleService;
+
+    @Autowired
+    private SysPrivilegeService sysPrivilegeService;
 
     @GetMapping("/list")
     public String listUi() {
@@ -74,22 +78,28 @@ public class SysRoleController {
         return LayuiResult.success();
     }
 
-    @GetMapping("/allotSysRole_ui")
-    public String allotSysRoleUi(Integer userId, Model model) {
-        model.addAttribute("all_role", this.sysRoleService.findAll());
-        List<Integer> integers = new ArrayList<>();
-        for (SysUserRole sysUserRole : this.sysRoleService.findByUserId(userId)) {
-            integers.add(sysUserRole.getSurRoleId());
-        }
-        model.addAttribute("userId", userId);
-        //model.addAttribute("have_role", StringUtils.join(integers, ','));
-        return "system/role/allotSysRole";
-    }
-
     @ResponseBody
     @PostMapping("/allotSysRole")
     public LayuiResult allotSysRole(Integer userId, String roleIds) {
         this.sysRoleService.allotSysRole(userId, roleIds);
         return LayuiResult.success();
+    }
+
+    @ResponseBody
+    @PostMapping("/getLayuiTreeNode")
+    public List<LayuiTreeNode> getLayuiTreeNode(Integer roleId) {
+        return this.sysPrivilegeService.getLayuiTreeNode(roleId);
+    }
+
+    @GetMapping("/allotPrivilege_ui")
+    public String allotPrivilegeUi(Integer roleId, Model model) {
+        model.addAttribute("roleId", roleId);
+        return "system/role/allotPrivilege";
+    }
+
+    @ResponseBody
+    @PostMapping("/allotPrivilege")
+    public LayuiResult allotPrivilege(@RequestBody List<SysRolePrivilege> sysRolePrivileges) {
+        return this.sysPrivilegeService.allotPrivilege(sysRolePrivileges);
     }
 }

@@ -3,7 +3,9 @@ package com.bearcat2.web.controller;
 import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.LineCaptcha;
 import com.bearcat2.entity.common.Constant;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.HttpServletResponse;
@@ -20,8 +22,12 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class IndexController {
 
+    @Value("${bearcat2.systemName}")
+    private String systemName;
+
     @GetMapping(value = {"/", "/index"})
-    public String index() {
+    public String index(Model model) {
+        model.addAttribute("systemName", systemName);
         return "index";
     }
 

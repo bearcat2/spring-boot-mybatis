@@ -110,7 +110,8 @@
       #{suPassword,jdbcType=VARCHAR}, #{suCreateTime,jdbcType=TIMESTAMP}, #{suUpdateTime,jdbcType=TIMESTAMP}
       )
   </insert>
-    <insert id="insertSelective" parameterType="com.bearcat2.entity.system.SysUser">
+    <insert id="insertSelective" parameterType="com.bearcat2.entity.system.SysUser"
+            useGeneratedKeys="true" keyProperty="suId" keyColumn="su_id">
         insert into sys_user
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="suId != null">
