@@ -1,5 +1,6 @@
 package com.bearcat2.web.controller.system;
 
+import com.bearcat2.entity.common.AllotButtonTransfer;
 import com.bearcat2.entity.common.LayuiResult;
 import com.bearcat2.entity.common.TreeSelectNode;
 import com.bearcat2.entity.common.TreeTableNode;
@@ -82,5 +83,17 @@ public class SysMenuController {
     @PostMapping("/getTreeSelectNode")
     public List<TreeSelectNode> getTreeSelectNode() {
         return this.sysPrivilegeService.getTreeSelectNode();
+    }
+
+    @GetMapping("/allotButton_ui")
+    public String allotButtonUi(Integer menuId, Model model) {
+        model.addAttribute("menuId", menuId);
+        return "system/menu/allotButton";
+    }
+
+    @ResponseBody
+    @PostMapping("/allotButton")
+    public AllotButtonTransfer allotButton(Integer menuId) {
+        return this.sysPrivilegeService.allotButton(menuId);
     }
 }

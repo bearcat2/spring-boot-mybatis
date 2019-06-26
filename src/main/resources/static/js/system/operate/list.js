@@ -4,11 +4,12 @@ layui.use(['commonTable'], function () {
     // 渲染表格
     var customConfig = {
         cols: [[
-            {field: 'suLoginName', title: '登录名'},
-            {field: 'suRealName', title: '真实姓名'},
+            {field: 'soName', title: '操作名称'},
+            {field: 'soShowName', title: '显示名称'},
+            {field: 'soOrderd', title: '序号'},
             {
-                field: 'suCreateTime', title: '创建时间', templet: function (d) {
-                    return formatDate(d.suCreateTime, DATE_TIME_FORMAT);
+                field: 'soCreateTime', title: '创建时间', templet: function (d) {
+                    return formatDate(d.soCreateTime, DATE_TIME_FORMAT);
                 }
             },
             {

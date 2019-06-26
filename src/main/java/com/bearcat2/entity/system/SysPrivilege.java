@@ -1,13 +1,13 @@
 package com.bearcat2.entity.system;
 
-import com.bearcat2.entity.common.BaseEntity;
+import com.bearcat2.entity.common.CommonEntity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class SysPrivilege extends BaseEntity implements Serializable {
+public class SysPrivilege extends CommonEntity implements Serializable {
     /**
      * 权限id
      */

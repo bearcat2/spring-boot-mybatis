@@ -1,9 +1,6 @@
-layui.use(['commonTable', 'jquery', 'table', 'tree','form'], function () {
+layui.use(['commonTable','table'], function () {
     var commonTable = layui.commonTable,
-        table = layui.table,
-        tree = layui.tree,
-        form = layui.form,
-        $ = layui.jquery;
+        table = layui.table;
 
     // 渲染表格
     var customConfig = {

@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bearcat2.mapper.system.SysOperateMapper">
+    <resultMap id="BaseResultMap" type="com.bearcat2.entity.system.SysOperate">
+        <id column="so_id" jdbcType="INTEGER" property="soId"/>
+        <result column="so_name" jdbcType="VARCHAR" property="soName"/>
+        <result column="so_show_name" jdbcType="VARCHAR" property="soShowName"/>
+        <result column="so_orderd" jdbcType="INTEGER" property="soOrderd"/>
+        <result column="so_create_time" jdbcType="TIMESTAMP" property="soCreateTime"/>
+        <result column="so_create_user" jdbcType="VARCHAR" property="soCreateUser"/>
+        <result column="so_update_time" jdbcType="TIMESTAMP" property="soUpdateTime"/>
+        <result column="so_update_user" jdbcType="VARCHAR" property="soUpdateUser"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+    so_id, so_name, so_show_name, so_orderd, so_create_time, so_create_user, so_update_time, 
+    so_update_user
+  </sql>
+    <select id="selectByExample" parameterType="com.bearcat2.entity.system.SysOperateExample" resultMap="BaseResultMap">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from sys_operate
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_operate
+        where so_id = #{soId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from sys_operate
+    where so_id = #{soId,jdbcType=INTEGER}
+  </delete>
+    <delete id="deleteByExample" parameterType="com.bearcat2.entity.system.SysOperateExample">
+        delete from sys_operate
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.bearcat2.entity.system.SysOperate">
+    insert into sys_operate (so_id, so_name, so_show_name, 
+      so_orderd, so_create_time, so_create_user, 
+      so_update_time, so_update_user)
+    values (#{soId,jdbcType=INTEGER}, #{soName,jdbcType=VARCHAR}, #{soShowName,jdbcType=VARCHAR}, 
+      #{soOrderd,jdbcType=INTEGER}, #{soCreateTime,jdbcType=TIMESTAMP}, #{soCreateUser,jdbcType=VARCHAR}, 
+      #{soUpdateTime,jdbcType=TIMESTAMP}, #{soUpdateUser,jdbcType=VARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="com.bearcat2.entity.system.SysOperate">
+        insert into sys_operate
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="soId != null">
+                so_id,
+            </if>
+            <if test="soName != null">
+                so_name,
+            </if>
+            <if test="soShowName != null">
+                so_show_name,
+            </if>
+            <if test="soOrderd != null">
+                so_orderd,
+            </if>
+            <if test="soCreateTime != null">
+                so_create_time,
+            </if>
+            <if test="soCreateUser != null">
+                so_create_user,
+            </if>
+            <if test="soUpdateTime != null">
+                so_update_time,
+            </if>
+            <if test="soUpdateUser != null">
+                so_update_user,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="soId != null">
+                #{soId,jdbcType=INTEGER},
+            </if>
+            <if test="soName != null">
+                #{soName,jdbcType=VARCHAR},
+            </if>
+            <if test="soShowName != null">
+                #{soShowName,jdbcType=VARCHAR},
+            </if>
+            <if test="soOrderd != null">
+                #{soOrderd,jdbcType=INTEGER},
+            </if>
+            <if test="soCreateTime != null">
+                #{soCreateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="soCreateUser != null">
+                #{soCreateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="soUpdateTime != null">
+                #{soUpdateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="soUpdateUser != null">
+                #{soUpdateUser,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.bearcat2.entity.system.SysOperateExample"
+            resultType="java.lang.Long">
+        select count(*) from sys_operate
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update sys_operate
+        <set>
+            <if test="record.soId != null">
+                so_id = #{record.soId,jdbcType=INTEGER},
+            </if>
+            <if test="record.soName != null">
+                so_name = #{record.soName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.soShowName != null">
+                so_show_name = #{record.soShowName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.soOrderd != null">
+                so_orderd = #{record.soOrderd,jdbcType=INTEGER},
+            </if>
+            <if test="record.soCreateTime != null">
+                so_create_time = #{record.soCreateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.soCreateUser != null">
+                so_create_user = #{record.soCreateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="record.soUpdateTime != null">
+                so_update_time = #{record.soUpdateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.soUpdateUser != null">
+                so_update_user = #{record.soUpdateUser,jdbcType=VARCHAR},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update sys_operate
+        set so_id = #{record.soId,jdbcType=INTEGER},
+        so_name = #{record.soName,jdbcType=VARCHAR},
+        so_show_name = #{record.soShowName,jdbcType=VARCHAR},
+        so_orderd = #{record.soOrderd,jdbcType=INTEGER},
+        so_create_time = #{record.soCreateTime,jdbcType=TIMESTAMP},
+        so_create_user = #{record.soCreateUser,jdbcType=VARCHAR},
+        so_update_time = #{record.soUpdateTime,jdbcType=TIMESTAMP},
+        so_update_user = #{record.soUpdateUser,jdbcType=VARCHAR}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.bearcat2.entity.system.SysOperate">
+        update sys_operate
+        <set>
+            <if test="soName != null">
+                so_name = #{soName,jdbcType=VARCHAR},
+            </if>
+            <if test="soShowName != null">
+                so_show_name = #{soShowName,jdbcType=VARCHAR},
+            </if>
+            <if test="soOrderd != null">
+                so_orderd = #{soOrderd,jdbcType=INTEGER},
+            </if>
+            <if test="soCreateTime != null">
+                so_create_time = #{soCreateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="soCreateUser != null">
+                so_create_user = #{soCreateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="soUpdateTime != null">
+                so_update_time = #{soUpdateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="soUpdateUser != null">
+                so_update_user = #{soUpdateUser,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where so_id = #{soId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.bearcat2.entity.system.SysOperate">
+    update sys_operate
+    set so_name = #{soName,jdbcType=VARCHAR},
+      so_show_name = #{soShowName,jdbcType=VARCHAR},
+      so_orderd = #{soOrderd,jdbcType=INTEGER},
+      so_create_time = #{soCreateTime,jdbcType=TIMESTAMP},
+      so_create_user = #{soCreateUser,jdbcType=VARCHAR},
+      so_update_time = #{soUpdateTime,jdbcType=TIMESTAMP},
+      so_update_user = #{soUpdateUser,jdbcType=VARCHAR}
+    where so_id = #{soId,jdbcType=INTEGER}
+  </update>
+</mapper>

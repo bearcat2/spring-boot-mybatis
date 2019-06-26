@@ -3,11 +3,10 @@ package com.bearcat2.service.impl.system;
 import cn.hutool.core.util.StrUtil;
 import com.bearcat2.entity.common.LayuiResult;
 import com.bearcat2.entity.system.*;
-import com.bearcat2.mapper.system.SysRoleMapper;
 import com.bearcat2.mapper.system.SysUserRoleMapper;
 import com.bearcat2.service.common.CommonServiceImpl;
 import com.bearcat2.service.system.SysRoleService;
-import com.bearcat2.util.BaseUtil;
+import com.bearcat2.util.CommonUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +40,7 @@ public class SysRoleServiceImpl extends CommonServiceImpl< SysRole,  SysRoleExam
         SysRoleExample example = new SysRoleExample();
         SysRoleExample.Criteria criteria = example.createCriteria();
         if (StrUtil.isNotBlank(sysRole.getSrName())) {
-            criteria.andSrNameLike(BaseUtil.buildLikeQueryParam(sysRole.getSrName()));
+            criteria.andSrNameLike(CommonUtil.buildLikeQueryParam(sysRole.getSrName()));
         }
         PageHelper.startPage(sysRole.getPage(), sysRole.getLimit());
         List<SysRole> sysRoles = super.selectByExample(example);

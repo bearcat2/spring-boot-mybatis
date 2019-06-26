@@ -7,13 +7,13 @@ import java.util.*;
 
 /**
  * <p> Description: 系统通用工具类 </p>
- * <p> Title: BaseUtil </p>
+ * <p> Title: CommonUtil </p>
  * <p> Create Time: 2019/5/11 22:43 </p>
  *
  * @author: zhongzhipeng
  * @version: 1.0
  */
-public class BaseUtil {
+public class CommonUtil {
 
     /**
      * 构建数据库 like 查询参数

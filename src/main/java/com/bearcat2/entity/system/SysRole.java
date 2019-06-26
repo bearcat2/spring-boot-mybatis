@@ -1,11 +1,11 @@
 package com.bearcat2.entity.system;
 
-import com.bearcat2.entity.common.BaseEntity;
+import com.bearcat2.entity.common.CommonEntity;
 
 import java.io.Serializable;
 import java.util.Date;
 
-public class SysRole extends BaseEntity implements Serializable {
+public class SysRole extends CommonEntity implements Serializable {
     /**
      * 角色id,自增
      */

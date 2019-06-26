@@ -11,7 +11,7 @@ import com.bearcat2.mapper.system.SysUserRoleMapper;
 import com.bearcat2.service.common.CommonServiceImpl;
 import com.bearcat2.service.system.SysPrivilegeService;
 import com.bearcat2.service.system.SysUserService;
-import com.bearcat2.util.BaseUtil;
+import com.bearcat2.util.CommonUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,11 +60,11 @@ public class SysUserServiceImpl extends CommonServiceImpl<SysUser, SysUserExampl
         loginUser.setRealName(sysUser.getSuRealName());
 
         List<SysPrivilege> sysPrivileges = this.sysPrivilegeService.findMenuByUserId(loginUser.getUserId());
-        Set<SysPrivilege> meuns = BaseUtil.listToSet(this.handleModule(sysPrivileges));
+        Set<SysPrivilege> meuns = CommonUtil.listToSet(this.handleModule(sysPrivileges));
         loginUser.setMenus(meuns);
 
         List<SysPrivilege> privileges = this.sysPrivilegeService.findPrivilegeByUserId(loginUser.getUserId());
-        loginUser.setPrivileges(BaseUtil.listToSet(privileges));
+        loginUser.setPrivileges(CommonUtil.listToSet(privileges));
         return LayuiResult.success(loginUser);
     }
 
@@ -73,7 +73,7 @@ public class SysUserServiceImpl extends CommonServiceImpl<SysUser, SysUserExampl
         SysUserExample example = new SysUserExample();
         SysUserExample.Criteria criteria = example.createCriteria();
         if (StrUtil.isNotBlank(sysUser.getSuLoginName())) {
-            criteria.andSuLoginNameLike(BaseUtil.buildLikeQueryParam(sysUser.getSuLoginName()));
+            criteria.andSuLoginNameLike(CommonUtil.buildLikeQueryParam(sysUser.getSuLoginName()));
         }
         example.setOrderByClause("su_create_time desc");
         PageHelper.startPage(sysUser.getPage(), sysUser.getLimit());

@@ -28,6 +28,8 @@ layui.use(['treeTable', 'commonTable', 'treeSelect', 'layer', 'jquery'], functio
                     var html = '';
                     html += '<a class="layui-btn layui-btn-xs" lay-filter="edit">编辑</a>';
                     html += '<a class="layui-btn layui-btn-danger layui-btn-xs" lay-filter="delete">删除</a>';
+                    html += '<a class="layui-btn layui-btn-normal layui-btn-xs" lay-filter="allotButton">分配按钮</a>';
+
                     return html;
                 }
             }
@@ -74,21 +76,20 @@ layui.use(['treeTable', 'commonTable', 'treeSelect', 'layer', 'jquery'], functio
         );
     });
 
-    // 点击批量删除
-    $('.batchDelete').on('click', function () {
-        var checked = treeTable.checked(render);
-        if (checked.length === 0) {
-            layer.msg("请选择需要删除的菜单项");
-            return;
-        }
-
-        layer.confirm('删除操作不可恢复,确定要删除吗？',
-            {title: '操作提示', area: ['300px', '160px']},
-            function (index) {
-                console.log("确定被点击了...");
-                layer.close(index);
-            }
-        );
+    // 监听分配按钮
+    treeTable.on('tree(allotButton)', function (res) {
+        var data = res.item;
+        var title = data.title + ' > 分配按钮';
+        layer.open({
+            type: 2,
+            title: title,
+            skin: 'layui-layer-lan',
+            btn: ['确定', '取消'],
+            maxmin: true,
+            area: ['506px', '414px'],
+            content: '/sysMenu/allotButton_ui?menuId=' + data.id,
+            // resize: false,
+        });
     });
 
     // 定义回调成功函数,type 1 新增,2编辑

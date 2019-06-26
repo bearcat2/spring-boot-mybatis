@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 /**
  * <p> Description: 通用实体对象 </p>
- * <p> Title: BaseEntity </p>
+ * <p> Title: CommonEntity </p>
  * <p> Create Time: 2019/5/11 22:36 </p>
  *
  * @author: zhongzhipeng
@@ -15,7 +15,7 @@ import java.io.Serializable;
  */
 @Getter
 @Setter
-public class BaseEntity implements Serializable {
+public class CommonEntity implements Serializable {
 
     /** 当前所在页码,默认为第一页 */
     private Integer page = 1;

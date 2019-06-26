@@ -1,9 +1,6 @@
 package com.bearcat2.service.system;
 
-import com.bearcat2.entity.common.LayuiResult;
-import com.bearcat2.entity.common.LayuiTreeNode;
-import com.bearcat2.entity.common.TreeSelectNode;
-import com.bearcat2.entity.common.TreeTableNode;
+import com.bearcat2.entity.common.*;
 import com.bearcat2.entity.system.SysPrivilege;
 import com.bearcat2.entity.system.SysPrivilegeExample;
 import com.bearcat2.entity.system.SysRolePrivilege;
@@ -105,4 +102,12 @@ public interface SysPrivilegeService extends CommonService<SysPrivilege, SysPriv
      * @return
      */
     LayuiResult allotPrivilege(List<SysRolePrivilege> sysRolePrivileges);
+
+    /**
+     * 给当前菜单分配按钮
+     *
+     * @param menuId 菜单id
+     * @return
+     */
+    AllotButtonTransfer allotButton(Integer menuId);
 }

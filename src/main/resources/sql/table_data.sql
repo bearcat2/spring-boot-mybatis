@@ -1,6 +1,6 @@
 /*
 SQLyog Ultimate v13.1.1 (64 bit)
-MySQL - 5.7.24-log : Database - spring-boot-mybatis
+MySQL - 5.5.52 : Database - spring-boot-mybatis
 *********************************************************************
 */
 
@@ -43,6 +43,31 @@ insert  into `sys_data_dictionary`(`sdr_id`,`sdr_name`,`sdr_value`,`sdr_parent_i
 (8,'/index','系统首页',6,1,2),
 (9,'/sysUser/settingData','用户设置基本资料',6,1,3);
 
+/*Table structure for table `sys_operate` */
+
+DROP TABLE IF EXISTS `sys_operate`;
+
+CREATE TABLE `sys_operate` (
+  `so_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '操作id,自增',
+  `so_name` varchar(32) DEFAULT NULL COMMENT '操作名称',
+  `so_show_name` varchar(32) DEFAULT NULL COMMENT '显示名称(操作名的中文显示)',
+  `so_orderd` int(11) DEFAULT NULL COMMENT '序号',
+  `so_create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `so_create_user` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `so_update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `so_update_user` varchar(32) DEFAULT NULL COMMENT '更新人',
+  PRIMARY KEY (`so_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+
+/*Data for the table `sys_operate` */
+
+insert  into `sys_operate`(`so_id`,`so_name`,`so_show_name`,`so_orderd`,`so_create_time`,`so_create_user`,`so_update_time`,`so_update_user`) values 
+(1,'add','新增',1,'2019-06-26 16:06:15','张三','2019-06-26 16:54:14','张三'),
+(3,'edit','编辑',2,'2019-06-26 16:54:44','张三','2019-06-26 16:56:28','张三'),
+(4,'delete','删除',3,'2019-06-26 16:56:17','张三','2019-06-26 16:56:17','张三'),
+(5,'detail','查看详情',4,'2019-06-26 16:57:07','张三','2019-06-26 16:57:07','张三'),
+(6,'allotPrivilege','分配权限',5,'2019-06-26 16:57:51','张三','2019-06-26 16:57:51','张三');
+
 /*Table structure for table `sys_privilege` */
 
 DROP TABLE IF EXISTS `sys_privilege`;
@@ -57,7 +82,7 @@ CREATE TABLE `sys_privilege` (
   `sp_create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `sp_update_time` datetime DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`sp_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 
 /*Data for the table `sys_privilege` */
 
@@ -79,7 +104,8 @@ insert  into `sys_privilege`(`sp_id`,`sp_name`,`sp_uri`,`sp_type`,`sp_parent_id`
 (15,'菜单管理修改','/sysMenu/edit',3,12,NULL,'2018-08-17 19:21:40','2018-08-17 19:21:30'),
 (16,'菜单管理删除','/sysMenu/delete',3,12,NULL,'2018-08-17 19:21:42','2018-08-17 19:21:44'),
 (18,'分配权限','/sysMenu/allotSysPrivilege',3,11,NULL,'2018-08-17 21:32:52','2018-08-17 21:32:54'),
-(19,'分配角色','/sysRole/allotSysRole',3,1,NULL,'2018-08-18 00:36:21','2018-08-18 00:36:23');
+(19,'分配角色','/sysRole/allotSysRole',3,1,NULL,'2018-08-18 00:36:21','2018-08-18 00:36:23'),
+(20,'按钮管理','/sysOperate/list',2,6,4,'2019-06-26 15:44:52','2019-06-26 17:01:12');
 
 /*Table structure for table `sys_role` */
 
@@ -109,33 +135,49 @@ CREATE TABLE `sys_role_privilege` (
   `srp_role_id` int(11) DEFAULT NULL COMMENT '角色表主键id',
   `srp_privilege_id` int(11) DEFAULT NULL COMMENT '权限表主键id',
   PRIMARY KEY (`srp_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=98 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=136 DEFAULT CHARSET=utf8;
 
 /*Data for the table `sys_role_privilege` */
 
 insert  into `sys_role_privilege`(`srp_id`,`srp_role_id`,`srp_privilege_id`) values 
-(76,1,1),
-(77,1,2),
-(78,1,3),
-(79,1,4),
-(80,1,5),
-(81,1,6),
-(82,1,7),
-(83,1,8),
-(84,1,9),
-(85,1,10),
-(86,1,11),
-(87,1,12),
-(88,1,13),
-(89,1,14),
-(90,1,15),
-(91,1,16),
-(92,1,18),
-(93,1,19),
-(94,1,21),
-(95,2,1),
-(96,2,2),
-(97,2,6);
+(98,1,6),
+(99,1,1),
+(100,1,19),
+(101,1,5),
+(102,1,4),
+(103,1,3),
+(104,1,2),
+(105,1,11),
+(106,1,10),
+(107,1,18),
+(108,1,9),
+(109,1,8),
+(110,1,7),
+(111,1,12),
+(112,1,13),
+(113,1,15),
+(114,1,16),
+(115,1,14),
+(116,1,20),
+(117,2,6),
+(118,2,1),
+(119,2,19),
+(120,2,5),
+(121,2,4),
+(122,2,3),
+(123,2,2),
+(124,2,11),
+(125,2,10),
+(126,2,18),
+(127,2,9),
+(128,2,8),
+(129,2,7),
+(130,2,12),
+(131,2,13),
+(132,2,15),
+(133,2,16),
+(134,2,14),
+(135,2,20);
 
 /*Table structure for table `sys_user` */
 
@@ -149,7 +191,7 @@ CREATE TABLE `sys_user` (
   `su_create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `su_update_time` datetime DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`su_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 
 /*Data for the table `sys_user` */
 

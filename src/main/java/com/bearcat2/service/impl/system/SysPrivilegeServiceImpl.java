@@ -3,16 +3,14 @@ package com.bearcat2.service.impl.system;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.bearcat2.entity.common.*;
-import com.bearcat2.entity.system.SysPrivilege;
-import com.bearcat2.entity.system.SysPrivilegeExample;
-import com.bearcat2.entity.system.SysRolePrivilege;
-import com.bearcat2.entity.system.SysRolePrivilegeExample;
+import com.bearcat2.entity.system.*;
 import com.bearcat2.enumeration.CodeMsgEnum;
 import com.bearcat2.mapper.system.SysPrivilegeMapper;
 import com.bearcat2.mapper.system.SysRolePrivilegeMapper;
 import com.bearcat2.service.common.CommonServiceImpl;
+import com.bearcat2.service.system.SysOperateService;
 import com.bearcat2.service.system.SysPrivilegeService;
-import com.bearcat2.util.BaseUtil;
+import com.bearcat2.util.CommonUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * <p>Description: 权限管理的service接口实现类 </p>
@@ -38,6 +37,9 @@ public class SysPrivilegeServiceImpl extends CommonServiceImpl<SysPrivilege, Sys
     @Autowired
     private SysRolePrivilegeMapper sysRolePrivilegeMapper;
 
+    @Autowired
+    private SysOperateService sysOperateService;
+
     @Value("${bearcat2.systemName}")
     private String systemName;
 
@@ -51,10 +53,10 @@ public class SysPrivilegeServiceImpl extends CommonServiceImpl<SysPrivilege, Sys
         SysPrivilegeExample example = new SysPrivilegeExample();
         SysPrivilegeExample.Criteria criteria = example.createCriteria();
         if (StrUtil.isNotBlank(sysPrivilege.getSpName())) {
-            criteria.andSpNameLike(BaseUtil.buildLikeQueryParam(sysPrivilege.getSpName()));
+            criteria.andSpNameLike(CommonUtil.buildLikeQueryParam(sysPrivilege.getSpName()));
         }
         if (StrUtil.isNotBlank(sysPrivilege.getSpUri())) {
-            criteria.andSpUriLike(BaseUtil.buildLikeQueryParam(sysPrivilege.getSpUri()));
+            criteria.andSpUriLike(CommonUtil.buildLikeQueryParam(sysPrivilege.getSpUri()));
         }
         if (sysPrivilege.getSpType() != null) {
             criteria.andSpTypeEqualTo(sysPrivilege.getSpType());
@@ -288,5 +290,40 @@ public class SysPrivilegeServiceImpl extends CommonServiceImpl<SysPrivilege, Sys
 
         this.sysRolePrivilegeMapper.insertBatch(sysRolePrivileges);
         return LayuiResult.success();
+    }
+
+    @Override
+    public AllotButtonTransfer allotButton(Integer menuId) {
+        // 获得该菜单下所拥有的按钮权限,并处理url取出按钮名称
+        SysPrivilegeExample example = new SysPrivilegeExample();
+        example.setOrderByClause("sp_orderd");
+        example.createCriteria()
+                .andSpParentIdEqualTo(menuId);
+        List<SysPrivilege> sysPrivileges = super.selectByExample(example);
+
+        // 对url处理,例如 /sysUser/add -> add
+        List<String> buttonNames = sysPrivileges.stream()
+                .map(sysPrivilege -> StrUtil.subAfter(sysPrivilege.getSpUri(), StrUtil.SLASH, true))
+                .collect(Collectors.toList());
+
+        // 获取系统所有的按钮
+        SysOperateExample sysOperateExample = new SysOperateExample();
+        sysOperateExample.setOrderByClause("so_orderd");
+        List<SysOperate> sysOperates = this.sysOperateService.selectByExample(sysOperateExample);
+
+        AllotButtonTransfer allotButtonTransfer = new AllotButtonTransfer();
+        List<AllotButtonTransfer.Transfer> data = allotButtonTransfer.getData();
+        List<String> rightSelectData = allotButtonTransfer.getRightSelectData();
+        for (SysOperate sysOperate : sysOperates) {
+            AllotButtonTransfer.Transfer transfer = new AllotButtonTransfer.Transfer();
+            transfer.setValue(sysOperate.getSoName());
+            transfer.setTitle(sysOperate.getSoShowName());
+            data.add(transfer);
+            if (buttonNames.contains(sysOperate.getSoName())) {
+                // 该菜单下有该按钮，初始化右侧选中数据
+                rightSelectData.add(sysOperate.getSoName());
+            }
+        }
+        return allotButtonTransfer;
     }
 }

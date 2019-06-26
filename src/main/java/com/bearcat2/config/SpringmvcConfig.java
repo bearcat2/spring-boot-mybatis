@@ -1,6 +1,6 @@
 package com.bearcat2.config;
 
-import com.bearcat2.util.BaseUtil;
+import com.bearcat2.util.CommonUtil;
 import com.bearcat2.web.converter.DateConverter;
 import com.bearcat2.web.interceptor.LoginInterceptor;
 import org.springframework.context.annotation.Configuration;
@@ -39,7 +39,7 @@ public class SpringmvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 增加登录及权限验证的拦截器
-        List<String> propertyNames = BaseUtil.getPropertyNames("config/anonymousUrls.properties");
+        List<String> propertyNames = CommonUtil.getPropertyNames("config/anonymousUrls.properties");
         registry.addInterceptor(new LoginInterceptor())
                 .addPathPatterns("/**")
                 .excludePathPatterns(propertyNames);
