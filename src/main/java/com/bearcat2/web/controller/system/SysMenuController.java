@@ -44,7 +44,7 @@ public class SysMenuController {
         return this.sysPrivilegeService.getTreeTableNode();
     }
 
-    @GetMapping("/edit_ui")
+    @GetMapping("/edit")
     public String editUi(TreeTableNode treeTableNode, Model model) {
         model.addAttribute("menu", this.sysPrivilegeService.selectByPrimaryKey(treeTableNode.getId()));
         return "system/menu/edit";
@@ -58,7 +58,7 @@ public class SysMenuController {
         return LayuiResult.success();
     }
 
-    @GetMapping("/add_ui")
+    @GetMapping("/add")
     public String addUi() {
         return "system/menu/add";
     }
@@ -85,7 +85,7 @@ public class SysMenuController {
         return this.sysPrivilegeService.getTreeSelectNode();
     }
 
-    @GetMapping("/allotButton_ui")
+    @GetMapping("/allotButton")
     public String allotButtonUi(Integer menuId, Model model) {
         model.addAttribute("menuId", menuId);
         return "system/menu/allotButton";

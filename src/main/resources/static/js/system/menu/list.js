@@ -87,7 +87,7 @@ layui.use(['treeTable', 'commonTable', 'treeSelect', 'layer', 'jquery'], functio
             btn: ['确定', '取消'],
             maxmin: true,
             area: ['506px', '414px'],
-            content: '/sysMenu/allotButton_ui?menuId=' + data.id,
+            content: '/sysMenu/allotButton?menuId=' + data.id,
             // resize: false,
         });
     });

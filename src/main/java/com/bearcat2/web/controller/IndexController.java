@@ -3,6 +3,7 @@ package com.bearcat2.web.controller;
 import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.LineCaptcha;
 import com.bearcat2.entity.common.Constant;
+import com.bearcat2.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,6 +32,11 @@ public class IndexController {
         return "index";
     }
 
+    @GetMapping(value = "/refuse")
+    public String refuse(Model model) {
+        return "refuse";
+    }
+
     @GetMapping("/getCaptcha")
     public void getCaptcha(HttpServletResponse response, HttpSession session) throws Exception {
         // 创建验证码,并写入session中
@@ -38,10 +44,7 @@ public class IndexController {
         session.setAttribute(Constant.CAPTCHA_SESSION_ATTR, lineCaptcha.getCode());
 
         // 控制浏览器不缓存验证码,并将验证码写入浏览器
-        response.setDateHeader("expries", -1);
-        response.setHeader("Cache-Control", "no-cache");
-        response.setHeader("Pragma", "no-cache");
-
+        CommonUtil.noCache(response);
         lineCaptcha.write(response.getOutputStream());
     }
 

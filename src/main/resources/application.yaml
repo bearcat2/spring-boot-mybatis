@@ -19,8 +19,8 @@ spring:
         druid:
             # 配置连接的基本属性,注意mysql驱动6以上版本url中需指定serverTimezone时区
             username: root
-#            password: 123456
-            password: 123
+            password: 123456
+            #            password: 123
             url: jdbc:mysql://localhost:3306/spring-boot-mybatis?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=Asia/Shanghai
             driver-class-name: com.mysql.cj.jdbc.Driver
             # 配置初始化大小、最小、最大连接数

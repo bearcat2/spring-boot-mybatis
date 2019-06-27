@@ -6,6 +6,7 @@ import com.bearcat2.entity.system.SysPrivilegeExample;
 import com.bearcat2.entity.system.SysRolePrivilege;
 import com.bearcat2.service.common.CommonService;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -35,43 +36,11 @@ public interface SysPrivilegeService extends CommonService<SysPrivilege, SysPriv
     List<SysPrivilege> findPrivilegeByUserId(Integer userId);
 
     /**
-     * 通过模块id查询该模块下的所有菜单
-     *
-     * @param moduleId 模块id
-     * @return
-     */
-    List<SysPrivilege> findByModuleId(Integer moduleId);
-
-    /**
-     * 分页查询
-     *
-     * @param sysPrivilege
-     * @return
-     */
-    LayuiResult list(SysPrivilege sysPrivilege);
-
-    /**
-     * 通过类型查询
-     *
-     * @param type
-     * @return
-     */
-    List<SysPrivilege> findByType(Integer type);
-
-    /**
-     * 查找所有权限
+     * 查找系统配置的所有权限
      *
      * @return
      */
-    List<SysPrivilege> findAll();
-
-    /**
-     * 查找该用户下所有权限id
-     *
-     * @param roleId
-     * @return
-     */
-    List<SysRolePrivilege> findByRoleId(Integer roleId);
+    HashMap<String, Integer> findAllPrivilege();
 
     /**
      * 获取前端treeTable插件所需内容

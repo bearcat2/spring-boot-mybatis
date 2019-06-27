@@ -3,6 +3,7 @@ package com.bearcat2.service.impl.system;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
+import com.bearcat2.entity.common.Constant;
 import com.bearcat2.entity.common.LayuiResult;
 import com.bearcat2.entity.common.LoginUser;
 import com.bearcat2.entity.system.*;
@@ -18,8 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -59,12 +60,14 @@ public class SysUserServiceImpl extends CommonServiceImpl<SysUser, SysUserExampl
         loginUser.setLoginName(sysUser.getSuLoginName());
         loginUser.setRealName(sysUser.getSuRealName());
 
-        List<SysPrivilege> sysPrivileges = this.sysPrivilegeService.findMenuByUserId(loginUser.getUserId());
-        Set<SysPrivilege> meuns = CommonUtil.listToSet(this.handleModule(sysPrivileges));
-        loginUser.setMenus(meuns);
+        List<SysPrivilege> menus = this.sysPrivilegeService.findMenuByUserId(loginUser.getUserId());
+        loginUser.setMenus(CommonUtil.listToSet(this.handleModule(menus)));
 
-        List<SysPrivilege> privileges = this.sysPrivilegeService.findPrivilegeByUserId(loginUser.getUserId());
-        loginUser.setPrivileges(CommonUtil.listToSet(privileges));
+        List<SysPrivilege> userPrivileges = this.sysPrivilegeService.findPrivilegeByUserId(loginUser.getUserId());
+        loginUser.setUserPrivileges(CommonUtil.listToSet(userPrivileges));
+
+        HashMap<String, Integer> allPrivilege = this.sysPrivilegeService.findAllPrivilege();
+        loginUser.setPrivilegeMap(allPrivilege);
         return LayuiResult.success(loginUser);
     }
 
@@ -122,9 +125,9 @@ public class SysUserServiceImpl extends CommonServiceImpl<SysUser, SysUserExampl
     private List<SysPrivilege> handleModule(List<SysPrivilege> sysPrivileges) {
         List<SysPrivilege> modules = new ArrayList<>();
         for (SysPrivilege sysPrivilege : sysPrivileges) {
-            if (sysPrivilege.getSpType() == 1) {
+            if (sysPrivilege.getSpType() == Constant.MODULE_PRIVILEGE_TYPE) {
                 // 类型为模块,获取模块下的菜单
-                sysPrivilege.setChildrenSysPrivilege(this.handleMenu(sysPrivileges, sysPrivilege));
+                sysPrivilege.setChildrenSysPrivilege(this.fillMenu(sysPrivileges, sysPrivilege));
                 modules.add(sysPrivilege);
             }
         }
@@ -132,13 +135,13 @@ public class SysUserServiceImpl extends CommonServiceImpl<SysUser, SysUserExampl
     }
 
     /**
-     * 处理菜单
+     * 填充模块下所有菜单
      *
      * @param sysPrivileges 用户拥有的权限集合
      * @param sysPrivilege  父权限id
      * @return
      */
-    private List<SysPrivilege> handleMenu(List<SysPrivilege> sysPrivileges, SysPrivilege sysPrivilege) {
+    private List<SysPrivilege> fillMenu(List<SysPrivilege> sysPrivileges, SysPrivilege sysPrivilege) {
         List<SysPrivilege> childrenMenus = new ArrayList<>();
         for (SysPrivilege privilege : sysPrivileges) {
             if (privilege.getSpParentId().equals(sysPrivilege.getSpId())) {

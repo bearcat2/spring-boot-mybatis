@@ -1,10 +1,10 @@
 package com.bearcat2.web.controller.system;
 
-import com.bearcat2.entity.common.Constant;
 import com.bearcat2.entity.common.LayuiResult;
 import com.bearcat2.entity.common.LoginUser;
 import com.bearcat2.entity.system.SysOperate;
 import com.bearcat2.service.system.SysOperateService;
+import com.bearcat2.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -42,7 +42,7 @@ public class SysOperateController {
         return this.sysOperateService.list(sysOperate);
     }
 
-    @GetMapping("/add_ui")
+    @GetMapping("/add")
     public String addUi() {
         return "system/operate/add";
     }
@@ -50,7 +50,7 @@ public class SysOperateController {
     @ResponseBody
     @PostMapping("/add")
     public LayuiResult add(SysOperate sysOperate, HttpSession session) {
-        LoginUser loginUser = (LoginUser) session.getAttribute(Constant.LOGIN_USER_SESSION_ATTR);
+        LoginUser loginUser = CommonUtil.getLoginUser(session);
         sysOperate.setSoCreateTime(new Date());
         sysOperate.setSoCreateUser(loginUser.getRealName());
         sysOperate.setSoUpdateTime(new Date());
@@ -59,7 +59,7 @@ public class SysOperateController {
         return LayuiResult.success();
     }
 
-    @GetMapping("/edit_ui")
+    @GetMapping("/edit")
     public String editUi(SysOperate sysOperate, Model model) {
         model.addAttribute("operate", this.sysOperateService.selectByPrimaryKey(sysOperate.getSoId()));
         return "system/operate/edit";
@@ -68,7 +68,7 @@ public class SysOperateController {
     @ResponseBody
     @PostMapping("/edit")
     public LayuiResult edit(SysOperate sysOperate, HttpSession session) {
-        LoginUser loginUser = (LoginUser) session.getAttribute(Constant.LOGIN_USER_SESSION_ATTR);
+        LoginUser loginUser = CommonUtil.getLoginUser(session);
         sysOperate.setSoUpdateTime(new Date());
         sysOperate.setSoUpdateUser(loginUser.getRealName());
         this.sysOperateService.updateByPrimaryKeySelective(sysOperate);

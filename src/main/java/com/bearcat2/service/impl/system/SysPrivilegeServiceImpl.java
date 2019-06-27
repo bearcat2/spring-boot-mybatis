@@ -10,9 +10,6 @@ import com.bearcat2.mapper.system.SysRolePrivilegeMapper;
 import com.bearcat2.service.common.CommonServiceImpl;
 import com.bearcat2.service.system.SysOperateService;
 import com.bearcat2.service.system.SysPrivilegeService;
-import com.bearcat2.util.CommonUtil;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -43,30 +40,6 @@ public class SysPrivilegeServiceImpl extends CommonServiceImpl<SysPrivilege, Sys
     @Value("${bearcat2.systemName}")
     private String systemName;
 
-    /**
-     * 构建单表字段动态sql查询
-     *
-     * @param sysPrivilege 系统权限表
-     * @return 权限集合
-     */
-    private List<SysPrivilege> dynamicSqlQuery(SysPrivilege sysPrivilege) {
-        SysPrivilegeExample example = new SysPrivilegeExample();
-        SysPrivilegeExample.Criteria criteria = example.createCriteria();
-        if (StrUtil.isNotBlank(sysPrivilege.getSpName())) {
-            criteria.andSpNameLike(CommonUtil.buildLikeQueryParam(sysPrivilege.getSpName()));
-        }
-        if (StrUtil.isNotBlank(sysPrivilege.getSpUri())) {
-            criteria.andSpUriLike(CommonUtil.buildLikeQueryParam(sysPrivilege.getSpUri()));
-        }
-        if (sysPrivilege.getSpType() != null) {
-            criteria.andSpTypeEqualTo(sysPrivilege.getSpType());
-        }
-        if (sysPrivilege.getSpParentId() != null) {
-            criteria.andSpParentIdEqualTo(sysPrivilege.getSpParentId());
-        }
-        return super.selectByExample(example);
-    }
-
     @Override
     public List<SysPrivilege> findMenuByUserId(Integer userId) {
         return this.sysPrivilegeMapper.findMenuByUserId(userId);
@@ -75,42 +48,6 @@ public class SysPrivilegeServiceImpl extends CommonServiceImpl<SysPrivilege, Sys
     @Override
     public List<SysPrivilege> findPrivilegeByUserId(Integer userId) {
         return this.sysPrivilegeMapper.findPrivilegeByUserId(userId);
-    }
-
-    @Override
-    public List<SysPrivilege> findByModuleId(Integer moduleId) {
-        SysPrivilege sysPrivilege = new SysPrivilege();
-        sysPrivilege.setSpParentId(moduleId);
-        return this.dynamicSqlQuery(sysPrivilege);
-    }
-
-    @Override
-    public LayuiResult list(SysPrivilege sysPrivilege) {
-        PageHelper.startPage(sysPrivilege.getPage(), sysPrivilege.getLimit());
-        List<SysPrivilege> sysPrivileges = this.dynamicSqlQuery(sysPrivilege);
-        PageInfo<SysPrivilege> pageInfo = new PageInfo<>(sysPrivileges);
-        return LayuiResult.success(pageInfo.getList(), pageInfo.getTotal());
-    }
-
-    @Override
-    public List<SysPrivilege> findByType(Integer type) {
-        SysPrivilege sysPrivilege = new SysPrivilege();
-        sysPrivilege.setSpType(type);
-        return this.dynamicSqlQuery(sysPrivilege);
-    }
-
-    @Override
-    public List<SysPrivilege> findAll() {
-        SysPrivilege sysPrivilege = new SysPrivilege();
-        return this.dynamicSqlQuery(sysPrivilege);
-    }
-
-    @Override
-    public List<SysRolePrivilege> findByRoleId(Integer roleId) {
-        SysRolePrivilegeExample example = new SysRolePrivilegeExample();
-        SysRolePrivilegeExample.Criteria criteria = example.createCriteria();
-        criteria.andSrpRoleIdEqualTo(roleId);
-        return this.sysRolePrivilegeMapper.selectByExample(example);
     }
 
     @Override
@@ -129,6 +66,20 @@ public class SysPrivilegeServiceImpl extends CommonServiceImpl<SysPrivilege, Sys
             treeTableNodes.add(treeTableNode);
         }
         return treeTableNodes;
+    }
+
+    @Override
+    public HashMap<String, Integer> findAllPrivilege() {
+        SysPrivilegeExample example = new SysPrivilegeExample();
+        example.createCriteria()
+                .andSpTypeEqualTo(Constant.BUTTON_PRIVILEGE_TYPE);
+        List<SysPrivilege> sysPrivileges = super.selectByExample(example);
+
+        HashMap<String, Integer> privilegeMap = new HashMap<>(sysPrivileges.size());
+        for (SysPrivilege sysPrivilege : sysPrivileges) {
+            privilegeMap.put(sysPrivilege.getSpUri(), sysPrivilege.getSpId());
+        }
+        return privilegeMap;
     }
 
     @Override
@@ -279,7 +230,7 @@ public class SysPrivilegeServiceImpl extends CommonServiceImpl<SysPrivilege, Sys
         // 为了简便,不修改对应权限,直接先删除该角色原先拥有的权限再添加现在重新分配的
         if (CollUtil.isEmpty(sysRolePrivileges)) {
             // 前端已处理,不能提交非空权限,为了程序的更加严谨,在后台再做一次处理
-            return LayuiResult.error(CodeMsgEnum.PRIVILEGER_IS_NULL);
+            return LayuiResult.error(CodeMsgEnum.PRIVILEGE_IS_NULL);
         }
         SysRolePrivilege sysRolePrivilege = sysRolePrivileges.get(0);
         Integer roleId = sysRolePrivilege.getSrpRoleId();
