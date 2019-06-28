@@ -29,7 +29,7 @@ public class PrivilegeInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        // 注意权限拦截器配置需配置在登录拦截器后, 程序走到这儿说明用户已登录
+        // 注意权限拦截器需配置在登录拦截器后, 程序走到这儿说明用户已登录
 
         // 从当前请求中取出当前请求url资源,这里要注意因为权限表里配置的都是控制器访问路径,即不带项目名所以取出 servletPath当前访问的serlvet路径
         String requestUri = request.getServletPath();
@@ -38,7 +38,7 @@ public class PrivilegeInterceptor implements HandlerInterceptor {
         LoginUser loginUser = CommonUtil.getLoginUser(request);
         Map<String, Integer> privilegeMap = loginUser.getPrivilegeMap();
         if (!privilegeMap.containsKey(requestUri)) {
-            // 当前访问路径没有在权限表中配置,即该路径不受控制，直接放行
+            // 当前访问路径在权限表中没有配置,即该路径不受控制，直接放行
             return true;
         }
 
@@ -63,7 +63,7 @@ public class PrivilegeInterceptor implements HandlerInterceptor {
         if (handlerClass.isAnnotationPresent(RestController.class) ||
                 handlerClass.isAnnotationPresent(ResponseBody.class) ||
                 handlerMethod.getMethod().isAnnotationPresent(ResponseBody.class)) {
-            // 控制器类上标有 RestController或ResponseBody注解或控制器方式上标有ResponseBody说明需要访问json格式数据
+            // 控制器类上标有 RestController或ResponseBody注解或 控制器方法上标有ResponseBody说明需要访问json格式数据
             LayuiResult error = LayuiResult.error(CodeMsgEnum.NO_ACCESS_PRIVILEGE);
             response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
             response.getWriter().write(JSONUtil.toJsonStr(error));
