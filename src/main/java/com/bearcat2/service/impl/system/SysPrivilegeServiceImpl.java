@@ -244,17 +244,18 @@ public class SysPrivilegeServiceImpl extends CommonServiceImpl<SysPrivilege, Sys
     }
 
     @Override
-    public AllotButtonTransfer allotButton(Integer menuId) {
+    public AllotButtonTransfer getTransferData(Integer menuId) {
         // 获得该菜单下所拥有的按钮权限,并处理url取出按钮名称
         SysPrivilegeExample example = new SysPrivilegeExample();
         example.setOrderByClause("sp_orderd");
         example.createCriteria()
-                .andSpParentIdEqualTo(menuId);
+                .andSpParentIdEqualTo(menuId)
+                .andSpTypeEqualTo(Constant.BUTTON_PRIVILEGE_TYPE);
         List<SysPrivilege> sysPrivileges = super.selectByExample(example);
 
-        // 对url处理,例如 /sysUser/add -> add
+        // 取出菜单下所有操作名
         List<String> buttonNames = sysPrivileges.stream()
-                .map(sysPrivilege -> StrUtil.subAfter(sysPrivilege.getSpUri(), StrUtil.SLASH, true))
+                .map(SysPrivilege::getSpOperateName)
                 .collect(Collectors.toList());
 
         // 获取系统所有的按钮
@@ -277,4 +278,118 @@ public class SysPrivilegeServiceImpl extends CommonServiceImpl<SysPrivilege, Sys
         }
         return allotButtonTransfer;
     }
+
+    @Override
+    public LayuiResult allotButton(List<SysPrivilege> newSysPrivileges) {
+        // 说明下这里为啥不简单处理，直接删除原先的权限再把选择的新权限添加进去,主要是权限关联着角色权限表
+        // 如果简单删除那么假设用户选择的新权限和原有一致会导致吧原有的权限给删除掉
+
+        // 这里的按钮权限不可能为空,前端做了控制所以可以放心的取第一条数据
+        SysPrivilege sysPrivilege = newSysPrivileges.get(0);
+        SysPrivilegeExample example = new SysPrivilegeExample();
+        example.createCriteria()
+                .andSpParentIdEqualTo(sysPrivilege.getSpId())
+                .andSpTypeEqualTo(Constant.BUTTON_PRIVILEGE_TYPE);
+        List<SysPrivilege> oldSysPrivileges = super.selectByExample(example);
+        if (CollUtil.isEmpty(oldSysPrivileges)) {
+            // 该菜单原来没有分配按钮,那么用户选择的新权限都添加权限表中
+            for (SysPrivilege newSysPrivilege : newSysPrivileges) {
+                if (StrUtil.isBlank(newSysPrivilege.getSpOperateName())) {
+                    // 操作名为空，跳出本次循环
+                    continue;
+                }
+
+                this.addSysPrivilege(newSysPrivilege);
+            }
+            return LayuiResult.success();
+        }
+
+        // 该菜单原先已有权限,对比现在用户新选择的权限判断是删除,还是需要新增
+        // 获取菜单下对应按钮权限id
+        List<Integer> buttonPrivilegeIds = oldSysPrivileges.stream()
+                .map(SysPrivilege::getSpId)
+                .collect(Collectors.toList());
+        if (newSysPrivileges.size() == 1 && StrUtil.isBlank(newSysPrivileges.get(0).getSpOperateName())) {
+            // 用户没有选择新的权限过来,说明用户想要删除原先所有的权限
+            SysPrivilegeExample sysPrivilegeExample = new SysPrivilegeExample();
+            sysPrivilegeExample.createCriteria()
+                    .andSpParentIdEqualTo(newSysPrivileges.get(0).getSpId())
+                    .andSpTypeEqualTo(Constant.BUTTON_PRIVILEGE_TYPE);
+            super.deleteByExample(sysPrivilegeExample);
+
+            // 权限都删除了,权限角色关系表也就没有存在的必要,同步删除角色权限关系表
+            SysRolePrivilegeExample sysRolePrivilegeExample = new SysRolePrivilegeExample();
+            sysRolePrivilegeExample.createCriteria()
+                    .andSrpPrivilegeIdIn(buttonPrivilegeIds);
+            this.sysRolePrivilegeMapper.deleteByExample(sysRolePrivilegeExample);
+            return LayuiResult.success();
+        }
+
+        // 用户选择的选择了新的权限,对比是需要新增,还是删除 add delete   add edit
+        List<SysPrivilege> addPrivileges = new ArrayList<>();
+        List<SysPrivilege> deletePrivileges = new ArrayList<>();
+        boolean same = false;
+        for (SysPrivilege newSysPrivilege : newSysPrivileges) {
+            for (SysPrivilege oldSysPrivilege : oldSysPrivileges) {
+                // 这个循环是找出删除或新增集合的主要的核心逻辑,需多理解
+                if (newSysPrivilege.getSpOperateName().equals(oldSysPrivilege.getSpOperateName())) {
+                    // 选择的权限与原先一致,没有改变无需处理
+                    deletePrivileges.add(oldSysPrivilege);
+                    same = true;
+                    break;
+                }
+            }
+
+            if (same) {
+                same = false;
+                continue;
+            }
+            addPrivileges.add(newSysPrivilege);
+        }
+
+        // 删除原有的而现在用户已取消的权限
+        oldSysPrivileges.removeAll(deletePrivileges);
+        for (SysPrivilege oldSysPrivilege : oldSysPrivileges) {
+            super.deleteByPrimaryKey(oldSysPrivilege.getSpId());
+
+            // 权限都删除了,权限角色关系表也就没有存在的必要,同步删除角色权限关系表
+            SysRolePrivilegeExample sysRolePrivilegeExample = new SysRolePrivilegeExample();
+            sysRolePrivilegeExample.createCriteria()
+                    .andSrpPrivilegeIdEqualTo(oldSysPrivilege.getSpId());
+            this.sysRolePrivilegeMapper.deleteByExample(sysRolePrivilegeExample);
+        }
+
+        // 添加用户新增的权限
+        for (SysPrivilege privilege : addPrivileges) {
+            addSysPrivilege(privilege);
+        }
+        return LayuiResult.success();
+    }
+
+    /**
+     * 添加系统权限
+     *
+     * @param sysPrivilege
+     * @return
+     */
+    private void addSysPrivilege(SysPrivilege sysPrivilege) {
+        SysPrivilege privilege = new SysPrivilege();
+        privilege.setSpName(sysPrivilege.getSpName());
+
+        // eg : /sysUser/list => /sysUser/add
+        String buttonUrl = StrUtil.format("{}/{}"
+                , StrUtil.subBefore(sysPrivilege.getSpUri(), StrUtil.SLASH, true)
+                , sysPrivilege.getSpOperateName()
+        );
+
+        privilege.setSpUri(buttonUrl);
+        privilege.setSpType(Constant.BUTTON_PRIVILEGE_TYPE);
+        privilege.setSpOperateName(sysPrivilege.getSpOperateName());
+        privilege.setSpParentId(sysPrivilege.getSpId());
+        privilege.setSpCreateTime(new Date());
+        privilege.setSpUpdateTime(new Date());
+        super.insertSelective(privilege);
+    }
+
+
 }

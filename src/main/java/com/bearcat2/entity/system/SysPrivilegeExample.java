@@ -70,7 +70,7 @@ public class SysPrivilegeExample implements Serializable {
     /**
      * <p>Description:  sys_privilege表的实体类 </p>
      * <p>Title: GeneratedCriteria </p>
-     * <p>Create Time:2019-05-11 21:01 </p>
+     * <p>Create Time:2019-06-28 22:31 </p>
      *
      * @author: mybatis generator
      * @version: 1.0
@@ -376,6 +376,76 @@ public class SysPrivilegeExample implements Serializable {
             return (Criteria) this;
         }
 
+        public Criteria andSpOperateNameIsNull() {
+            addCriterion("sp_operate_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpOperateNameIsNotNull() {
+            addCriterion("sp_operate_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpOperateNameEqualTo(String value) {
+            addCriterion("sp_operate_name =", value, "spOperateName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpOperateNameNotEqualTo(String value) {
+            addCriterion("sp_operate_name <>", value, "spOperateName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpOperateNameGreaterThan(String value) {
+            addCriterion("sp_operate_name >", value, "spOperateName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpOperateNameGreaterThanOrEqualTo(String value) {
+            addCriterion("sp_operate_name >=", value, "spOperateName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpOperateNameLessThan(String value) {
+            addCriterion("sp_operate_name <", value, "spOperateName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpOperateNameLessThanOrEqualTo(String value) {
+            addCriterion("sp_operate_name <=", value, "spOperateName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpOperateNameLike(String value) {
+            addCriterion("sp_operate_name like", value, "spOperateName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpOperateNameNotLike(String value) {
+            addCriterion("sp_operate_name not like", value, "spOperateName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpOperateNameIn(List<String> values) {
+            addCriterion("sp_operate_name in", values, "spOperateName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpOperateNameNotIn(List<String> values) {
+            addCriterion("sp_operate_name not in", values, "spOperateName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpOperateNameBetween(String value1, String value2) {
+            addCriterion("sp_operate_name between", value1, value2, "spOperateName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpOperateNameNotBetween(String value1, String value2) {
+            addCriterion("sp_operate_name not between", value1, value2, "spOperateName");
+            return (Criteria) this;
+        }
+
         public Criteria andSpParentIdIsNull() {
             addCriterion("sp_parent_id is null");
             return (Criteria) this;
@@ -630,7 +700,7 @@ public class SysPrivilegeExample implements Serializable {
     /**
      * <p>Description:  sys_privilege表的实体类 </p>
      * <p>Title: Criterion </p>
-     * <p>Create Time:2019-05-11 21:01 </p>
+     * <p>Create Time:2019-06-28 22:31 </p>
      *
      * @author: mybatis generator
      * @version: 1.0

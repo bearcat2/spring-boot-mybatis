@@ -6,6 +6,7 @@
         <result column="sp_name" property="spName" jdbcType="VARCHAR"/>
         <result column="sp_uri" property="spUri" jdbcType="VARCHAR"/>
         <result column="sp_type" property="spType" jdbcType="INTEGER"/>
+        <result column="sp_operate_name" property="spOperateName" jdbcType="VARCHAR"/>
         <result column="sp_parent_id" property="spParentId" jdbcType="INTEGER"/>
         <result column="sp_orderd" property="spOrderd" jdbcType="INTEGER"/>
         <result column="sp_create_time" property="spCreateTime" jdbcType="TIMESTAMP"/>
@@ -72,7 +73,8 @@
         </where>
     </sql>
     <sql id="Base_Column_List">
-    sp_id, sp_name, sp_uri, sp_type, sp_parent_id, sp_orderd, sp_create_time, sp_update_time
+    sp_id, sp_name, sp_uri, sp_type, sp_operate_name, sp_parent_id, sp_orderd, sp_create_time,
+    sp_update_time
   </sql>
     <select id="selectByExample" resultMap="BaseResultMap"
             parameterType="com.bearcat2.entity.system.SysPrivilegeExample">
@@ -106,12 +108,14 @@
         </if>
     </delete>
     <insert id="insert" parameterType="com.bearcat2.entity.system.SysPrivilege">
-    insert into sys_privilege (sp_id, sp_name, sp_uri, 
-      sp_type, sp_parent_id, sp_orderd, 
-      sp_create_time, sp_update_time)
-    values (#{spId,jdbcType=INTEGER}, #{spName,jdbcType=VARCHAR}, #{spUri,jdbcType=VARCHAR}, 
-      #{spType,jdbcType=INTEGER}, #{spParentId,jdbcType=INTEGER}, #{spOrderd,jdbcType=INTEGER}, 
-      #{spCreateTime,jdbcType=TIMESTAMP}, #{spUpdateTime,jdbcType=TIMESTAMP})
+    insert into sys_privilege (sp_id, sp_name, sp_uri,
+      sp_type, sp_operate_name, sp_parent_id,
+      sp_orderd, sp_create_time, sp_update_time
+      )
+    values (#{spId,jdbcType=INTEGER}, #{spName,jdbcType=VARCHAR}, #{spUri,jdbcType=VARCHAR},
+      #{spType,jdbcType=INTEGER}, #{spOperateName,jdbcType=VARCHAR}, #{spParentId,jdbcType=INTEGER},
+      #{spOrderd,jdbcType=INTEGER}, #{spCreateTime,jdbcType=TIMESTAMP}, #{spUpdateTime,jdbcType=TIMESTAMP}
+      )
   </insert>
     <insert id="insertSelective" parameterType="com.bearcat2.entity.system.SysPrivilege">
         insert into sys_privilege
@@ -127,6 +131,9 @@
             </if>
             <if test="spType != null">
                 sp_type,
+            </if>
+            <if test="spOperateName != null">
+                sp_operate_name,
             </if>
             <if test="spParentId != null">
                 sp_parent_id,
@@ -153,6 +160,9 @@
             </if>
             <if test="spType != null">
                 #{spType,jdbcType=INTEGER},
+            </if>
+            <if test="spOperateName != null">
+                #{spOperateName,jdbcType=VARCHAR},
             </if>
             <if test="spParentId != null">
                 #{spParentId,jdbcType=INTEGER},
@@ -190,6 +200,9 @@
             <if test="record.spType != null">
                 sp_type = #{record.spType,jdbcType=INTEGER},
             </if>
+            <if test="record.spOperateName != null">
+                sp_operate_name = #{record.spOperateName,jdbcType=VARCHAR},
+            </if>
             <if test="record.spParentId != null">
                 sp_parent_id = #{record.spParentId,jdbcType=INTEGER},
             </if>
@@ -213,6 +226,7 @@
         sp_name = #{record.spName,jdbcType=VARCHAR},
         sp_uri = #{record.spUri,jdbcType=VARCHAR},
         sp_type = #{record.spType,jdbcType=INTEGER},
+        sp_operate_name = #{record.spOperateName,jdbcType=VARCHAR},
         sp_parent_id = #{record.spParentId,jdbcType=INTEGER},
         sp_orderd = #{record.spOrderd,jdbcType=INTEGER},
         sp_create_time = #{record.spCreateTime,jdbcType=TIMESTAMP},
@@ -232,6 +246,9 @@
             </if>
             <if test="spType != null">
                 sp_type = #{spType,jdbcType=INTEGER},
+            </if>
+            <if test="spOperateName != null">
+                sp_operate_name = #{spOperateName,jdbcType=VARCHAR},
             </if>
             <if test="spParentId != null">
                 sp_parent_id = #{spParentId,jdbcType=INTEGER},
@@ -253,6 +270,7 @@
     set sp_name = #{spName,jdbcType=VARCHAR},
       sp_uri = #{spUri,jdbcType=VARCHAR},
       sp_type = #{spType,jdbcType=INTEGER},
+      sp_operate_name = #{spOperateName,jdbcType=VARCHAR},
       sp_parent_id = #{spParentId,jdbcType=INTEGER},
       sp_orderd = #{spOrderd,jdbcType=INTEGER},
       sp_create_time = #{spCreateTime,jdbcType=TIMESTAMP},

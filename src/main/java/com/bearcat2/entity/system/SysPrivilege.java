@@ -1,13 +1,12 @@
 package com.bearcat2.entity.system;
 
-import com.bearcat2.entity.common.CommonEntity;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
-public class SysPrivilege extends CommonEntity implements Serializable {
+public class SysPrivilege implements Serializable {
     /**
      * 权限id
      */
@@ -27,6 +26,11 @@ public class SysPrivilege extends CommonEntity implements Serializable {
      * 资源类型(1:模块;2:菜单;3:按钮)
      */
     private Integer spType;
+
+    /**
+     * 操作名
+     */
+    private String spOperateName;
 
     /**
      * 父权限id
@@ -118,6 +122,22 @@ public class SysPrivilege extends CommonEntity implements Serializable {
     }
 
     /**
+     * 操作名
+     * @return sp_operate_name 操作名
+     */
+    public String getSpOperateName() {
+        return spOperateName;
+    }
+
+    /**
+     * 操作名
+     * @param spOperateName 操作名
+     */
+    public void setSpOperateName(String spOperateName) {
+        this.spOperateName = spOperateName == null ? null : spOperateName.trim();
+    }
+
+    /**
      * 父权限id
      * @return sp_parent_id 父权限id
      */
@@ -199,6 +219,7 @@ public class SysPrivilege extends CommonEntity implements Serializable {
         sb.append(", spName=").append(spName);
         sb.append(", spUri=").append(spUri);
         sb.append(", spType=").append(spType);
+        sb.append(", spOperateName=").append(spOperateName);
         sb.append(", spParentId=").append(spParentId);
         sb.append(", spOrderd=").append(spOrderd);
         sb.append(", spCreateTime=").append(spCreateTime);
@@ -208,39 +229,15 @@ public class SysPrivilege extends CommonEntity implements Serializable {
     }
 
     @Override
-    public boolean equals(Object that) {
-        if (this == that) {
-            return true;
-        }
-        if (that == null) {
-            return false;
-        }
-        if (getClass() != that.getClass()) {
-            return false;
-        }
-        SysPrivilege other = (SysPrivilege) that;
-        return (this.getSpId() == null ? other.getSpId() == null : this.getSpId().equals(other.getSpId()))
-            && (this.getSpName() == null ? other.getSpName() == null : this.getSpName().equals(other.getSpName()))
-            && (this.getSpUri() == null ? other.getSpUri() == null : this.getSpUri().equals(other.getSpUri()))
-            && (this.getSpType() == null ? other.getSpType() == null : this.getSpType().equals(other.getSpType()))
-            && (this.getSpParentId() == null ? other.getSpParentId() == null : this.getSpParentId().equals(other.getSpParentId()))
-            && (this.getSpOrderd() == null ? other.getSpOrderd() == null : this.getSpOrderd().equals(other.getSpOrderd()))
-            && (this.getSpCreateTime() == null ? other.getSpCreateTime() == null : this.getSpCreateTime().equals(other.getSpCreateTime()))
-            && (this.getSpUpdateTime() == null ? other.getSpUpdateTime() == null : this.getSpUpdateTime().equals(other.getSpUpdateTime()));
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SysPrivilege privilege = (SysPrivilege) o;
+        return Objects.equals(spId, privilege.spId);
     }
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((getSpId() == null) ? 0 : getSpId().hashCode());
-        result = prime * result + ((getSpName() == null) ? 0 : getSpName().hashCode());
-        result = prime * result + ((getSpUri() == null) ? 0 : getSpUri().hashCode());
-        result = prime * result + ((getSpType() == null) ? 0 : getSpType().hashCode());
-        result = prime * result + ((getSpParentId() == null) ? 0 : getSpParentId().hashCode());
-        result = prime * result + ((getSpOrderd() == null) ? 0 : getSpOrderd().hashCode());
-        result = prime * result + ((getSpCreateTime() == null) ? 0 : getSpCreateTime().hashCode());
-        result = prime * result + ((getSpUpdateTime() == null) ? 0 : getSpUpdateTime().hashCode());
-        return result;
+        return Objects.hash(spId);
     }
 }

@@ -92,9 +92,9 @@
                         // 关闭当前iframe层
                         var index = parent.layer.getFrameIndex(window.name);
                         parent.layer.close(index);
-                        layer.msg('权限分配成功');
+                        parent.layer.msg('权限分配成功');
                     } else {
-                        layer.msg('出错了,错误原因' + data.msg);
+                        parent.layer.msg('出错了,错误原因' + data.msg);
                     }
                 },
                 error: function (data) {

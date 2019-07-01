@@ -9,10 +9,7 @@ import com.bearcat2.service.system.SysPrivilegeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
@@ -85,15 +82,15 @@ public class SysMenuController {
         return this.sysPrivilegeService.getTreeSelectNode();
     }
 
-    @GetMapping("/allotButton")
-    public String allotButtonUi(Integer menuId, Model model) {
-        model.addAttribute("menuId", menuId);
-        return "system/menu/allotButton";
+    @ResponseBody
+    @PostMapping("/getTransferData")
+    public AllotButtonTransfer getTransferData(Integer menuId) {
+        return this.sysPrivilegeService.getTransferData(menuId);
     }
 
     @ResponseBody
     @PostMapping("/allotButton")
-    public AllotButtonTransfer allotButton(Integer menuId) {
-        return this.sysPrivilegeService.allotButton(menuId);
+    public LayuiResult allotButton(@RequestBody List<SysPrivilege> sysPrivileges) {
+        return this.sysPrivilegeService.allotButton(sysPrivileges);
     }
 }

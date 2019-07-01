@@ -5,25 +5,26 @@
     <title>角色列表</title>
 
     <link rel="stylesheet" href="../../../static/libs/layui/css/layui.css" th:href="@{/libs/layui/css/layui.css}">
+    <link rel="stylesheet" href="../../../static/css/global.css" th:href="@{/css/global.css}">
 </head>
 <body>
 
 <div class="layui-row">
-    <div class="layui-col-sm12 layui-col-md12 layui-col-lg12 layui-inline">
-        <form class="layui-form " id="searchForm">
-            <div class="layui-inline">
-                角色名：
+    <div class="layui-col-sm12">
+        <form id="searchForm">
+            <div class="bearcat2-input">
+                <span>角色名：</span>
                 <div class="layui-input-inline">
                     <input class="layui-input" name="srName">
                 </div>
-
-                <div class="layui-input-inline" style="margin-left: 20px;">
-                    <button class="layui-btn" type="button" id="search">搜索</button>
-                    <button class="layui-btn layui-btn-danger" type="button" id="clear">清空</button>
-                    <button class="layui-btn" type="button" id="add">新增</button>
-                </div>
             </div>
         </form>
+
+        <div class="bearcat2-input">
+            <button class="layui-btn" id="search">搜索</button>
+            <button class="layui-btn layui-btn-danger" id="clear">清空</button>
+            <button class="layui-btn" id="add">新增</button>
+        </div>
     </div>
 </div>
 
