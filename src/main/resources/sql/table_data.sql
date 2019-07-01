@@ -1,6 +1,6 @@
 /*
 SQLyog Ultimate v13.1.1 (64 bit)
-MySQL - 5.5.52 : Database - spring-boot-mybatis
+MySQL - 5.7.24-log : Database - spring-boot-mybatis
 *********************************************************************
 */
 
@@ -57,16 +57,16 @@ CREATE TABLE `sys_operate` (
   `so_update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `so_update_user` varchar(32) DEFAULT NULL COMMENT '更新人',
   PRIMARY KEY (`so_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 
 /*Data for the table `sys_operate` */
 
 insert  into `sys_operate`(`so_id`,`so_name`,`so_show_name`,`so_orderd`,`so_create_time`,`so_create_user`,`so_update_time`,`so_update_user`) values 
-(1,'add','新增',1,'2019-06-26 16:06:15','张三','2019-06-26 16:54:14','张三'),
-(3,'edit','编辑',2,'2019-06-26 16:54:44','张三','2019-06-26 16:56:28','张三'),
 (4,'delete','删除',3,'2019-06-26 16:56:17','张三','2019-06-26 16:56:17','张三'),
 (5,'detail','查看详情',4,'2019-06-26 16:57:07','张三','2019-06-26 16:57:07','张三'),
-(6,'allotPrivilege','分配权限',5,'2019-06-26 16:57:51','张三','2019-06-26 16:57:51','张三');
+(6,'allotPrivilege','分配权限',5,'2019-06-26 16:57:51','张三','2019-06-26 16:57:51','张三'),
+(12,'add','新增',1,'2019-06-28 21:37:51','张三','2019-06-28 21:37:51','张三'),
+(13,'edit','编辑',2,'2019-06-28 21:38:02','张三','2019-06-28 21:38:36','张三');
 
 /*Table structure for table `sys_privilege` */
 
@@ -77,35 +77,33 @@ CREATE TABLE `sys_privilege` (
   `sp_name` varchar(32) DEFAULT NULL COMMENT '资源名称',
   `sp_uri` varchar(128) DEFAULT NULL COMMENT '资源uri',
   `sp_type` int(11) DEFAULT NULL COMMENT '资源类型(1:模块;2:菜单;3:按钮)',
+  `sp_operate_name` varchar(32) DEFAULT NULL COMMENT '操作名',
   `sp_parent_id` int(11) DEFAULT NULL COMMENT '父权限id',
   `sp_orderd` int(11) DEFAULT NULL COMMENT '位置排序',
   `sp_create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `sp_update_time` datetime DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`sp_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=97 DEFAULT CHARSET=utf8;
 
 /*Data for the table `sys_privilege` */
 
-insert  into `sys_privilege`(`sp_id`,`sp_name`,`sp_uri`,`sp_type`,`sp_parent_id`,`sp_orderd`,`sp_create_time`,`sp_update_time`) values 
-(1,'用户管理','/sysUser/list',2,6,1,'2018-08-16 15:56:34','2019-06-16 22:16:14'),
-(2,'用户管理查询','/sysUser/list',3,1,NULL,'2018-08-16 15:58:21','2018-08-16 15:58:29'),
-(3,'用户管理新增','/sysUser/add',3,1,NULL,'2018-08-16 15:58:23','2018-08-16 15:58:32'),
-(4,'用户管理修改','/sysUser/edit',3,1,NULL,'2018-08-16 15:58:25','2018-08-16 15:58:36'),
-(5,'用户管理删除','/sysUser/delete',3,1,NULL,'2018-08-16 15:58:27','2018-08-16 15:58:34'),
-(6,'系统管理','',1,0,6,'2018-08-17 18:33:01','2019-06-16 22:18:48'),
-(7,'角色管理查询','/sysRole/list',3,11,NULL,'2018-08-17 19:21:05','2018-08-17 19:21:12'),
-(8,'角色管理新增','/sysRole/add',3,11,NULL,'2018-08-17 19:21:07','2018-08-17 19:21:16'),
-(9,'角色管理修改','/sysRole/edit',3,11,NULL,'2018-08-17 19:21:09','2018-08-17 19:21:14'),
-(10,'角色管理删除','/sysRole/delete',3,11,NULL,'2018-08-17 19:21:10','2018-08-17 19:21:18'),
-(11,'角色管理','/sysRole/list',2,6,2,'2018-08-17 19:21:32','2018-08-17 19:21:20'),
-(12,'菜单管理','/sysMenu/list',2,6,3,'2018-08-17 19:21:34','2018-08-17 19:21:23'),
-(13,'菜单管理查询','/sysMenu/list',3,12,NULL,'2018-08-17 19:21:36','2018-08-17 19:21:26'),
-(14,'菜单管理新增','/sysMenu/add',3,12,NULL,'2018-08-17 19:21:38','2018-08-17 19:21:28'),
-(15,'菜单管理修改','/sysMenu/edit',3,12,NULL,'2018-08-17 19:21:40','2018-08-17 19:21:30'),
-(16,'菜单管理删除','/sysMenu/delete',3,12,NULL,'2018-08-17 19:21:42','2018-08-17 19:21:44'),
-(18,'分配权限','/sysMenu/allotSysPrivilege',3,11,NULL,'2018-08-17 21:32:52','2018-08-17 21:32:54'),
-(19,'分配角色','/sysRole/allotSysRole',3,1,NULL,'2018-08-18 00:36:21','2018-08-18 00:36:23'),
-(20,'按钮管理','/sysOperate/list',2,6,4,'2019-06-26 15:44:52','2019-06-26 17:01:12');
+insert  into `sys_privilege`(`sp_id`,`sp_name`,`sp_uri`,`sp_type`,`sp_operate_name`,`sp_parent_id`,`sp_orderd`,`sp_create_time`,`sp_update_time`) values 
+(1,'用户管理','/sysUser/list',2,NULL,6,1,'2018-08-16 15:56:34','2019-06-16 22:16:14'),
+(6,'系统管理','',1,NULL,0,6,'2018-08-17 18:33:01','2019-06-16 22:18:48'),
+(8,'新增','/sysRole/add',3,'add',11,NULL,'2018-08-17 19:21:07','2018-08-17 19:21:16'),
+(9,'修改','/sysRole/edit',3,'edit',11,NULL,'2018-08-17 19:21:09','2018-08-17 19:21:14'),
+(10,'删除','/sysRole/delete',3,'delete',11,NULL,'2018-08-17 19:21:10','2018-08-17 19:21:18'),
+(11,'角色管理','/sysRole/list',2,NULL,6,2,'2018-08-17 19:21:32','2018-08-17 19:21:20'),
+(12,'菜单管理','/sysMenu/list',2,NULL,6,3,'2018-08-17 19:21:34','2018-08-17 19:21:23'),
+(14,'新增','/sysMenu/add',3,'add',12,NULL,'2018-08-17 19:21:38','2018-08-17 19:21:28'),
+(15,'修改','/sysMenu/edit',3,'edit',12,NULL,'2018-08-17 19:21:40','2018-08-17 19:21:30'),
+(16,'删除','/sysMenu/delete',3,'delete',12,NULL,'2018-08-17 19:21:42','2018-08-17 19:21:44'),
+(18,'分配权限','/sysMenu/allotPrivilege',3,'allotPrivilege',11,NULL,'2018-08-17 21:32:52','2018-08-17 21:32:54'),
+(20,'按钮管理','/sysOperate/list',2,NULL,6,4,'2019-06-26 15:44:52','2019-06-26 17:01:12'),
+(46,'编辑','/sysUser/edit',3,'edit',1,NULL,'2019-07-01 23:09:29','2019-07-01 23:09:29'),
+(94,'查看详情','/sysUser/detail',3,'detail',1,NULL,'2019-07-01 23:54:09','2019-07-01 23:54:09'),
+(95,'新增','/sysUser/add',3,'add',1,NULL,'2019-07-01 23:55:26','2019-07-01 23:55:26'),
+(96,'删除','/sysUser/delete',3,'delete',1,NULL,'2019-07-01 23:55:26','2019-07-01 23:55:26');
 
 /*Table structure for table `sys_role` */
 
@@ -135,49 +133,41 @@ CREATE TABLE `sys_role_privilege` (
   `srp_role_id` int(11) DEFAULT NULL COMMENT '角色表主键id',
   `srp_privilege_id` int(11) DEFAULT NULL COMMENT '权限表主键id',
   PRIMARY KEY (`srp_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=136 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=355 DEFAULT CHARSET=utf8;
 
 /*Data for the table `sys_role_privilege` */
 
 insert  into `sys_role_privilege`(`srp_id`,`srp_role_id`,`srp_privilege_id`) values 
-(98,1,6),
-(99,1,1),
-(100,1,19),
-(101,1,5),
-(102,1,4),
-(103,1,3),
-(104,1,2),
-(105,1,11),
-(106,1,10),
-(107,1,18),
-(108,1,9),
-(109,1,8),
-(110,1,7),
-(111,1,12),
-(112,1,13),
-(113,1,15),
-(114,1,16),
-(115,1,14),
-(116,1,20),
-(117,2,6),
-(118,2,1),
-(119,2,19),
-(120,2,5),
-(121,2,4),
-(122,2,3),
-(123,2,2),
-(124,2,11),
-(125,2,10),
-(126,2,18),
-(127,2,9),
-(128,2,8),
-(129,2,7),
-(130,2,12),
-(131,2,13),
-(132,2,15),
-(133,2,16),
-(134,2,14),
-(135,2,20);
+(136,2,6),
+(137,2,1),
+(138,2,3),
+(139,2,4),
+(140,2,5),
+(141,2,21),
+(142,2,11),
+(143,2,8),
+(144,2,9),
+(145,2,10),
+(146,2,18),
+(147,2,12),
+(148,2,14),
+(149,2,15),
+(150,2,16),
+(151,2,20),
+(339,1,6),
+(340,1,1),
+(341,1,46),
+(344,1,94),
+(345,1,11),
+(346,1,8),
+(347,1,9),
+(348,1,10),
+(349,1,18),
+(350,1,12),
+(351,1,14),
+(352,1,15),
+(353,1,16),
+(354,1,20);
 
 /*Table structure for table `sys_user` */
 
@@ -200,8 +190,7 @@ insert  into `sys_user`(`su_id`,`su_login_name`,`su_real_name`,`su_password`,`su
 (2,'lisi','李四','e10adc3949ba59abbe56e057f20f883e','2018-08-16 15:52:44','2018-08-16 15:52:45'),
 (4,'zzp','zzp','e10adc3949ba59abbe56e057f20f883e','2018-08-17 20:15:41','2018-08-17 20:15:41'),
 (5,'wangwu','王五','123456','2019-05-06 22:44:37','2019-05-06 22:44:37'),
-(19,'dadsasd','dadsad','8f4031bfc7640c5f267b11b6fe0c2507','2019-06-16 17:55:11','2019-06-16 17:55:11'),
-(20,'sfsdf','fsfsdf','c73aa4f9bdfc15de604d63550e47de5a','2019-06-16 18:10:12','2019-06-16 18:10:12');
+(19,'dadsasd','dadsad','8f4031bfc7640c5f267b11b6fe0c2507','2019-06-16 17:55:11','2019-06-16 17:55:11');
 
 /*Table structure for table `sys_user_role` */
 
