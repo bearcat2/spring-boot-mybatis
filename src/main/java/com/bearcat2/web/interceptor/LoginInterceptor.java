@@ -1,9 +1,7 @@
 package com.bearcat2.web.interceptor;
 
 import com.bearcat2.entity.common.LoginUser;
-import com.bearcat2.service.system.SysPrivilegeService;
 import com.bearcat2.util.CommonUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,9 +16,6 @@ import javax.servlet.http.HttpServletResponse;
  * @version: 1.0
  */
 public class LoginInterceptor implements HandlerInterceptor {
-
-    @Autowired
-    private SysPrivilegeService sysPrivilegeService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {

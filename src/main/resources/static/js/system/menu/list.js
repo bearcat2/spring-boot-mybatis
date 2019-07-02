@@ -118,7 +118,7 @@ layui.use(['treeTable', 'commonTable', 'treeSelect', 'layer', 'jquery', 'transfe
                 $.each(transferSelectData, function (i, e) {
                     arr.push(
                         {
-                            spId: menuId,
+                            spParentId: menuId,
                             spUri: menuUrl,
                             spOperateName: e.value,
                             spName: e.title
@@ -130,7 +130,7 @@ layui.use(['treeTable', 'commonTable', 'treeSelect', 'layer', 'jquery', 'transfe
                     // 右侧没有选中数据
                     arr.push(
                         {
-                            spId: menuId
+                            spParentId: menuId
                         }
                     );
                 }

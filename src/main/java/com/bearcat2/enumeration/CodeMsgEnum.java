@@ -22,7 +22,7 @@ public enum CodeMsgEnum {
     LOGIN_ERROR(100, "用户名或密码错误"),
     CAPTCHA_ERROR(101, "验证码错误"),
     PRIVILEGE_IS_NULL(102, "您没有选中任何权限,无法提交"),
-    NO_ACCESS_PRIVILEGE(401, "无权限访问,请联系管理员");
+    NO_ACCESS_PRIVILEGE(403, "权限不足操作拒绝,请联系管理员");
 
     /** 响应码 */
     private int code;

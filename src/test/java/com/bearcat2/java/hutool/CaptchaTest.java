@@ -6,9 +6,12 @@ import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.setting.dialect.Props;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.Enumeration;
 
@@ -45,9 +48,14 @@ public class CaptchaTest {
         String format = DateUtil.format(new Date(), DatePattern.UTC_FORMAT);
         System.out.println(format);
     }
-    
+
     @Test
-    public void test3() throws Exception{
+    public void test3() throws Exception {
         System.out.println(StrUtil.subAfter("/sysUser/add", StrUtil.SLASH, true));
+    }
+
+    @SneakyThrows
+    public void test11() {
+        InputStream inputStream = new FileInputStream("1.txt");
     }
 }

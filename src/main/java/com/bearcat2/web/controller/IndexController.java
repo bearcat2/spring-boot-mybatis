@@ -33,7 +33,7 @@ public class IndexController {
     }
 
     @GetMapping(value = "/refuse")
-    public String refuse(Model model) {
+    public String refuse() {
         return "refuse";
     }
 

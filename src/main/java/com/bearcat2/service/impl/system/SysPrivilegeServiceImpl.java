@@ -288,7 +288,7 @@ public class SysPrivilegeServiceImpl extends CommonServiceImpl<SysPrivilege, Sys
         SysPrivilege sysPrivilege = newSysPrivileges.get(0);
         SysPrivilegeExample example = new SysPrivilegeExample();
         example.createCriteria()
-                .andSpParentIdEqualTo(sysPrivilege.getSpId())
+                .andSpParentIdEqualTo(sysPrivilege.getSpParentId())
                 .andSpTypeEqualTo(Constant.BUTTON_PRIVILEGE_TYPE);
         List<SysPrivilege> oldSysPrivileges = super.selectByExample(example);
         if (CollUtil.isEmpty(oldSysPrivileges)) {
@@ -304,7 +304,6 @@ public class SysPrivilegeServiceImpl extends CommonServiceImpl<SysPrivilege, Sys
             return LayuiResult.success();
         }
 
-        // 该菜单原先已有权限,对比现在用户新选择的权限判断是删除,还是需要新增
         // 获取菜单下对应按钮权限id
         List<Integer> buttonPrivilegeIds = oldSysPrivileges.stream()
                 .map(SysPrivilege::getSpId)
@@ -313,7 +312,7 @@ public class SysPrivilegeServiceImpl extends CommonServiceImpl<SysPrivilege, Sys
             // 用户没有选择新的权限过来,说明用户想要删除原先所有的权限
             SysPrivilegeExample sysPrivilegeExample = new SysPrivilegeExample();
             sysPrivilegeExample.createCriteria()
-                    .andSpParentIdEqualTo(newSysPrivileges.get(0).getSpId())
+                    .andSpParentIdEqualTo(newSysPrivileges.get(0).getSpParentId())
                     .andSpTypeEqualTo(Constant.BUTTON_PRIVILEGE_TYPE);
             super.deleteByExample(sysPrivilegeExample);
 
@@ -325,13 +324,15 @@ public class SysPrivilegeServiceImpl extends CommonServiceImpl<SysPrivilege, Sys
             return LayuiResult.success();
         }
 
-        // 用户选择的选择了新的权限,对比是需要新增,还是删除 add delete   add edit
+        // 用户选择的选择了新的权限,对比是需要新增,还是删除
         List<SysPrivilege> addPrivileges = new ArrayList<>();
         List<SysPrivilege> deletePrivileges = new ArrayList<>();
         boolean same = false;
+
+        // 这个循环是找出删除或新增集合的主要的核心逻辑,需多理解 eg：old => [add,edit]; new => [add,delete]
+        // 删除的为 edit ,新增的为delete
         for (SysPrivilege newSysPrivilege : newSysPrivileges) {
             for (SysPrivilege oldSysPrivilege : oldSysPrivileges) {
-                // 这个循环是找出删除或新增集合的主要的核心逻辑,需多理解
                 if (newSysPrivilege.getSpOperateName().equals(oldSysPrivilege.getSpOperateName())) {
                     // 选择的权限与原先一致,没有改变无需处理
                     deletePrivileges.add(oldSysPrivilege);
@@ -339,7 +340,6 @@ public class SysPrivilegeServiceImpl extends CommonServiceImpl<SysPrivilege, Sys
                     break;
                 }
             }
-
             if (same) {
                 same = false;
                 continue;
@@ -381,11 +381,10 @@ public class SysPrivilegeServiceImpl extends CommonServiceImpl<SysPrivilege, Sys
                 , StrUtil.subBefore(sysPrivilege.getSpUri(), StrUtil.SLASH, true)
                 , sysPrivilege.getSpOperateName()
         );
-
         privilege.setSpUri(buttonUrl);
         privilege.setSpType(Constant.BUTTON_PRIVILEGE_TYPE);
         privilege.setSpOperateName(sysPrivilege.getSpOperateName());
-        privilege.setSpParentId(sysPrivilege.getSpId());
+        privilege.setSpParentId(sysPrivilege.getSpParentId());
         privilege.setSpCreateTime(new Date());
         privilege.setSpUpdateTime(new Date());
         super.insertSelective(privilege);
