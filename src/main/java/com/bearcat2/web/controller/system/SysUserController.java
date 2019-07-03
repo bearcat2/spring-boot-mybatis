@@ -60,7 +60,7 @@ public class SysUserController {
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         // 移除session标记
-        session.removeAttribute("loginUser");
+        session.removeAttribute(Constant.LOGIN_USER_SESSION_ATTR);
         return "redirect:/sysUser/doLogin";
     }
 

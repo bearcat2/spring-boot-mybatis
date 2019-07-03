@@ -13,6 +13,7 @@ import com.bearcat2.service.system.SysPrivilegeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
  * @version: 1.0
  */
 @Service
+@Transactional(readOnly = true)
 public class SysPrivilegeServiceImpl extends CommonServiceImpl<SysPrivilege, SysPrivilegeExample> implements SysPrivilegeService {
 
     @Autowired
@@ -225,6 +227,7 @@ public class SysPrivilegeServiceImpl extends CommonServiceImpl<SysPrivilege, Sys
         return this.selectByExample(example);
     }
 
+    @Transactional
     @Override
     public LayuiResult allotPrivilege(List<SysRolePrivilege> sysRolePrivileges) {
         // 为了简便,不修改对应权限,直接先删除该角色原先拥有的权限再添加现在重新分配的
@@ -279,6 +282,7 @@ public class SysPrivilegeServiceImpl extends CommonServiceImpl<SysPrivilege, Sys
         return allotButtonTransfer;
     }
 
+    @Transactional
     @Override
     public LayuiResult allotButton(List<SysPrivilege> newSysPrivileges) {
         // 说明下这里为啥不简单处理，直接删除原先的权限再把选择的新权限添加进去,主要是权限关联着角色权限表

@@ -2,7 +2,10 @@ package com.bearcat2.service.impl.system;
 
 import cn.hutool.core.util.StrUtil;
 import com.bearcat2.entity.common.LayuiResult;
-import com.bearcat2.entity.system.*;
+import com.bearcat2.entity.system.SysRole;
+import com.bearcat2.entity.system.SysRoleExample;
+import com.bearcat2.entity.system.SysUserRole;
+import com.bearcat2.entity.system.SysUserRoleExample;
 import com.bearcat2.mapper.system.SysUserRoleMapper;
 import com.bearcat2.service.common.CommonServiceImpl;
 import com.bearcat2.service.system.SysRoleService;
@@ -11,6 +14,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
@@ -25,6 +29,7 @@ import java.util.List;
  * @version: 1.0
  */
 @Service
+@Transactional(readOnly = true)
 public class SysRoleServiceImpl extends CommonServiceImpl< SysRole,  SysRoleExample> implements SysRoleService {
 
     @Autowired
@@ -62,6 +67,7 @@ public class SysRoleServiceImpl extends CommonServiceImpl< SysRole,  SysRoleExam
         return this.sysUserRoleMapper.selectByExample(sysUserRoleExample);
     }
 
+    @Transactional
     @Override
     public void allotSysRole(Integer userId, String roleIds) {
         SysUserRoleExample sysUserRoleExample = new SysUserRoleExample();

@@ -17,6 +17,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,6 +33,7 @@ import java.util.stream.Collectors;
  * @version: 1.0
  */
 @Service
+@Transactional(readOnly = true)
 public class SysUserServiceImpl extends CommonServiceImpl<SysUser, SysUserExample> implements SysUserService {
 
     @Autowired
@@ -97,6 +99,7 @@ public class SysUserServiceImpl extends CommonServiceImpl<SysUser, SysUserExampl
         return roleIds;
     }
 
+    @Transactional
     @Override
     public int insertUserRoleRelation(Integer userId, Integer roleId) {
         SysUserRole sysUserRole = new SysUserRole();
@@ -105,6 +108,7 @@ public class SysUserServiceImpl extends CommonServiceImpl<SysUser, SysUserExampl
         return this.sysUserRoleMapper.insertSelective(sysUserRole);
     }
 
+    @Transactional
     @Override
     public int updateUserRoleRelationByUserId(Integer userId, Integer roleId) {
         SysUserRoleExample example = new SysUserRoleExample();
