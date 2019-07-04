@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bearcat2.mapper.system.SysUserRoleMapper">
+    <resultMap id="BaseResultMap" type="com.bearcat2.entity.system.SysUserRole">
+        <id column="sur_id" property="surId" jdbcType="INTEGER"/>
+        <result column="sur_user_id" property="surUserId" jdbcType="INTEGER"/>
+        <result column="sur_role_id" property="surRoleId" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+    sur_id, sur_user_id, sur_role_id
+  </sql>
+    <select id="selectByExample" resultMap="BaseResultMap"
+            parameterType="com.bearcat2.entity.system.SysUserRoleExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from sys_user_role
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_user_role
+        where sur_id = #{surId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from sys_user_role
+    where sur_id = #{surId,jdbcType=INTEGER}
+  </delete>
+    <delete id="deleteByExample" parameterType="com.bearcat2.entity.system.SysUserRoleExample">
+        delete from sys_user_role
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.bearcat2.entity.system.SysUserRole">
+    insert into sys_user_role (sur_id, sur_user_id, sur_role_id
+      )
+    values (#{surId,jdbcType=INTEGER}, #{surUserId,jdbcType=INTEGER}, #{surRoleId,jdbcType=INTEGER}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="com.bearcat2.entity.system.SysUserRole">
+        insert into sys_user_role
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="surId != null">
+                sur_id,
+            </if>
+            <if test="surUserId != null">
+                sur_user_id,
+            </if>
+            <if test="surRoleId != null">
+                sur_role_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="surId != null">
+                #{surId,jdbcType=INTEGER},
+            </if>
+            <if test="surUserId != null">
+                #{surUserId,jdbcType=INTEGER},
+            </if>
+            <if test="surRoleId != null">
+                #{surRoleId,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="countByExample" parameterType="com.bearcat2.entity.system.SysUserRoleExample"
+            resultType="java.lang.Integer">
+        select count(*) from sys_user_role
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update sys_user_role
+        <set>
+            <if test="record.surId != null">
+                sur_id = #{record.surId,jdbcType=INTEGER},
+            </if>
+            <if test="record.surUserId != null">
+                sur_user_id = #{record.surUserId,jdbcType=INTEGER},
+            </if>
+            <if test="record.surRoleId != null">
+                sur_role_id = #{record.surRoleId,jdbcType=INTEGER},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update sys_user_role
+        set sur_id = #{record.surId,jdbcType=INTEGER},
+        sur_user_id = #{record.surUserId,jdbcType=INTEGER},
+        sur_role_id = #{record.surRoleId,jdbcType=INTEGER}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.bearcat2.entity.system.SysUserRole">
+        update sys_user_role
+        <set>
+            <if test="surUserId != null">
+                sur_user_id = #{surUserId,jdbcType=INTEGER},
+            </if>
+            <if test="surRoleId != null">
+                sur_role_id = #{surRoleId,jdbcType=INTEGER},
+            </if>
+        </set>
+        where sur_id = #{surId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.bearcat2.entity.system.SysUserRole">
+    update sys_user_role
+    set sur_user_id = #{surUserId,jdbcType=INTEGER},
+      sur_role_id = #{surRoleId,jdbcType=INTEGER}
+    where sur_id = #{surId,jdbcType=INTEGER}
+  </update>
+
+    <insert id="insertBatch">
+        insert into sys_user_role (sur_id, sur_user_id, sur_role_id)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.surId,jdbcType=INTEGER}, #{item.surUserId,jdbcType=INTEGER}, #{item.surRoleId,jdbcType=INTEGER})
+        </foreach>
+    </insert>
+</mapper>

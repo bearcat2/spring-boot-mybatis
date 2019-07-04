@@ -1,0 +1,46 @@
+<form class="layui-form" id="layui-form-page">
+    <div class="layui-form-item">
+        <label class="layui-form-label">登录名</label>
+        <div class="layui-input-block">
+            <input type="text" name="suLoginName" placeholder="请输入登录名" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">真实姓名</label>
+        <div class="layui-input-block">
+            <input type="text" name="suRealName" placeholder="请输入真实姓名" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">密码</label>
+        <div class="layui-input-block">
+            <input type="text" name="suPassword" placeholder="请输入密码" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">确认密码</label>
+        <div class="layui-input-block">
+            <input type="text" name="confirmPassword" placeholder="请输入确认密码" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">角色名</label>
+        <div class="layui-input-block">
+            <select name="roleId" lay-verify="required">
+                <option value=""></option>
+                <option th:each="role:${roles}" th:value="${role.srId}" th:text="${role.srName}">角色名</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="form">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>

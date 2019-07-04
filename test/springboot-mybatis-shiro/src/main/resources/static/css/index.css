@@ -1,0 +1,18 @@
+.rightmenu-ul {
+    display: none;
+    position: absolute;
+    background-color: #dddddd;
+    width: 100px;
+    text-align: center;
+}
+
+.rightmenu-li {
+    height: 25px;
+    line-height: 25px;
+    color: #3F3F3F;
+}
+
+ul.rightmenu hr {
+    margin: 0;
+    padding: 0;
+}

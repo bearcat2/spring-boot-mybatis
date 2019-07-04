@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bearcat2.mapper.system.SysPrivilegeMapper">
+    <resultMap id="BaseResultMap" type="com.bearcat2.entity.system.SysPrivilege">
+        <id column="sp_id" property="spId" jdbcType="INTEGER"/>
+        <result column="sp_name" property="spName" jdbcType="VARCHAR"/>
+        <result column="sp_uri" property="spUri" jdbcType="VARCHAR"/>
+        <result column="sp_type" property="spType" jdbcType="INTEGER"/>
+        <result column="sp_parent_id" property="spParentId" jdbcType="INTEGER"/>
+        <result column="sp_orderd" property="spOrderd" jdbcType="INTEGER"/>
+        <result column="sp_create_time" property="spCreateTime" jdbcType="TIMESTAMP"/>
+        <result column="sp_update_time" property="spUpdateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+    sp_id, sp_name, sp_uri, sp_type, sp_parent_id, sp_orderd, sp_create_time, sp_update_time
+  </sql>
+    <select id="selectByExample" resultMap="BaseResultMap"
+            parameterType="com.bearcat2.entity.system.SysPrivilegeExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from sys_privilege
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_privilege
+        where sp_id = #{spId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from sys_privilege
+    where sp_id = #{spId,jdbcType=INTEGER}
+  </delete>
+    <delete id="deleteByExample" parameterType="com.bearcat2.entity.system.SysPrivilegeExample">
+        delete from sys_privilege
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.bearcat2.entity.system.SysPrivilege">
+    insert into sys_privilege (sp_id, sp_name, sp_uri, 
+      sp_type, sp_parent_id, sp_orderd, 
+      sp_create_time, sp_update_time)
+    values (#{spId,jdbcType=INTEGER}, #{spName,jdbcType=VARCHAR}, #{spUri,jdbcType=VARCHAR}, 
+      #{spType,jdbcType=INTEGER}, #{spParentId,jdbcType=INTEGER}, #{spOrderd,jdbcType=INTEGER}, 
+      #{spCreateTime,jdbcType=TIMESTAMP}, #{spUpdateTime,jdbcType=TIMESTAMP})
+  </insert>
+    <insert id="insertSelective" parameterType="com.bearcat2.entity.system.SysPrivilege">
+        insert into sys_privilege
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="spId != null">
+                sp_id,
+            </if>
+            <if test="spName != null">
+                sp_name,
+            </if>
+            <if test="spUri != null">
+                sp_uri,
+            </if>
+            <if test="spType != null">
+                sp_type,
+            </if>
+            <if test="spParentId != null">
+                sp_parent_id,
+            </if>
+            <if test="spOrderd != null">
+                sp_orderd,
+            </if>
+            <if test="spCreateTime != null">
+                sp_create_time,
+            </if>
+            <if test="spUpdateTime != null">
+                sp_update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="spId != null">
+                #{spId,jdbcType=INTEGER},
+            </if>
+            <if test="spName != null">
+                #{spName,jdbcType=VARCHAR},
+            </if>
+            <if test="spUri != null">
+                #{spUri,jdbcType=VARCHAR},
+            </if>
+            <if test="spType != null">
+                #{spType,jdbcType=INTEGER},
+            </if>
+            <if test="spParentId != null">
+                #{spParentId,jdbcType=INTEGER},
+            </if>
+            <if test="spOrderd != null">
+                #{spOrderd,jdbcType=INTEGER},
+            </if>
+            <if test="spCreateTime != null">
+                #{spCreateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="spUpdateTime != null">
+                #{spUpdateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.bearcat2.entity.system.SysPrivilegeExample"
+            resultType="java.lang.Integer">
+        select count(*) from sys_privilege
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update sys_privilege
+        <set>
+            <if test="record.spId != null">
+                sp_id = #{record.spId,jdbcType=INTEGER},
+            </if>
+            <if test="record.spName != null">
+                sp_name = #{record.spName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.spUri != null">
+                sp_uri = #{record.spUri,jdbcType=VARCHAR},
+            </if>
+            <if test="record.spType != null">
+                sp_type = #{record.spType,jdbcType=INTEGER},
+            </if>
+            <if test="record.spParentId != null">
+                sp_parent_id = #{record.spParentId,jdbcType=INTEGER},
+            </if>
+            <if test="record.spOrderd != null">
+                sp_orderd = #{record.spOrderd,jdbcType=INTEGER},
+            </if>
+            <if test="record.spCreateTime != null">
+                sp_create_time = #{record.spCreateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.spUpdateTime != null">
+                sp_update_time = #{record.spUpdateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update sys_privilege
+        set sp_id = #{record.spId,jdbcType=INTEGER},
+        sp_name = #{record.spName,jdbcType=VARCHAR},
+        sp_uri = #{record.spUri,jdbcType=VARCHAR},
+        sp_type = #{record.spType,jdbcType=INTEGER},
+        sp_parent_id = #{record.spParentId,jdbcType=INTEGER},
+        sp_orderd = #{record.spOrderd,jdbcType=INTEGER},
+        sp_create_time = #{record.spCreateTime,jdbcType=TIMESTAMP},
+        sp_update_time = #{record.spUpdateTime,jdbcType=TIMESTAMP}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.bearcat2.entity.system.SysPrivilege">
+        update sys_privilege
+        <set>
+            <if test="spName != null">
+                sp_name = #{spName,jdbcType=VARCHAR},
+            </if>
+            <if test="spUri != null">
+                sp_uri = #{spUri,jdbcType=VARCHAR},
+            </if>
+            <if test="spType != null">
+                sp_type = #{spType,jdbcType=INTEGER},
+            </if>
+            <if test="spParentId != null">
+                sp_parent_id = #{spParentId,jdbcType=INTEGER},
+            </if>
+            <if test="spOrderd != null">
+                sp_orderd = #{spOrderd,jdbcType=INTEGER},
+            </if>
+            <if test="spCreateTime != null">
+                sp_create_time = #{spCreateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="spUpdateTime != null">
+                sp_update_time = #{spUpdateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where sp_id = #{spId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.bearcat2.entity.system.SysPrivilege">
+    update sys_privilege
+    set sp_name = #{spName,jdbcType=VARCHAR},
+      sp_uri = #{spUri,jdbcType=VARCHAR},
+      sp_type = #{spType,jdbcType=INTEGER},
+      sp_parent_id = #{spParentId,jdbcType=INTEGER},
+      sp_orderd = #{spOrderd,jdbcType=INTEGER},
+      sp_create_time = #{spCreateTime,jdbcType=TIMESTAMP},
+      sp_update_time = #{spUpdateTime,jdbcType=TIMESTAMP}
+    where sp_id = #{spId,jdbcType=INTEGER}
+  </update>
+
+    <select id="findMenuByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+          sp.`sp_id`,
+          sp.sp_uri,
+          sp.`sp_name`,
+          sp.`sp_parent_id`,
+          sp.`sp_type`
+        from
+          `sys_privilege` sp
+        where sp.`sp_type` in (1,2)
+          and sp.`sp_id` in
+          (select
+            srp.`srp_privilege_id`
+          from
+            `sys_role_privilege` srp
+          where srp.`srp_role_id` in
+            (select
+              sur.`sur_role_id`
+            from
+              `sys_user_role` sur
+            where sur.`sur_user_id` = #{userId}))
+        order by sp_orderd
+    </select>
+
+    <select id="findPrivilegeByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+          sp.`sp_id`,
+          sp.sp_uri,
+          sp.`sp_name`,
+          sp.`sp_parent_id`,
+          sp.`sp_type`
+        from
+          `sys_privilege` sp
+        where sp.`sp_type` = 3
+          and sp.`sp_id` in
+          (select
+            srp.`srp_privilege_id`
+          from
+            `sys_role_privilege` srp
+          where srp.`srp_role_id` in
+            (select
+              sur.`sur_role_id`
+            from
+              `sys_user_role` sur
+            where sur.`sur_user_id` = #{userId}))
+        order by sp_orderd
+    </select>
+
+
+    <!--=Start findPermsByRole 根据角色ID查找权限树列表-->
+    <select id="findPermsByRoleId" resultMap="BaseResultMap">
+        select
+        *
+        from sys_privilege p
+        LEFT JOIN sys_role_privilege rp ON rp.srp_privilege_id=p.sp_id
+        WHERE rp.srp_role_id=#{srId}
+    </select>
+    <!--=End findPermsByRole 根据角色ID查找权限树列表-->
+
+    <!--=Start getUserPerms 根据用户ID查找权限树列表-->
+    <select id="getUserPerms" resultMap="BaseResultMap">
+    select
+    p.*
+    from sys_privilege p
+    LEFT JOIN sys_role_privilege rp ON rp.srp_privilege_id=p.sp_id
+    LEFT JOIN sys_role r ON r.sr_id=rp.srp_role_id
+    LEFT JOIN sys_user_role ur ON ur.sur_role_id=r.sr_id
+    WHERE ur.sur_user_id= #{su_id}
+    GROUP BY p.sp_id
+  </select>
+    <!--=End getUserPerms 根据用户ID查找权限树列表-->
+
+
+
+</mapper>
