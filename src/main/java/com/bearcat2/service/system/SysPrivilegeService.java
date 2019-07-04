@@ -6,6 +6,7 @@ import com.bearcat2.entity.system.SysPrivilegeExample;
 import com.bearcat2.entity.system.SysRolePrivilege;
 import com.bearcat2.service.common.CommonService;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -35,43 +36,11 @@ public interface SysPrivilegeService extends CommonService<SysPrivilege, SysPriv
     List<SysPrivilege> findPrivilegeByUserId(Integer userId);
 
     /**
-     * 通过模块id查询该模块下的所有菜单
-     *
-     * @param moduleId 模块id
-     * @return
-     */
-    List<SysPrivilege> findByModuleId(Integer moduleId);
-
-    /**
-     * 分页查询
-     *
-     * @param sysPrivilege
-     * @return
-     */
-    LayuiResult list(SysPrivilege sysPrivilege);
-
-    /**
-     * 通过类型查询
-     *
-     * @param type
-     * @return
-     */
-    List<SysPrivilege> findByType(Integer type);
-
-    /**
-     * 查找所有权限
+     * 查找系统配置的所有权限
      *
      * @return
      */
-    List<SysPrivilege> findAll();
-
-    /**
-     * 查找该用户下所有权限id
-     *
-     * @param roleId
-     * @return
-     */
-    List<SysRolePrivilege> findByRoleId(Integer roleId);
+    HashMap<String, Integer> findAllPrivilege();
 
     /**
      * 获取前端treeTable插件所需内容
@@ -104,10 +73,20 @@ public interface SysPrivilegeService extends CommonService<SysPrivilege, SysPriv
     LayuiResult allotPrivilege(List<SysRolePrivilege> sysRolePrivileges);
 
     /**
-     * 给当前菜单分配按钮
+     * 获取按钮管理穿梭框数据
      *
      * @param menuId 菜单id
      * @return
      */
-    AllotButtonTransfer allotButton(Integer menuId);
+    AllotButtonTransfer getTransferData(Integer menuId);
+
+    /**
+     * 分配按钮
+     * 注意：前端传递过来的权限数据做了处理,如果没有选择权限会将父菜单id传递过来但是不会有 operateName
+     * 所以判断空的条件是有且仅有一条数据且operateName为空
+     *
+     * @param sysPrivileges 权限对象
+     * @return
+     */
+    LayuiResult allotButton(List<SysPrivilege> sysPrivileges);
 }

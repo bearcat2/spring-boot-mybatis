@@ -10,6 +10,7 @@ import com.bearcat2.util.CommonUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -22,6 +23,7 @@ import java.util.List;
  * @version: 1.0
  */
 @Service
+@Transactional(readOnly = true)
 public class SysOperateServiceImpl extends CommonServiceImpl<SysOperate, SysOperateExample> implements SysOperateService {
 
     @Override

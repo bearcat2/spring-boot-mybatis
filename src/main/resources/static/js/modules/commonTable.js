@@ -84,7 +84,7 @@ layui.define(['table', 'jquery', 'form'], function (exports) {
         switch (type) {
             case 1:
                 // 新增
-                htmlUrl = 'add_ui';
+                htmlUrl = 'add';
                 ajaxFormSubmitUrl = 'add';
                 ajaxFormSubmitSuccessMsg = '新增成功';
                 $selector = $('#addConfig');
@@ -92,7 +92,7 @@ layui.define(['table', 'jquery', 'form'], function (exports) {
                 break;
             case 2:
                 // 编辑
-                htmlUrl = 'edit_ui';
+                htmlUrl = 'edit';
                 ajaxFormSubmitUrl = 'edit';
                 ajaxFormSubmitSuccessMsg = '编辑成功';
                 $selector = $('#editConfig');
@@ -220,6 +220,10 @@ layui.define(['table', 'jquery', 'form'], function (exports) {
             case 'del':
                 // 删除
                 deleteData(data);
+                break;
+            case 'allotPrivilege':
+                // 分配权限,分配权限并不是所有页面共有的回调外部定义方法即可
+                allotPrivilege(data);
                 break;
         }
     });

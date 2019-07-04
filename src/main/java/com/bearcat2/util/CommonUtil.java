@@ -2,7 +2,12 @@ package com.bearcat2.util;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.setting.dialect.Props;
+import com.bearcat2.entity.common.Constant;
+import com.bearcat2.entity.common.LoginUser;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.*;
 
 /**
@@ -43,7 +48,7 @@ public class CommonUtil {
      */
     public static List<String> getPropertyNames(String path) {
         List<String> propertyNames = new ArrayList<>();
-        Props props = new Props("config/anonymousUrls.properties");
+        Props props = new Props(path);
         Enumeration<?> enumeration = props.propertyNames();
         while (enumeration.hasMoreElements()) {
             String key = (String) enumeration.nextElement();
@@ -52,10 +57,34 @@ public class CommonUtil {
         return propertyNames;
     }
 
+    /**
+     * 从 request 中获取当前登录的用户
+     *
+     * @param request 当前请求对象
+     * @return LoginUser - 当前登录的用户
+     */
+    public static LoginUser getLoginUser(HttpServletRequest request) {
+        return getLoginUser(request.getSession());
+    }
 
-    public static void main(String[] args) {
-        List<String> list = Arrays.asList("张三", "李四", "张三");
-        Set<String> datas = listToSet(list);
-        System.out.println(datas);
+    /**
+     * 从 session 中获取当前登录的用户
+     *
+     * @param session session会话
+     * @return LoginUser - 当前登录的用户
+     */
+    public static LoginUser getLoginUser(HttpSession session) {
+        return (LoginUser) session.getAttribute(Constant.LOGIN_USER_SESSION_ATTR);
+    }
+
+    /**
+     * 控制浏览器不缓存响应内容
+     *
+     * @param response 响应对象
+     */
+    public static void noCache(HttpServletResponse response) {
+        response.setDateHeader("expries", -1);
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
     }
 }

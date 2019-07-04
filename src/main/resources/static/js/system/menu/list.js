@@ -1,8 +1,9 @@
-layui.use(['treeTable', 'commonTable', 'treeSelect', 'layer', 'jquery'], function () {
+layui.use(['treeTable', 'commonTable', 'treeSelect', 'layer', 'jquery', 'transfer'], function () {
     var treeTable = layui.treeTable,
         commonTable = layui.commonTable,
         treeSelect = layui.treeSelect,
         layer = layui.layer,
+        transfer = layui.transfer,
         $ = layui.jquery;
 
     var render = treeTable.render({
@@ -24,12 +25,11 @@ layui.use(['treeTable', 'commonTable', 'treeSelect', 'layer', 'jquery'], functio
             },
             {
                 title: '操作',
-                template: function (item) {
+                template: function (data) {
                     var html = '';
                     html += '<a class="layui-btn layui-btn-xs" lay-filter="edit">编辑</a>';
                     html += '<a class="layui-btn layui-btn-danger layui-btn-xs" lay-filter="delete">删除</a>';
                     html += '<a class="layui-btn layui-btn-normal layui-btn-xs" lay-filter="allotButton">分配按钮</a>';
-
                     return html;
                 }
             }
@@ -44,6 +44,11 @@ layui.use(['treeTable', 'commonTable', 'treeSelect', 'layer', 'jquery'], functio
 
     // 监听删除操作
     treeTable.on('tree(delete)', function (data) {
+        if (!data.item.is_end) {
+            // 非叶子节点,无法删除
+            layer.msg("模块下有子菜单，请先删除子菜单");
+            return;
+        }
         layer.confirm(
             '删除操作不可恢复，确认要删除吗？',
             {
@@ -78,17 +83,77 @@ layui.use(['treeTable', 'commonTable', 'treeSelect', 'layer', 'jquery'], functio
 
     // 监听分配按钮
     treeTable.on('tree(allotButton)', function (res) {
-        var data = res.item;
-        var title = data.title + ' > 分配按钮';
+        var title = res.item.title + ' > 分配按钮';
+        var menuId = res.item.id;
+        var menuUrl = res.item.url;
         layer.open({
-            type: 2,
+            type: 1,
             title: title,
             skin: 'layui-layer-lan',
             btn: ['确定', '取消'],
             maxmin: true,
-            area: ['506px', '414px'],
-            content: '/sysMenu/allotButton_ui?menuId=' + data.id,
+            area: ['479px', '393px'],
+            content: $('#allotButton'),
             // resize: false,
+            success: function (layero, index) {
+                // 弹出层成功回调函数,渲染穿梭框数据
+                var params = {menuId: menuId};
+                $.post("/sysMenu/getTransferData", params, function (result) {
+                    //渲染
+                    transfer.render({
+                        elem: '#allotButton',
+                        data: result.data,
+                        value: result.rightSelectData,
+                        title: ['待选区', '已选区'],
+                        showSearch: true,
+                        height: 300,
+                        id: 'allotButtonTransfer'
+                    });
+                }, 'json');
+            },
+            yes: function (index, layero) {
+                // 获得穿梭框右侧选中数据
+                var transferSelectData = transfer.getData('allotButtonTransfer');
+                var arr = [];
+                $.each(transferSelectData, function (i, e) {
+                    arr.push(
+                        {
+                            spParentId: menuId,
+                            spUri: menuUrl,
+                            spOperateName: e.value,
+                            spName: e.title
+                        }
+                    );
+                });
+
+                if (arr.length === 0) {
+                    // 右侧没有选中数据
+                    arr.push(
+                        {
+                            spParentId: menuId
+                        }
+                    );
+                }
+
+                $.ajax({
+                    url: '/sysMenu/allotButton',
+                    data: JSON.stringify(arr),
+                    type: 'POST',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    success: function (data) {
+                        var msg = '';
+                        if (data.code === REQUEST_SUCCESS_CODE) {
+                            msg = '按钮分配成功';
+                            // 关闭弹出层
+                            layer.close(index);
+                        } else {
+                            msg = data.msg;
+                        }
+                        layer.msg(msg);
+                    }
+                });
+            }
         });
     });
 

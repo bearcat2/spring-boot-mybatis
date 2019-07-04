@@ -60,7 +60,7 @@ public class SysUserController {
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         // 移除session标记
-        session.removeAttribute("loginUser");
+        session.removeAttribute(Constant.LOGIN_USER_SESSION_ATTR);
         return "redirect:/sysUser/doLogin";
     }
 
@@ -75,7 +75,7 @@ public class SysUserController {
         return this.sysUserService.list(sysUser);
     }
 
-    @GetMapping(value = "/edit_ui")
+    @GetMapping(value = "/edit")
     public String editUi(SysUser sysUser, Model model) {
         model.addAttribute("sysUser", this.sysUserService.selectByPrimaryKey(sysUser.getSuId()));
         model.addAttribute("roles", this.sysRoleService.findAll());
@@ -100,7 +100,7 @@ public class SysUserController {
         return "system/user/detail";
     }
 
-    @GetMapping("/add_ui")
+    @GetMapping("/add")
     public String addUi(Model model) {
         model.addAttribute("roles", this.sysRoleService.findAll());
         return "system/user/add";

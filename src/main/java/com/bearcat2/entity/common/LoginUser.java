@@ -3,7 +3,9 @@ package com.bearcat2.entity.common;
 import com.bearcat2.entity.system.SysPrivilege;
 import lombok.Data;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -30,5 +32,8 @@ public class LoginUser {
     private Set<SysPrivilege> menus = new HashSet<>();
 
     /** 当前用户所拥有的权限集合(用户所用的按钮权限) */
-    private Set<SysPrivilege> privileges = new HashSet<>();
+    private Set<SysPrivilege> userPrivileges = new HashSet<>();
+
+    /** 系统配置的所有权限. key为权限url value为权限id */
+    private Map<String, Integer> privilegeMap = new HashMap<>();
 }

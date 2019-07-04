@@ -10,8 +10,6 @@ logging:
         root: info
         # 本项目开发使用debug,测试上线后使用info
         com.bearcat2: debug
-        # spring 日志输出设置为warn,避免大量日志输出
-        org.springframework: warn
 
 # 配置 druid 数据源,参考配置 https://github.com/alibaba/druid/wiki/DruidDataSource%E9%85%8D%E7%BD%AE
 spring:
@@ -19,8 +17,8 @@ spring:
         druid:
             # 配置连接的基本属性,注意mysql驱动6以上版本url中需指定serverTimezone时区
             username: root
-#            password: 123456
-            password: 123
+            password: 123456
+            #            password: 123
             url: jdbc:mysql://localhost:3306/spring-boot-mybatis?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=Asia/Shanghai
             driver-class-name: com.mysql.cj.jdbc.Driver
             # 配置初始化大小、最小、最大连接数
@@ -44,6 +42,11 @@ spring:
             # 配置监控统计拦截的filters
             filters: stat,wall
             async-init: true
+        # 在项目启动时执行下面脚本
+#        schema: classpath:sql/table.sql
+#        data: classpath:sql/data.sql
+#        initialization-mode: always
+
     # thymeleaf 配置
     thymeleaf:
         # 控制不缓存页面,避免刷新不显示最新内容,线上时记得开启,提升页面响应速度

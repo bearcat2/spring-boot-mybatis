@@ -10,12 +10,10 @@ import com.bearcat2.mapper.system.SysRolePrivilegeMapper;
 import com.bearcat2.service.common.CommonServiceImpl;
 import com.bearcat2.service.system.SysOperateService;
 import com.bearcat2.service.system.SysPrivilegeService;
-import com.bearcat2.util.CommonUtil;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -29,6 +27,7 @@ import java.util.stream.Collectors;
  * @version: 1.0
  */
 @Service
+@Transactional(readOnly = true)
 public class SysPrivilegeServiceImpl extends CommonServiceImpl<SysPrivilege, SysPrivilegeExample> implements SysPrivilegeService {
 
     @Autowired
@@ -43,30 +42,6 @@ public class SysPrivilegeServiceImpl extends CommonServiceImpl<SysPrivilege, Sys
     @Value("${bearcat2.systemName}")
     private String systemName;
 
-    /**
-     * 构建单表字段动态sql查询
-     *
-     * @param sysPrivilege 系统权限表
-     * @return 权限集合
-     */
-    private List<SysPrivilege> dynamicSqlQuery(SysPrivilege sysPrivilege) {
-        SysPrivilegeExample example = new SysPrivilegeExample();
-        SysPrivilegeExample.Criteria criteria = example.createCriteria();
-        if (StrUtil.isNotBlank(sysPrivilege.getSpName())) {
-            criteria.andSpNameLike(CommonUtil.buildLikeQueryParam(sysPrivilege.getSpName()));
-        }
-        if (StrUtil.isNotBlank(sysPrivilege.getSpUri())) {
-            criteria.andSpUriLike(CommonUtil.buildLikeQueryParam(sysPrivilege.getSpUri()));
-        }
-        if (sysPrivilege.getSpType() != null) {
-            criteria.andSpTypeEqualTo(sysPrivilege.getSpType());
-        }
-        if (sysPrivilege.getSpParentId() != null) {
-            criteria.andSpParentIdEqualTo(sysPrivilege.getSpParentId());
-        }
-        return super.selectByExample(example);
-    }
-
     @Override
     public List<SysPrivilege> findMenuByUserId(Integer userId) {
         return this.sysPrivilegeMapper.findMenuByUserId(userId);
@@ -75,42 +50,6 @@ public class SysPrivilegeServiceImpl extends CommonServiceImpl<SysPrivilege, Sys
     @Override
     public List<SysPrivilege> findPrivilegeByUserId(Integer userId) {
         return this.sysPrivilegeMapper.findPrivilegeByUserId(userId);
-    }
-
-    @Override
-    public List<SysPrivilege> findByModuleId(Integer moduleId) {
-        SysPrivilege sysPrivilege = new SysPrivilege();
-        sysPrivilege.setSpParentId(moduleId);
-        return this.dynamicSqlQuery(sysPrivilege);
-    }
-
-    @Override
-    public LayuiResult list(SysPrivilege sysPrivilege) {
-        PageHelper.startPage(sysPrivilege.getPage(), sysPrivilege.getLimit());
-        List<SysPrivilege> sysPrivileges = this.dynamicSqlQuery(sysPrivilege);
-        PageInfo<SysPrivilege> pageInfo = new PageInfo<>(sysPrivileges);
-        return LayuiResult.success(pageInfo.getList(), pageInfo.getTotal());
-    }
-
-    @Override
-    public List<SysPrivilege> findByType(Integer type) {
-        SysPrivilege sysPrivilege = new SysPrivilege();
-        sysPrivilege.setSpType(type);
-        return this.dynamicSqlQuery(sysPrivilege);
-    }
-
-    @Override
-    public List<SysPrivilege> findAll() {
-        SysPrivilege sysPrivilege = new SysPrivilege();
-        return this.dynamicSqlQuery(sysPrivilege);
-    }
-
-    @Override
-    public List<SysRolePrivilege> findByRoleId(Integer roleId) {
-        SysRolePrivilegeExample example = new SysRolePrivilegeExample();
-        SysRolePrivilegeExample.Criteria criteria = example.createCriteria();
-        criteria.andSrpRoleIdEqualTo(roleId);
-        return this.sysRolePrivilegeMapper.selectByExample(example);
     }
 
     @Override
@@ -129,6 +68,20 @@ public class SysPrivilegeServiceImpl extends CommonServiceImpl<SysPrivilege, Sys
             treeTableNodes.add(treeTableNode);
         }
         return treeTableNodes;
+    }
+
+    @Override
+    public HashMap<String, Integer> findAllPrivilege() {
+        SysPrivilegeExample example = new SysPrivilegeExample();
+        example.createCriteria()
+                .andSpTypeEqualTo(Constant.BUTTON_PRIVILEGE_TYPE);
+        List<SysPrivilege> sysPrivileges = super.selectByExample(example);
+
+        HashMap<String, Integer> privilegeMap = new HashMap<>(sysPrivileges.size());
+        for (SysPrivilege sysPrivilege : sysPrivileges) {
+            privilegeMap.put(sysPrivilege.getSpUri(), sysPrivilege.getSpId());
+        }
+        return privilegeMap;
     }
 
     @Override
@@ -274,12 +227,13 @@ public class SysPrivilegeServiceImpl extends CommonServiceImpl<SysPrivilege, Sys
         return this.selectByExample(example);
     }
 
+    @Transactional
     @Override
     public LayuiResult allotPrivilege(List<SysRolePrivilege> sysRolePrivileges) {
         // 为了简便,不修改对应权限,直接先删除该角色原先拥有的权限再添加现在重新分配的
         if (CollUtil.isEmpty(sysRolePrivileges)) {
             // 前端已处理,不能提交非空权限,为了程序的更加严谨,在后台再做一次处理
-            return LayuiResult.error(CodeMsgEnum.PRIVILEGER_IS_NULL);
+            return LayuiResult.error(CodeMsgEnum.PRIVILEGE_IS_NULL);
         }
         SysRolePrivilege sysRolePrivilege = sysRolePrivileges.get(0);
         Integer roleId = sysRolePrivilege.getSrpRoleId();
@@ -293,17 +247,18 @@ public class SysPrivilegeServiceImpl extends CommonServiceImpl<SysPrivilege, Sys
     }
 
     @Override
-    public AllotButtonTransfer allotButton(Integer menuId) {
+    public AllotButtonTransfer getTransferData(Integer menuId) {
         // 获得该菜单下所拥有的按钮权限,并处理url取出按钮名称
         SysPrivilegeExample example = new SysPrivilegeExample();
         example.setOrderByClause("sp_orderd");
         example.createCriteria()
-                .andSpParentIdEqualTo(menuId);
+                .andSpParentIdEqualTo(menuId)
+                .andSpTypeEqualTo(Constant.BUTTON_PRIVILEGE_TYPE);
         List<SysPrivilege> sysPrivileges = super.selectByExample(example);
 
-        // 对url处理,例如 /sysUser/add -> add
+        // 取出菜单下所有操作名
         List<String> buttonNames = sysPrivileges.stream()
-                .map(sysPrivilege -> StrUtil.subAfter(sysPrivilege.getSpUri(), StrUtil.SLASH, true))
+                .map(SysPrivilege::getSpOperateName)
                 .collect(Collectors.toList());
 
         // 获取系统所有的按钮
@@ -326,4 +281,118 @@ public class SysPrivilegeServiceImpl extends CommonServiceImpl<SysPrivilege, Sys
         }
         return allotButtonTransfer;
     }
+
+    @Transactional
+    @Override
+    public LayuiResult allotButton(List<SysPrivilege> newSysPrivileges) {
+        // 说明下这里为啥不简单处理，直接删除原先的权限再把选择的新权限添加进去,主要是权限关联着角色权限表
+        // 如果简单删除那么假设用户选择的新权限和原有一致会导致吧原有的权限给删除掉
+
+        // 这里的按钮权限不可能为空,前端做了控制所以可以放心的取第一条数据
+        SysPrivilege sysPrivilege = newSysPrivileges.get(0);
+        SysPrivilegeExample example = new SysPrivilegeExample();
+        example.createCriteria()
+                .andSpParentIdEqualTo(sysPrivilege.getSpParentId())
+                .andSpTypeEqualTo(Constant.BUTTON_PRIVILEGE_TYPE);
+        List<SysPrivilege> oldSysPrivileges = super.selectByExample(example);
+        if (CollUtil.isEmpty(oldSysPrivileges)) {
+            // 该菜单原来没有分配按钮,那么用户选择的新权限都添加权限表中
+            for (SysPrivilege newSysPrivilege : newSysPrivileges) {
+                if (StrUtil.isBlank(newSysPrivilege.getSpOperateName())) {
+                    // 操作名为空，跳出本次循环
+                    continue;
+                }
+
+                this.addSysPrivilege(newSysPrivilege);
+            }
+            return LayuiResult.success();
+        }
+
+        // 获取菜单下对应按钮权限id
+        List<Integer> buttonPrivilegeIds = oldSysPrivileges.stream()
+                .map(SysPrivilege::getSpId)
+                .collect(Collectors.toList());
+        if (newSysPrivileges.size() == 1 && StrUtil.isBlank(newSysPrivileges.get(0).getSpOperateName())) {
+            // 用户没有选择新的权限过来,说明用户想要删除原先所有的权限
+            SysPrivilegeExample sysPrivilegeExample = new SysPrivilegeExample();
+            sysPrivilegeExample.createCriteria()
+                    .andSpParentIdEqualTo(newSysPrivileges.get(0).getSpParentId())
+                    .andSpTypeEqualTo(Constant.BUTTON_PRIVILEGE_TYPE);
+            super.deleteByExample(sysPrivilegeExample);
+
+            // 权限都删除了,权限角色关系表也就没有存在的必要,同步删除角色权限关系表
+            SysRolePrivilegeExample sysRolePrivilegeExample = new SysRolePrivilegeExample();
+            sysRolePrivilegeExample.createCriteria()
+                    .andSrpPrivilegeIdIn(buttonPrivilegeIds);
+            this.sysRolePrivilegeMapper.deleteByExample(sysRolePrivilegeExample);
+            return LayuiResult.success();
+        }
+
+        // 用户选择的选择了新的权限,对比是需要新增,还是删除
+        List<SysPrivilege> addPrivileges = new ArrayList<>();
+        List<SysPrivilege> deletePrivileges = new ArrayList<>();
+        boolean same = false;
+
+        // 这个循环是找出删除或新增集合的主要的核心逻辑,需多理解 eg：old => [add,edit]; new => [add,delete]
+        // 删除的为 edit ,新增的为delete
+        for (SysPrivilege newSysPrivilege : newSysPrivileges) {
+            for (SysPrivilege oldSysPrivilege : oldSysPrivileges) {
+                if (newSysPrivilege.getSpOperateName().equals(oldSysPrivilege.getSpOperateName())) {
+                    // 选择的权限与原先一致,没有改变无需处理
+                    deletePrivileges.add(oldSysPrivilege);
+                    same = true;
+                    break;
+                }
+            }
+            if (same) {
+                same = false;
+                continue;
+            }
+            addPrivileges.add(newSysPrivilege);
+        }
+
+        // 删除原有的而现在用户已取消的权限
+        oldSysPrivileges.removeAll(deletePrivileges);
+        for (SysPrivilege oldSysPrivilege : oldSysPrivileges) {
+            super.deleteByPrimaryKey(oldSysPrivilege.getSpId());
+
+            // 权限都删除了,权限角色关系表也就没有存在的必要,同步删除角色权限关系表
+            SysRolePrivilegeExample sysRolePrivilegeExample = new SysRolePrivilegeExample();
+            sysRolePrivilegeExample.createCriteria()
+                    .andSrpPrivilegeIdEqualTo(oldSysPrivilege.getSpId());
+            this.sysRolePrivilegeMapper.deleteByExample(sysRolePrivilegeExample);
+        }
+
+        // 添加用户新增的权限
+        for (SysPrivilege privilege : addPrivileges) {
+            addSysPrivilege(privilege);
+        }
+        return LayuiResult.success();
+    }
+
+    /**
+     * 添加系统权限
+     *
+     * @param sysPrivilege
+     * @return
+     */
+    private void addSysPrivilege(SysPrivilege sysPrivilege) {
+        SysPrivilege privilege = new SysPrivilege();
+        privilege.setSpName(sysPrivilege.getSpName());
+
+        // eg : /sysUser/list => /sysUser/add
+        String buttonUrl = StrUtil.format("{}/{}"
+                , StrUtil.subBefore(sysPrivilege.getSpUri(), StrUtil.SLASH, true)
+                , sysPrivilege.getSpOperateName()
+        );
+        privilege.setSpUri(buttonUrl);
+        privilege.setSpType(Constant.BUTTON_PRIVILEGE_TYPE);
+        privilege.setSpOperateName(sysPrivilege.getSpOperateName());
+        privilege.setSpParentId(sysPrivilege.getSpParentId());
+        privilege.setSpCreateTime(new Date());
+        privilege.setSpUpdateTime(new Date());
+        super.insertSelective(privilege);
+    }
+
+
 }

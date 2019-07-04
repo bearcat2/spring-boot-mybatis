@@ -3,6 +3,7 @@ package com.bearcat2.service.common;
 import com.bearcat2.mapper.CommonMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -26,21 +27,25 @@ public class CommonServiceImpl<Record, Example> implements CommonService<Record,
         return verifyUpdateIsSuccess(this.commonMapper.countByExample(example));
     }
 
+    @Transactional
     @Override
     public boolean deleteByExample(Example example) {
         return verifyUpdateIsSuccess(this.commonMapper.deleteByExample(example));
     }
 
+    @Transactional
     @Override
     public boolean deleteByPrimaryKey(Integer id) {
         return verifyUpdateIsSuccess(this.commonMapper.deleteByPrimaryKey(id));
     }
 
+    @Transactional
     @Override
     public boolean insert(Record record) {
         return verifyUpdateIsSuccess(this.commonMapper.insert(record));
     }
 
+    @Transactional
     @Override
     public boolean insertSelective(Record record) {
         return verifyUpdateIsSuccess(this.commonMapper.insertSelective(record));
@@ -56,26 +61,31 @@ public class CommonServiceImpl<Record, Example> implements CommonService<Record,
         return this.commonMapper.selectByPrimaryKey(id);
     }
 
+    @Transactional
     @Override
     public boolean updateByExampleSelective(Record record, Example example) {
         return verifyUpdateIsSuccess(this.commonMapper.updateByExampleSelective(record,example));
     }
 
+    @Transactional
     @Override
     public boolean updateByExample(Record record, Example example) {
         return verifyUpdateIsSuccess(this.commonMapper.updateByExample(record,example));
     }
 
+    @Transactional
     @Override
     public boolean updateByPrimaryKeySelective(Record record) {
         return verifyUpdateIsSuccess(this.commonMapper.updateByPrimaryKeySelective(record));
     }
 
+    @Transactional
     @Override
     public boolean updateByPrimaryKey(Record record) {
         return verifyUpdateIsSuccess(this.commonMapper.updateByPrimaryKey(record));
     }
 
+    @Transactional
     @Override
     public boolean insertBatch(List<Record> records) {
         return verifyUpdateIsSuccess(this.commonMapper.insertBatch(records));

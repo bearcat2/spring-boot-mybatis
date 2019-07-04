@@ -43,7 +43,7 @@ public class SysRoleController {
         return this.sysRoleService.list(sysRole);
     }
 
-    @GetMapping("/edit_ui")
+    @GetMapping("/edit")
     public String editUi(SysRole sysRole, Model model) {
         model.addAttribute("role", this.sysRoleService.selectByPrimaryKey(sysRole.getSrId()));
         return "system/role/edit";
@@ -57,7 +57,7 @@ public class SysRoleController {
         return LayuiResult.success();
     }
 
-    @GetMapping("/add_ui")
+    @GetMapping("/add")
     public String addUi() {
         return "system/role/add";
     }
@@ -91,7 +91,7 @@ public class SysRoleController {
         return this.sysPrivilegeService.getLayuiTreeNode(roleId);
     }
 
-    @GetMapping("/allotPrivilege_ui")
+    @GetMapping("/allotPrivilege")
     public String allotPrivilegeUi(Integer roleId, Model model) {
         model.addAttribute("roleId", roleId);
         return "system/role/allotPrivilege";

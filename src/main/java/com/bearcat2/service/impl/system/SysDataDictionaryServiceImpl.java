@@ -7,6 +7,7 @@ import com.bearcat2.service.common.CommonServiceImpl;
 import com.bearcat2.service.system.SysDataDictionaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.List;
  * @version: 1.0
  */
 @Service
+@Transactional(readOnly = true)
 public class SysDataDictionaryServiceImpl extends CommonServiceImpl<SysDataDictionary, SysDataDictionaryExample> implements SysDataDictionaryService {
 
     @Autowired
