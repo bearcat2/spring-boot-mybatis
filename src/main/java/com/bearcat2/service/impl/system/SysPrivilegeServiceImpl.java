@@ -54,7 +54,7 @@ public class SysPrivilegeServiceImpl extends CommonServiceImpl<SysPrivilege, Sys
 
     @Override
     public List<TreeTableNode> getTreeTableNode() {
-        List<SysPrivilege> sysPrivileges = this.getSysMenu();
+        List<SysPrivilege> sysPrivileges = this.findAllMenu();
 
         List<TreeTableNode> treeTableNodes = new ArrayList<>(sysPrivileges.size());
         for (SysPrivilege sysPrivilege : sysPrivileges) {
@@ -71,12 +71,25 @@ public class SysPrivilegeServiceImpl extends CommonServiceImpl<SysPrivilege, Sys
     }
 
     @Override
-    public HashMap<String, Integer> findAllPrivilege() {
+    public List<SysPrivilege> findAllMenu() {
+        SysPrivilegeExample example = new SysPrivilegeExample();
+        example.createCriteria()
+                .andSpTypeIn(Arrays.asList(Constant.MODULE_PRIVILEGE_TYPE, Constant.MENU_PRIVILEGE_TYPE));
+        example.setOrderByClause("sp_orderd");
+        return super.selectByExample(example);
+    }
+
+    @Override
+    public List<SysPrivilege> findAllPrivilege() {
         SysPrivilegeExample example = new SysPrivilegeExample();
         example.createCriteria()
                 .andSpTypeEqualTo(Constant.BUTTON_PRIVILEGE_TYPE);
-        List<SysPrivilege> sysPrivileges = super.selectByExample(example);
+        return super.selectByExample(example);
+    }
 
+    @Override
+    public HashMap<String, Integer> findAllPrivilegeMap() {
+        List<SysPrivilege> sysPrivileges = findAllPrivilege();
         HashMap<String, Integer> privilegeMap = new HashMap<>(sysPrivileges.size());
         for (SysPrivilege sysPrivilege : sysPrivileges) {
             privilegeMap.put(sysPrivilege.getSpUri(), sysPrivilege.getSpId());
@@ -87,7 +100,7 @@ public class SysPrivilegeServiceImpl extends CommonServiceImpl<SysPrivilege, Sys
     @Override
     public List<TreeSelectNode> getTreeSelectNode() {
         List<TreeSelectNode> treeSelectNodes = new ArrayList<>();
-        List<SysPrivilege> sysPrivileges = this.getSysMenu();
+        List<SysPrivilege> sysPrivileges = this.findAllMenu();
         for (SysPrivilege sysPrivilege : sysPrivileges) {
             if (sysPrivilege.getSpType() == Constant.MODULE_PRIVILEGE_TYPE) {
                 // 权限为模块
@@ -214,18 +227,6 @@ public class SysPrivilegeServiceImpl extends CommonServiceImpl<SysPrivilege, Sys
         }
     }
 
-    /**
-     * 获取系统菜单
-     *
-     * @return 系统菜单集合
-     */
-    private List<SysPrivilege> getSysMenu() {
-        SysPrivilegeExample example = new SysPrivilegeExample();
-        example.createCriteria()
-                .andSpTypeIn(Arrays.asList(Constant.MODULE_PRIVILEGE_TYPE, Constant.MENU_PRIVILEGE_TYPE));
-        example.setOrderByClause("sp_orderd");
-        return this.selectByExample(example);
-    }
 
     @Transactional
     @Override
@@ -379,7 +380,6 @@ public class SysPrivilegeServiceImpl extends CommonServiceImpl<SysPrivilege, Sys
     private void addSysPrivilege(SysPrivilege sysPrivilege) {
         SysPrivilege privilege = new SysPrivilege();
         privilege.setSpName(sysPrivilege.getSpName());
-
         // eg : /sysUser/list => /sysUser/add
         String buttonUrl = StrUtil.format("{}/{}"
                 , StrUtil.subBefore(sysPrivilege.getSpUri(), StrUtil.SLASH, true)

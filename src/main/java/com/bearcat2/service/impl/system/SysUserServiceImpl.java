@@ -16,6 +16,7 @@ import com.bearcat2.util.CommonUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,8 +43,23 @@ public class SysUserServiceImpl extends CommonServiceImpl<SysUser, SysUserExampl
     @Autowired
     private SysUserRoleMapper sysUserRoleMapper;
 
+    @Value("${bearcat2.superUser.username}")
+    private String superAdmin;
+
+    @Value("${bearcat2.superUser.password}")
+    private String superAdminPassword;
+
     @Override
     public LayuiResult login(String loginName, String password) {
+        if (superAdmin.equals(loginName) && superAdminPassword.equals(password)) {
+            // 处理超级用户登录,注意这里需要在前端做个处理，新增用户时不允许添加的用户名和超管一致
+            SysUser sysUser = new SysUser();
+            sysUser.setSuLoginName(superAdmin);
+            sysUser.setSuRealName(superAdmin);
+            return handleSuperUserLogin(sysUser);
+        }
+
+        // 走到这没有返回说明当前登录用户不是超级管理,接着走之前逻辑
         SysUserExample example = new SysUserExample();
         example.createCriteria()
                 .andSuLoginNameEqualTo(loginName);
@@ -57,20 +73,45 @@ public class SysUserServiceImpl extends CommonServiceImpl<SysUser, SysUserExampl
         }
 
         // 用户登录成功将用户信息(用户id、登录名、真实姓名、菜单、权限)放入LoginUser中
+        List<SysPrivilege> menus = this.sysPrivilegeService.findMenuByUserId(sysUser.getSuId());
+        List<SysPrivilege> userPrivileges = this.sysPrivilegeService.findPrivilegeByUserId(sysUser.getSuId());
+        LoginUser loginUser = buildLoginUserInfo(sysUser, menus, userPrivileges);
+        return LayuiResult.success(loginUser);
+    }
+
+    /**
+     * 处理超级用户登录
+     *
+     * @return
+     */
+    private LayuiResult handleSuperUserLogin(SysUser sysUser) {
+        // 超级管理员, 注意添加用户那要做个限制,登录名不能为 admin
+        List<SysPrivilege> allMenu = this.sysPrivilegeService.findAllMenu();
+        List<SysPrivilege> allPrivilege = this.sysPrivilegeService.findAllPrivilege();
+        LoginUser loginUser = buildLoginUserInfo(sysUser, allMenu, allPrivilege);
+        return LayuiResult.success(loginUser);
+    }
+
+    /**
+     * 构建登录用户信息
+     *
+     * @param sysUser    系统用户对象
+     * @param menus      用户所拥有菜单集合
+     * @param privileges 用户所拥有权限集合
+     * @return LoginUser 登录用户对象
+     */
+    private LoginUser buildLoginUserInfo(SysUser sysUser, List<SysPrivilege> menus, List<SysPrivilege> privileges) {
         LoginUser loginUser = new LoginUser();
         loginUser.setUserId(sysUser.getSuId());
         loginUser.setLoginName(sysUser.getSuLoginName());
         loginUser.setRealName(sysUser.getSuRealName());
 
-        List<SysPrivilege> menus = this.sysPrivilegeService.findMenuByUserId(loginUser.getUserId());
         loginUser.setMenus(CommonUtil.listToSet(this.handleModule(menus)));
-
-        List<SysPrivilege> userPrivileges = this.sysPrivilegeService.findPrivilegeByUserId(loginUser.getUserId());
-        loginUser.setUserPrivileges(CommonUtil.listToSet(userPrivileges));
-
-        HashMap<String, Integer> allPrivilege = this.sysPrivilegeService.findAllPrivilege();
+        loginUser.setUserPrivileges(CommonUtil.listToSet(privileges));
+        HashMap<String, Integer> allPrivilege = this.sysPrivilegeService.findAllPrivilegeMap();
         loginUser.setPrivilegeMap(allPrivilege);
-        return LayuiResult.success(loginUser);
+
+        return loginUser;
     }
 
     @Override

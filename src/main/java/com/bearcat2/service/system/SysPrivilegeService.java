@@ -36,11 +36,20 @@ public interface SysPrivilegeService extends CommonService<SysPrivilege, SysPriv
     List<SysPrivilege> findPrivilegeByUserId(Integer userId);
 
     /**
+     * 获取系统所有菜单
+     *
+     * @return
+     */
+    List<SysPrivilege> findAllMenu();
+
+    List<SysPrivilege> findAllPrivilege();
+
+    /**
      * 查找系统配置的所有权限
      *
      * @return
      */
-    HashMap<String, Integer> findAllPrivilege();
+    HashMap<String, Integer> findAllPrivilegeMap();
 
     /**
      * 获取前端treeTable插件所需内容

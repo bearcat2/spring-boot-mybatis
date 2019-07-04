@@ -43,9 +43,9 @@ spring:
             filters: stat,wall
             async-init: true
         # 在项目启动时执行下面脚本
-#        schema: classpath:sql/table.sql
-#        data: classpath:sql/data.sql
-#        initialization-mode: always
+    #        schema: classpath:sql/table.sql
+    #        data: classpath:sql/data.sql
+    #        initialization-mode: always
 
     # thymeleaf 配置
     thymeleaf:
@@ -78,3 +78,7 @@ pagehelper:
 # 自定义属性
 bearcat2:
     systemName: 通用前端管理系统
+    # 配置超级用户用户名和密码
+    superUser:
+        username: admin
+        password: 123456
