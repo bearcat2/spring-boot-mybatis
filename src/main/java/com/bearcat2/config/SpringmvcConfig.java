@@ -3,7 +3,9 @@ package com.bearcat2.config;
 import com.bearcat2.util.CommonUtil;
 import com.bearcat2.web.converter.DateConverter;
 import com.bearcat2.web.interceptor.LoginInterceptor;
-import com.bearcat2.web.interceptor.PrivilegeInterceptor;
+import com.bearcat2.web.interceptor.PrivilegeRefreshInterceptor;
+import com.bearcat2.web.interceptor.PrivilegeVerifyInterceptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -22,6 +24,15 @@ import java.util.List;
 @Configuration
 public class SpringmvcConfig implements WebMvcConfigurer {
 
+    @Autowired
+    private LoginInterceptor loginInterceptor;
+
+    @Autowired
+    private PrivilegeRefreshInterceptor privilegeRefreshInterceptor;
+
+    @Autowired
+    private PrivilegeVerifyInterceptor privilegeVerifyInterceptor;
+
     /**
      * 增加格式化转换器
      *
@@ -39,13 +50,19 @@ public class SpringmvcConfig implements WebMvcConfigurer {
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        // 增加登录及权限验证的拦截器
+        // 获取允许匿名访问路径
         List<String> anonymousUrls = CommonUtil.getPropertyNames("config/anonymousUrls.properties");
-        registry.addInterceptor(new LoginInterceptor())
+
+        // 注册登录拦截器
+        registry.addInterceptor(loginInterceptor)
                 .addPathPatterns("/**")
                 .excludePathPatterns(anonymousUrls);
-
-        registry.addInterceptor(new PrivilegeInterceptor())
+        // 注册权限刷新拦截器
+        registry.addInterceptor(privilegeRefreshInterceptor)
+                .addPathPatterns("/**")
+                .excludePathPatterns(anonymousUrls);
+        // 注册权限校验拦截器
+        registry.addInterceptor(privilegeVerifyInterceptor)
                 .addPathPatterns("/**")
                 .excludePathPatterns(anonymousUrls);
     }

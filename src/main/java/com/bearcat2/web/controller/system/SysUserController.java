@@ -9,6 +9,7 @@ import com.bearcat2.enumeration.CodeMsgEnum;
 import com.bearcat2.service.system.SysRoleService;
 import com.bearcat2.service.system.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,6 +31,9 @@ import java.util.Date;
 @Controller
 @RequestMapping("/sysUser")
 public class SysUserController {
+
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
     @Autowired
     private SysUserService sysUserService;
@@ -72,6 +76,7 @@ public class SysUserController {
     @ResponseBody
     @PostMapping("/list")
     public LayuiResult list(SysUser sysUser) {
+        this.stringRedisTemplate.opsForValue().set("zzp", "zzp");
         return this.sysUserService.list(sysUser);
     }
 

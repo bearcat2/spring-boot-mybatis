@@ -18,7 +18,6 @@ spring:
             # 配置连接的基本属性,注意mysql驱动6以上版本url中需指定serverTimezone时区
             username: root
             password: 123456
-            #            password: 123
             url: jdbc:mysql://localhost:3306/spring-boot-mybatis?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=Asia/Shanghai
             driver-class-name: com.mysql.cj.jdbc.Driver
             # 配置初始化大小、最小、最大连接数
@@ -42,7 +41,7 @@ spring:
             # 配置监控统计拦截的filters
             filters: stat,wall
             async-init: true
-        # 在项目启动时执行下面脚本
+    # 在项目启动时执行下面脚本
     #        schema: classpath:sql/table.sql
     #        data: classpath:sql/data.sql
     #        initialization-mode: always
@@ -52,31 +51,49 @@ spring:
         # 控制不缓存页面,避免刷新不显示最新内容,线上时记得开启,提升页面响应速度
         cache: false
 
+    # redis 配置
+    redis:
+        host: 127.0.01
+        port: 6379
+        password: asdf
+        # 连接超时时间,单位毫秒
+        timeout: 10000
+        database: 0
+        lettuce:
+            pool:
+                # 连接池最大连接数(使用负值表示没有限制)
+                max-active: 10
+                # 连接池最大空闲连接数
+                max-idle: 8
+                # 连接池最小空闲连接数
+                min-idle: 2
+                # 连接池最大阻塞时间,单位毫秒(使用负值表示没有限制)
+                max-wait: -1
+
 # mybatis 配置
 mybatis:
     # mybatis主配置文件所在路径
     config-location: classpath:mybatis/mybatis.cfg.xml
-    # 给下面包及所有子包下的类取别名(默认为类名)
-    #    type-aliases-package: com.bearcat2.entity
     # 指定mapper映射文件的位置
     mapper-locations:
         - classpath:mybatis/mapper/**/*.xml
 
-# pagehelper分页插件
+# pagehelper分页插件配置
 pagehelper:
-    #设置数据库方言
     helperDialect: mysql
     reasonable: true
     supportMethodsArguments: true
     params: count=countSql
 
-# 配置项目名,默认 /
-#server:
-#    servlet:
-#        context-path: /bearcat2
+# session 超时时间设置为1小时,单位是秒
+server:
+    servlet:
+        session:
+            timeout: 3600
 
 # 自定义属性
 bearcat2:
+    # 定义系统名
     systemName: 通用前端管理系统
     # 配置超级用户用户名和密码
     superUser:

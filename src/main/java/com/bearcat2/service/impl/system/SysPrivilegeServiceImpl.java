@@ -2,11 +2,14 @@ package com.bearcat2.service.impl.system;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
+import com.bearcat2.dao.redis.RedisDao;
+import com.bearcat2.dao.redis.RedisNameSpace;
 import com.bearcat2.entity.common.*;
 import com.bearcat2.entity.system.*;
 import com.bearcat2.enumeration.CodeMsgEnum;
 import com.bearcat2.mapper.system.SysPrivilegeMapper;
 import com.bearcat2.mapper.system.SysRolePrivilegeMapper;
+import com.bearcat2.mapper.system.SysUserRoleMapper;
 import com.bearcat2.service.common.CommonServiceImpl;
 import com.bearcat2.service.system.SysOperateService;
 import com.bearcat2.service.system.SysPrivilegeService;
@@ -37,7 +40,16 @@ public class SysPrivilegeServiceImpl extends CommonServiceImpl<SysPrivilege, Sys
     private SysRolePrivilegeMapper sysRolePrivilegeMapper;
 
     @Autowired
+    private SysUserRoleMapper sysUserRoleMapper;
+
+    @Autowired
+    private RedisDao redisDao;
+
+    @Autowired
     private SysOperateService sysOperateService;
+
+    @Value("${server.servlet.session.timeout}")
+    private Integer sessionTimeout;
 
     @Value("${bearcat2.systemName}")
     private String systemName;
@@ -244,6 +256,21 @@ public class SysPrivilegeServiceImpl extends CommonServiceImpl<SysPrivilege, Sys
         this.sysRolePrivilegeMapper.deleteByExample(example);
 
         this.sysRolePrivilegeMapper.insertBatch(sysRolePrivileges);
+
+        // 超管给角色重新分配权限,给该角色下所有用户存储一个权限改变标记,便于在权限改变校验拦截器中判断来实现在线实现权限改变
+        SysUserRoleExample sysUserRoleExample = new SysUserRoleExample();
+        sysUserRoleExample.createCriteria()
+                .andSurRoleIdEqualTo(roleId);
+        List<SysUserRole> sysUserRoles = this.sysUserRoleMapper.selectByExample(sysUserRoleExample);
+        List<Integer> userIds = sysUserRoles.stream()
+                .map(SysUserRole::getSurId)
+                .collect(Collectors.toList());
+        // 将用户集合放入redis,将缓存有效期设置为session有效期,即session失效了必然会重新登录获取最新权限
+        for (Integer userId : userIds) {
+            this.redisDao.setEx(
+                    String.format(RedisNameSpace.PRIVILEGE_REFRESH_FLAG, userId)
+                    , userId, sessionTimeout);
+        }
         return LayuiResult.success();
     }
 

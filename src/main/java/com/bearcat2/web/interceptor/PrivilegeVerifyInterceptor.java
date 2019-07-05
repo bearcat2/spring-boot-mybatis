@@ -7,6 +7,7 @@ import com.bearcat2.entity.system.SysPrivilege;
 import com.bearcat2.enumeration.CodeMsgEnum;
 import com.bearcat2.util.CommonUtil;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.method.HandlerMethod;
@@ -18,14 +19,15 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * <p>Description: 权限拦截器</p>
- * <p>Title: PrivilegeInterceptor </p>
+ * <p>Description: 权限校验拦截器</p>
+ * <p>Title: PrivilegeVerifyInterceptor </p>
  * <p>Create Time: 2018/8/16 20:07 </p>
  *
  * @author: zhongzhipeng
  * @version: 1.0
  */
-public class PrivilegeInterceptor implements HandlerInterceptor {
+@Component
+public class PrivilegeVerifyInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {

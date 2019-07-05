@@ -2,6 +2,7 @@ package com.bearcat2.web.interceptor;
 
 import com.bearcat2.entity.common.LoginUser;
 import com.bearcat2.util.CommonUtil;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author: zhongzhipeng
  * @version: 1.0
  */
+@Component
 public class LoginInterceptor implements HandlerInterceptor {
 
     @Override
