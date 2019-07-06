@@ -68,7 +68,7 @@ public class GlobalExceptionHandler {
         String requestParameter = CommonUtil.getRequestParams(request);
         String className = handlerMethod.getBean().getClass().getSimpleName();
         String methodName = handlerMethod.getMethod().getName();
-        log.info("系统发生异常了,错误码: {} ,错误消息: {} ,className: {} ,methodName: {} ,请求URI: {} ,请求参数: {}"
+        log.error("系统发生异常了,错误码: {} ,错误消息: {} ,className: {} ,methodName: {} ,请求URI: {} ,请求参数: {}"
                 , layuiResult.getCode()
                 , layuiResult.getMsg()
                 , className
