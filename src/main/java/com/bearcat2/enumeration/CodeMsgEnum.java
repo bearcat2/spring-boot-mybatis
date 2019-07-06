@@ -16,7 +16,7 @@ import lombok.Getter;
 public enum CodeMsgEnum {
 
     SUCCESS(0, "响应成功"),
-    SERVER_ERROR(500, "服务端错误"),
+    SERVER_ERROR(500, "服务端错误,请联系管理员"),
 
     // 用户相关错误吗
     LOGIN_ERROR(100, "用户名或密码错误"),

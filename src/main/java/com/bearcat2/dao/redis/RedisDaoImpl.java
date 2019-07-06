@@ -88,7 +88,12 @@ public class RedisDaoImpl implements RedisDao {
         if (StrUtil.isBlank(key)) {
             return false;
         }
-        return this.stringRedisTemplate.hasKey(key);
+        try {
+            return this.stringRedisTemplate.hasKey(key);
+        } catch (Exception e) {
+            log.error(StrUtil.format("exists操作失败,key = {} ", key), e);
+            return false;
+        }
     }
 
     @Override
@@ -96,6 +101,11 @@ public class RedisDaoImpl implements RedisDao {
         if (StrUtil.isBlank(key)) {
             return false;
         }
-        return this.stringRedisTemplate.delete(key);
+        try {
+            return this.stringRedisTemplate.delete(key);
+        } catch (Exception e) {
+            log.error(StrUtil.format("del操作失败,key = {} ", key), e);
+            return false;
+        }
     }
 }

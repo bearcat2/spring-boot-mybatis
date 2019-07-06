@@ -159,7 +159,7 @@ layui.define(['table', 'jquery', 'form'], function (exports) {
                                         layer.close(index);
                                         msg = ajaxFormSubmitSuccessMsg;
                                     } else {
-                                        msg = "发生错误了,错误原因：" + data.msg;
+                                        msg = data.msg;
                                     }
                                     layer.msg(msg);
                                 },
@@ -262,7 +262,7 @@ layui.define(['table', 'jquery', 'form'], function (exports) {
                             tableIns.reload();
                             msg = '数据删除成功';
                         } else {
-                            msg = "发生错误了,错误原因：" + data.msg;
+                            msg = data.msg;
                         }
                         layer.msg(msg);
                     },

@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -159,6 +160,31 @@ public class SysUserServiceImpl extends CommonServiceImpl<SysUser, SysUserExampl
         SysUserRole sysUserRole = new SysUserRole();
         sysUserRole.setSurRoleId(roleId);
         return this.sysUserRoleMapper.updateByExampleSelective(sysUserRole, example);
+    }
+
+    @Transactional
+    @Override
+    public LayuiResult add(SysUser sysUser, Integer roleId) {
+        sysUser.setSuCreateTime(new Date());
+        sysUser.setSuUpdateTime(new Date());
+        sysUser.setSuPassword(SecureUtil.md5(sysUser.getSuPassword()));
+        // 注意这里已在mybatis里设置,插入用户数据后会将自增生成的主键插入到SysUser对象的suId属性中
+        super.insertSelective(sysUser);
+
+        // 添加用户角色表
+        this.insertUserRoleRelation(sysUser.getSuId(), roleId);
+        return LayuiResult.success();
+    }
+
+    @Transactional
+    @Override
+    public LayuiResult edit(SysUser sysUser, Integer roleId) {
+        sysUser.setSuUpdateTime(new Date());
+        super.updateByPrimaryKeySelective(sysUser);
+
+        // 修改对应的用户角色关系表
+        this.updateUserRoleRelationByUserId(sysUser.getSuId(), roleId);
+        return LayuiResult.success();
     }
 
     /**

@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.setting.dialect.Props;
 import com.bearcat2.entity.common.Constant;
 import com.bearcat2.entity.common.LoginUser;
+import org.springframework.http.MediaType;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -86,5 +87,37 @@ public class CommonUtil {
         response.setDateHeader("expries", -1);
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
+    }
+
+    /**
+     * 从请求对象中获取 key - value 类型请求参数
+     *
+     * @param httpServletRequest 请求对象
+     * @return key-value 类型请求参数
+     */
+    public static String getRequestParams(HttpServletRequest httpServletRequest) {
+        String contentType = httpServletRequest.getContentType();
+        if (MediaType.MULTIPART_FORM_DATA_VALUE.equalsIgnoreCase(contentType)) {
+            // 二进制流不记录请求参数,直接返回空
+            return null;
+        }
+        StringBuilder stringBuilder = new StringBuilder(64);
+        stringBuilder.append("{");
+        Map<String, String[]> parameterMap = httpServletRequest.getParameterMap();
+        for (Map.Entry<String, String[]> entry : parameterMap.entrySet()) {
+            String[] values = entry.getValue();
+            String value = values.length > 1 ? Arrays.toString(values) : values[0];
+            stringBuilder.append(entry.getKey())
+                    .append(" : ")
+                    .append("\"")
+                    .append(value)
+                    .append("\"")
+                    .append(" ,");
+        }
+        if (stringBuilder.indexOf(",") != -1) {
+            stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+        }
+        stringBuilder.append("}");
+        return stringBuilder.toString();
     }
 }

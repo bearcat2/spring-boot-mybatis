@@ -54,4 +54,20 @@ public interface SysUserService extends CommonService<SysUser, SysUserExample> {
      * @return
      */
     int updateUserRoleRelationByUserId(Integer userId, Integer roleId);
+
+    /**
+     * 添加用户
+     * @param sysUser
+     * @param roleId
+     * @return
+     */
+    LayuiResult add(SysUser sysUser, Integer roleId);
+
+    /**
+     * 编辑用户
+     * @param sysUser
+     * @param roleId
+     * @return
+     */
+    LayuiResult edit(SysUser sysUser, Integer roleId);
 }
