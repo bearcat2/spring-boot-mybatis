@@ -70,4 +70,12 @@ public interface SysUserService extends CommonService<SysUser, SysUserExample> {
      * @return
      */
     LayuiResult edit(SysUser sysUser, Integer roleId);
+
+    /**
+     * 修改密码
+     * @param sysUser 系统用户对象
+     * @param newPassword 新密码
+     * @return
+     */
+    LayuiResult updatePassword(SysUser sysUser, String newPassword);
 }

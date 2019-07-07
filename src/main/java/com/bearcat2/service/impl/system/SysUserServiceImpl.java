@@ -47,20 +47,9 @@ public class SysUserServiceImpl extends CommonServiceImpl<SysUser, SysUserExampl
     @Value("${bearcat2.superUser.username}")
     private String superAdmin;
 
-    @Value("${bearcat2.superUser.password}")
-    private String superAdminPassword;
-
     @Override
     public LayuiResult login(String loginName, String password) {
-        if (superAdmin.equals(loginName) && superAdminPassword.equals(password)) {
-            // 处理超级用户登录,注意这里需要在前端做个处理，新增用户时不允许添加的用户名和超管一致
-            SysUser sysUser = new SysUser();
-            sysUser.setSuLoginName(superAdmin);
-            sysUser.setSuRealName(superAdmin);
-            return handleSuperUserLogin(sysUser);
-        }
-
-        // 走到这没有返回说明当前登录用户不是超级管理,接着走之前逻辑
+        // 验证用户信息
         SysUserExample example = new SysUserExample();
         example.createCriteria()
                 .andSuLoginNameEqualTo(loginName);
@@ -71,6 +60,11 @@ public class SysUserServiceImpl extends CommonServiceImpl<SysUser, SysUserExampl
         SysUser sysUser = sysUsers.get(0);
         if (!sysUser.getSuPassword().equalsIgnoreCase(SecureUtil.md5(password))) {
             return LayuiResult.error(CodeMsgEnum.LOGIN_ERROR);
+        }
+
+        if (superAdmin.equals(sysUser.getSuLoginName())) {
+            // 处理超级管理员登录
+            return this.handleSuperUserLogin(sysUser);
         }
 
         // 用户登录成功将用户信息(用户id、登录名、真实姓名、菜单、权限)放入LoginUser中
@@ -117,8 +111,10 @@ public class SysUserServiceImpl extends CommonServiceImpl<SysUser, SysUserExampl
 
     @Override
     public LayuiResult list(SysUser sysUser) {
+        // 获取用户列表,排除超级管理员
         SysUserExample example = new SysUserExample();
-        SysUserExample.Criteria criteria = example.createCriteria();
+        SysUserExample.Criteria criteria = example.createCriteria()
+                .andSuLoginNameNotEqualTo(superAdmin);
         if (StrUtil.isNotBlank(sysUser.getSuLoginName())) {
             criteria.andSuLoginNameLike(CommonUtil.buildLikeQueryParam(sysUser.getSuLoginName()));
         }
@@ -184,6 +180,21 @@ public class SysUserServiceImpl extends CommonServiceImpl<SysUser, SysUserExampl
 
         // 修改对应的用户角色关系表
         this.updateUserRoleRelationByUserId(sysUser.getSuId(), roleId);
+        return LayuiResult.success();
+    }
+
+    @Transactional
+    @Override
+    public LayuiResult updatePassword(SysUser sysUser, String newPassword) {
+        if (sysUser.getSuPassword().equalsIgnoreCase(newPassword)) {
+            return LayuiResult.error(CodeMsgEnum.REPEAT_PASSWORD_ERROR);
+        }
+        SysUser user = super.selectByPrimaryKey(sysUser.getSuId());
+        if (!user.getSuPassword().equalsIgnoreCase(SecureUtil.md5(sysUser.getSuPassword()))) {
+            return LayuiResult.error(CodeMsgEnum.OLD_PASSWORD_ERROR);
+        }
+        sysUser.setSuPassword(SecureUtil.md5(newPassword));
+        super.updateByPrimaryKeySelective(sysUser);
         return LayuiResult.success();
     }
 

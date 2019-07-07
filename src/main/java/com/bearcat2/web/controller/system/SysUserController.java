@@ -10,10 +10,7 @@ import com.bearcat2.service.system.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
@@ -73,7 +70,7 @@ public class SysUserController {
         return this.sysUserService.list(sysUser);
     }
 
-    @GetMapping(value = "/edit")
+    @GetMapping(value = {"/edit", "/basicInfo"})
     public String editUi(SysUser sysUser, Model model) {
         model.addAttribute("sysUser", this.sysUserService.selectByPrimaryKey(sysUser.getSuId()));
         model.addAttribute("roles", this.sysRoleService.findAll());
@@ -84,7 +81,7 @@ public class SysUserController {
     @ResponseBody
     @PostMapping("/edit")
     public LayuiResult edit(SysUser sysUser, Integer roleId) {
-        return this.sysUserService.edit(sysUser,roleId);
+        return this.sysUserService.edit(sysUser, roleId);
     }
 
     @GetMapping(value = "/detail")
@@ -102,7 +99,7 @@ public class SysUserController {
     @ResponseBody
     @PostMapping("/add")
     public LayuiResult add(SysUser sysUser, Integer roleId) {
-        return this.sysUserService.add(sysUser,roleId);
+        return this.sysUserService.add(sysUser, roleId);
     }
 
     @ResponseBody
@@ -110,5 +107,22 @@ public class SysUserController {
     public LayuiResult delete(SysUser sysUser) {
         this.sysUserService.deleteByPrimaryKey(sysUser.getSuId());
         return LayuiResult.success();
+    }
+
+    @GetMapping("/updatePassword")
+    public String updatePasswordUi(Integer suId, Model model) {
+        model.addAttribute("sysUser", this.sysUserService.selectByPrimaryKey(suId));
+        return "system/user/updatePassword";
+    }
+
+    @ResponseBody
+    @PostMapping("/updatePassword")
+    public LayuiResult updatePassword(SysUser sysUser, String newPassword,HttpSession session) {
+        LayuiResult layuiResult = this.sysUserService.updatePassword(sysUser, newPassword);
+        if(layuiResult.getCode() == CodeMsgEnum.SUCCESS.getCode()){
+            // 修改密码成功移除登录标记重新登录
+            session.removeAttribute(Constant.LOGIN_USER_SESSION_ATTR);
+        }
+        return layuiResult;
     }
 }

@@ -15,12 +15,13 @@
         <ul class="layui-nav layui-layout-right">
             <li class="layui-nav-item">
                 <a href="javascript:void(0);">
-                    <img src="../static/imgs/system/user.png" th:src="@{/imgs/system/user.png}"  class="layui-nav-img">
+                    <img src="../static/imgs/system/user.png" th:src="@{/imgs/system/user.png}" class="layui-nav-img">
                     <span th:text="${session.loginUser.realName}">bearcat2</span>
                 </a>
                 <dl class="layui-nav-child">
-                    <dd><a href="">基本资料</a></dd>
-                    <dd><a href="">修改密码</a></dd>
+                    <dd><a href="javascript:void(0);" class="basicInfo">基本资料</a></dd>
+                    <dd><a href="javascript:void(0);" class="updatePassword">修改密码</a></dd>
+                    <input type="hidden" th:value="${session.loginUser.userId}" id="userId">
                 </dl>
             </li>
             <li class="layui-nav-item"><a href="/sysUser/logout">退出系统</a></li>

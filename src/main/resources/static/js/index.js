@@ -1,6 +1,7 @@
-layui.use(['element', 'jquery'], function () {
+layui.use(['element', 'jquery', 'form'], function () {
     //使用layui定好的模块
     var element = layui.element,
+        form = layui.form,
         $ = layui.jquery;
 
     // 定义和tab相关事件
@@ -56,11 +57,6 @@ layui.use(['element', 'jquery'], function () {
         tabActive.tabChange(dataid.attr("data-id"));
     });
 
-    // 页面加载打开默认的tab选项卡
-    // tabActive.tabAdd($("#defaultTab").attr("data-url"), $("#defaultTab").attr("data-id"), $("#defaultTab").attr("data-title"));
-    // tabActive.tabChange($("#defaultTab").attr("data-id"));
-    // $("#defaultTab").addClass('layui-this');
-
     // 切换tab选项卡切换动态选择左侧导航栏
     element.on('tab(customTab)', function () {
         var layId = this.getAttribute("lay-id");
@@ -73,29 +69,112 @@ layui.use(['element', 'jquery'], function () {
     });
 
     // 基本资料
-    // $('.layui-nav-child .userInfo').on('click', function () {
-    //     layer.open({
-    //         title: '设置我的基本资料',
-    //         type: 2,
-    //         area: ['529px', '483px'],
-    //         maxmin: true,
-    //         content: '${basePath}/pkdSysUser/edit_ui?suId=',
-    //         end: function () {
-    //             table.reload('tableReload');
-    //         }
-    //     });
-    // });
-    //
-    // // 修改密码
-    // $('.layui-nav-child .updatePwd').on('click', function () {
-    //     layer.open({
-    //         title: '修改密码',
-    //         type: 2,
-    //         area: ['590px', '304px'],
-    //         maxmin: true,
-    //         content: '${basePath}/pkdSysUser/updatePwd_ui?suId=' + ${sysUser.suId}
-    //     });
-    // });
+    $('.layui-nav-child .basicInfo').on('click', function () {
+        var userId = $('#userId').val();
+        var params = {suId: userId};
+        $.get('/sysUser/basicInfo', params, function (res) {
+            layer.open({
+                title: '设置我的基本资料',
+                skin: 'layui-layer-lan',
+                type: 1,
+                area: ['482px', '280px'],
+                maxmin: true,
+                content: res,
+                success: function (layero, index) {
+                    // 渲染表单元素
+                    form.render();
+                    // 页面加载成功,改变下布局
+                    $('#layui-form-page').css({
+                        marginTop: '20px',
+                        marginRight: '30px'
+                    });
+                    // 监控表单提交
+                    form.on('submit(form)', function (data) {
+                        // 异步提交表单
+                        $.ajax({
+                            url: '/sysUser/edit',
+                            data: data.field,
+                            type: 'POST',
+                            dataType: 'json',
+                            success: function (data) {
+                                var msg = '';
+                                if (data.code === REQUEST_SUCCESS_CODE) {
+                                    layer.close(index);
+                                    msg = '设置成功';
+                                } else {
+                                    msg = data.msg;
+                                }
+                                layer.msg(msg);
+                            },
+                            error: function (data) {
+                                console.error("调用出错", data);
+                            }
+                        });
+                        //阻止表单跳转(同步)
+                        return false;
+                    });
+                }
+            }, 'html');
+        });
+    });
+
+    // 修改密码
+    $('.layui-nav-child .updatePassword').on('click', function () {
+        var userId = $('#userId').val();
+        var params = {suId: userId};
+        $.get('/sysUser/updatePassword', params, function (res) {
+            layer.open({
+                title: '修改密码',
+                skin: 'layui-layer-lan',
+                type: 1,
+                area: ['482px', '350px'],
+                maxmin: true,
+                content: res,
+                success: function (layero, index) {
+                    // 渲染表单元素
+                    form.render();
+                    // 页面加载成功,改变下布局
+                    $('#layui-form-page').css({
+                        marginTop: '20px',
+                        marginRight: '30px'
+                    });
+                    // 监控表单提交
+                    form.on('submit(form)', function (data) {
+                        var params = data.field
+                        if (params.newPassword !== params.confirmPassword) {
+                            layer.msg("确认密码与新密码不一致,请重新输入");
+                            return false;
+                        }
+
+                        // 异步提交表单
+                        $.ajax({
+                            url: '/sysUser/updatePassword',
+                            data: params,
+                            type: 'POST',
+                            dataType: 'json',
+                            success: function (data) {
+                                var msg = '';
+                                if (data.code === REQUEST_SUCCESS_CODE) {
+                                    layer.close(index);
+                                    msg = '密码修改成功';
+                                    // 密码修改成功,跳转到登录页重新登录
+                                    window.location.href = '/sysUser/doLogin';
+                                } else {
+                                    msg = data.msg;
+                                }
+                                parent.layer.msg(msg);
+                            },
+                            error: function (data) {
+                                console.error("调用出错", data);
+                            }
+                        });
+                        //阻止表单跳转(同步)
+                        return false;
+                    });
+                }
+            }, 'html');
+        });
+    });
 
     // tab标题右键事件
     function CustomRightClick(id) {

@@ -4,6 +4,9 @@ import com.alibaba.fastjson.TypeReference;
 
 /**
  * <p> Description: redis 数据访问对象</p>
+ *
+ * redis命令手册参见：https://www.redis.net.cn/order/
+ *
  * <p> Title: RedisDao </p>
  * <p> Create Time: 2019/7/4 23:30 </p>
  *

@@ -22,6 +22,8 @@ public enum CodeMsgEnum {
     LOGIN_ERROR(100, "用户名或密码错误"),
     CAPTCHA_ERROR(101, "验证码错误"),
     PRIVILEGE_IS_NULL(102, "您没有选中任何权限,无法提交"),
+    OLD_PASSWORD_ERROR(103,"原始密码错误"),
+    REPEAT_PASSWORD_ERROR(103,"新密码不能与原密码一致"),
     NO_ACCESS_PRIVILEGE(403, "权限不足操作拒绝,请联系管理员");
 
     /** 响应码 */
