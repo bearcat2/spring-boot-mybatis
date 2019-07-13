@@ -2,8 +2,6 @@ package com.bearcat2.service.system;
 
 import com.bearcat2.entity.common.LayuiResult;
 import com.bearcat2.entity.system.SysUser;
-import com.bearcat2.entity.system.SysUserExample;
-import com.bearcat2.service.common.CommonService;
 
 import java.util.List;
 
@@ -15,7 +13,7 @@ import java.util.List;
  * @author: zhongzhipeng
  * @version: 1.0
  */
-public interface SysUserService extends CommonService<SysUser, SysUserExample> {
+public interface SysUserService  {
 
     /**
      * 用户登录
@@ -37,7 +35,7 @@ public interface SysUserService extends CommonService<SysUser, SysUserExample> {
     /**
      * 根据用户id查询对应的用户角色关系
      */
-    List<Integer> findByUserId(Integer userId);
+    List<Integer> findRoleIdsById(Integer userId);
 
     /**
      * 添加用户角色关系表
@@ -56,6 +54,30 @@ public interface SysUserService extends CommonService<SysUser, SysUserExample> {
     int updateUserRoleRelationByUserId(Integer userId, Integer roleId);
 
     /**
+     * 修改密码
+     * @param sysUser 系统用户对象
+     * @param newPassword 新密码
+     * @return
+     */
+    LayuiResult updatePassword(SysUser sysUser, String newPassword);
+
+    /**
+     * 根据id查询系统用户对象
+     *
+     * @param id 用户id
+     * @return SysUser - 系统用户对象
+     */
+    SysUser findById(Integer id);
+
+    /**
+     * 根据id删除系统用户对象
+     *
+     * @param id 用户id
+     * @return int - 影响数据表行数
+     */
+    int deleteById(Integer id);
+
+    /**
      * 添加用户
      * @param sysUser
      * @param roleId
@@ -71,11 +93,4 @@ public interface SysUserService extends CommonService<SysUser, SysUserExample> {
      */
     LayuiResult edit(SysUser sysUser, Integer roleId);
 
-    /**
-     * 修改密码
-     * @param sysUser 系统用户对象
-     * @param newPassword 新密码
-     * @return
-     */
-    LayuiResult updatePassword(SysUser sysUser, String newPassword);
 }

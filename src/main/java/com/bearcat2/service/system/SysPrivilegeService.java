@@ -2,9 +2,7 @@ package com.bearcat2.service.system;
 
 import com.bearcat2.entity.common.*;
 import com.bearcat2.entity.system.SysPrivilege;
-import com.bearcat2.entity.system.SysPrivilegeExample;
 import com.bearcat2.entity.system.SysRolePrivilege;
-import com.bearcat2.service.common.CommonService;
 
 import java.util.HashMap;
 import java.util.List;
@@ -17,7 +15,7 @@ import java.util.List;
  * @author: zhongzhipeng
  * @version: 1.0
  */
-public interface SysPrivilegeService extends CommonService<SysPrivilege, SysPrivilegeExample> {
+public interface SysPrivilegeService {
 
     /**
      * 查找用户下拥有的所有菜单
@@ -98,4 +96,37 @@ public interface SysPrivilegeService extends CommonService<SysPrivilege, SysPriv
      * @return
      */
     LayuiResult allotButton(List<SysPrivilege> sysPrivileges);
+
+    /**
+     * 根据id查询系统权限对象
+     *
+     * @param id 权限id
+     * @return SysPrivilege - 系统权限对象
+     */
+    SysPrivilege findById(Integer id);
+
+    /**
+     * 修改系统权限对象
+     *
+     * @param sysPrivilege 系统权限对象,必须包含id属性
+     * @return int - 影响数据表行数
+     */
+    int update(SysPrivilege sysPrivilege);
+
+    /**
+     * 插入系统权限对象
+     *
+     * @param sysPrivilege 系统权限对象,必须包含id属性
+     * @return int - 影响数据表行数
+     */
+    int insert(SysPrivilege sysPrivilege);
+
+    /**
+     * 根据id删除系统权限对象
+     *
+     * @param id 权限id
+     * @return int - 影响数据表行数
+     */
+    int deleteById(Integer id);
+
 }

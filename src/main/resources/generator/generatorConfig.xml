@@ -1,0 +1,45 @@
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <context id="Mysql" targetRuntime="MyBatis3Simple" defaultModelType="flat">
+        <property name="beginningDelimiter" value="`"/>
+        <property name="endingDelimiter" value="`"/>
+
+        <plugin type="tk.mybatis.mapper.generator.MapperPlugin">
+            <property name="mappers" value="com.bearcat2.mapper.CommonMapper"/>
+            <property name="caseSensitive" value="true"/>
+            <property name="forceAnnotation" value="true"/>
+            <property name="generateColumnConsts" value="true"/>
+            <!--<property name="lombok" value="Getter,Setter,ToString,Accessors"/>-->
+            <property name="lombok" value="Data,Accessors"/>
+        </plugin>
+
+        <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
+                        connectionURL="jdbc:mysql://localhost:3306/spring-boot-mybatis?serverTimezone=Asia/Shanghai"
+                        userId="root"
+                        password="123456">
+            <!--解决5.x.x驱动正常有@id，6.x，和8.x都没有@id问题-->
+            <property name="nullCatalogMeansCurrent" value="true"/>
+        </jdbcConnection>
+
+        <javaModelGenerator targetPackage="com.bearcat2.entity.system"
+                            targetProject="src/main/java"/>
+
+        <sqlMapGenerator targetPackage="mapper.system"
+                         targetProject="src/main/resources"/>
+
+        <javaClientGenerator targetPackage="com.bearcat2.mapper.system"
+                             targetProject="src/main/java"
+                             type="XMLMAPPER"/>
+
+        <table tableName="sys_data_dictionary"/>
+        <table tableName="sys_operate"/>
+        <table tableName="sys_privilege"/>
+        <table tableName="sys_role"/>
+        <table tableName="sys_role_privilege"/>
+        <table tableName="sys_user"/>
+        <table tableName="sys_user_role"/>
+    </context>
+</generatorConfiguration>

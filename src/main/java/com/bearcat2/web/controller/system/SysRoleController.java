@@ -11,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -45,15 +44,14 @@ public class SysRoleController {
 
     @GetMapping("/edit")
     public String editUi(SysRole sysRole, Model model) {
-        model.addAttribute("role", this.sysRoleService.selectByPrimaryKey(sysRole.getSrId()));
+        model.addAttribute("role", this.sysRoleService.findById(sysRole.getSrId()));
         return "system/role/edit";
     }
 
     @ResponseBody
     @PostMapping("/edit")
     public LayuiResult edit(SysRole sysRole) {
-        sysRole.setSrUpdateTime(new Date());
-        this.sysRoleService.updateByPrimaryKey(sysRole);
+        this.sysRoleService.update(sysRole);
         return LayuiResult.success();
     }
 
@@ -65,16 +63,14 @@ public class SysRoleController {
     @ResponseBody
     @PostMapping("/add")
     public LayuiResult add(SysRole sysRole) {
-        sysRole.setSrCreateTime(new Date());
-        sysRole.setSrUpdateTime(new Date());
-        this.sysRoleService.insertSelective(sysRole);
+        this.sysRoleService.insert(sysRole);
         return LayuiResult.success();
     }
 
     @ResponseBody
     @PostMapping("/delete")
     public LayuiResult delete(SysRole sysRole) {
-        this.sysRoleService.deleteByPrimaryKey(sysRole.getSrId());
+        this.sysRoleService.deleteById(sysRole.getSrId());
         return LayuiResult.success();
     }
 

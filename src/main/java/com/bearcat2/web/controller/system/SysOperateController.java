@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
-import java.util.Date;
 
 /**
  * <p> Description: 系统管理控制器 </p>
@@ -51,17 +50,15 @@ public class SysOperateController {
     @PostMapping("/add")
     public LayuiResult add(SysOperate sysOperate, HttpSession session) {
         LoginUser loginUser = CommonUtil.getLoginUser(session);
-        sysOperate.setSoCreateTime(new Date());
         sysOperate.setSoCreateUser(loginUser.getRealName());
-        sysOperate.setSoUpdateTime(new Date());
         sysOperate.setSoUpdateUser(loginUser.getRealName());
-        this.sysOperateService.insertSelective(sysOperate);
+        this.sysOperateService.insert(sysOperate);
         return LayuiResult.success();
     }
 
     @GetMapping("/edit")
     public String editUi(SysOperate sysOperate, Model model) {
-        model.addAttribute("operate", this.sysOperateService.selectByPrimaryKey(sysOperate.getSoId()));
+        model.addAttribute("operate", this.sysOperateService.findById(sysOperate.getSoId()));
         return "system/operate/edit";
     }
 
@@ -69,16 +66,15 @@ public class SysOperateController {
     @PostMapping("/edit")
     public LayuiResult edit(SysOperate sysOperate, HttpSession session) {
         LoginUser loginUser = CommonUtil.getLoginUser(session);
-        sysOperate.setSoUpdateTime(new Date());
         sysOperate.setSoUpdateUser(loginUser.getRealName());
-        this.sysOperateService.updateByPrimaryKeySelective(sysOperate);
+        this.sysOperateService.update(sysOperate);
         return LayuiResult.success();
     }
 
     @ResponseBody
     @PostMapping("/delete")
     public LayuiResult delete(SysOperate sysOperate) {
-        this.sysOperateService.deleteByPrimaryKey(sysOperate.getSoId());
+        this.sysOperateService.deleteById(sysOperate.getSoId());
         return LayuiResult.success();
     }
 }

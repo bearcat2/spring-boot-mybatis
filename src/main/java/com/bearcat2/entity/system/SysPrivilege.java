@@ -1,243 +1,111 @@
 package com.bearcat2.entity.system;
 
-import java.io.Serializable;
+import com.bearcat2.entity.common.CommonEntity;
+import lombok.Data;
+import lombok.experimental.Accessors;
+
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
-public class SysPrivilege implements Serializable {
+@Data
+@Accessors(chain = true)
+@Table(name = "sys_privilege")
+public class SysPrivilege extends CommonEntity {
     /**
      * 权限id
      */
+    @Id
+    @Column(name = "sp_id")
     private Integer spId;
 
     /**
      * 资源名称
      */
+    @Column(name = "sp_name")
     private String spName;
 
     /**
      * 资源uri
      */
+    @Column(name = "sp_uri")
     private String spUri;
 
     /**
      * 资源类型(1:模块;2:菜单;3:按钮)
      */
+    @Column(name = "sp_type")
     private Integer spType;
 
     /**
      * 操作名
      */
+    @Column(name = "sp_operate_name")
     private String spOperateName;
 
     /**
      * 父权限id
      */
+    @Column(name = "sp_parent_id")
     private Integer spParentId;
 
     /**
      * 位置排序
      */
+    @Column(name = "sp_orderd")
     private Integer spOrderd;
 
     /**
      * 创建时间
      */
+    @Column(name = "sp_create_time")
     private Date spCreateTime;
 
     /**
      * 修改时间
      */
+    @Column(name = "sp_update_time")
     private Date spUpdateTime;
-
-    private static final long serialVersionUID = 1L;
 
     // 获取所有子权限
     private List<SysPrivilege> childrenSysPrivilege = new ArrayList<>();
 
-    /**
-     * 权限id
-     * @return sp_id 权限id
-     */
-    public Integer getSpId() {
-        return spId;
-    }
+    public static final String SP_ID = "spId";
 
-    /**
-     * 权限id
-     * @param spId 权限id
-     */
-    public void setSpId(Integer spId) {
-        this.spId = spId;
-    }
+    public static final String DB_SP_ID = "sp_id";
 
-    /**
-     * 资源名称
-     * @return sp_name 资源名称
-     */
-    public String getSpName() {
-        return spName;
-    }
+    public static final String SP_NAME = "spName";
 
-    /**
-     * 资源名称
-     * @param spName 资源名称
-     */
-    public void setSpName(String spName) {
-        this.spName = spName == null ? null : spName.trim();
-    }
+    public static final String DB_SP_NAME = "sp_name";
 
-    /**
-     * 资源uri
-     * @return sp_uri 资源uri
-     */
-    public String getSpUri() {
-        return spUri;
-    }
+    public static final String SP_URI = "spUri";
 
-    /**
-     * 资源uri
-     * @param spUri 资源uri
-     */
-    public void setSpUri(String spUri) {
-        this.spUri = spUri == null ? null : spUri.trim();
-    }
+    public static final String DB_SP_URI = "sp_uri";
 
-    /**
-     * 资源类型(1:模块;2:菜单;3:按钮)
-     * @return sp_type 资源类型(1:模块;2:菜单;3:按钮)
-     */
-    public Integer getSpType() {
-        return spType;
-    }
+    public static final String SP_TYPE = "spType";
 
-    /**
-     * 资源类型(1:模块;2:菜单;3:按钮)
-     * @param spType 资源类型(1:模块;2:菜单;3:按钮)
-     */
-    public void setSpType(Integer spType) {
-        this.spType = spType;
-    }
+    public static final String DB_SP_TYPE = "sp_type";
 
-    /**
-     * 操作名
-     * @return sp_operate_name 操作名
-     */
-    public String getSpOperateName() {
-        return spOperateName;
-    }
+    public static final String SP_OPERATE_NAME = "spOperateName";
 
-    /**
-     * 操作名
-     * @param spOperateName 操作名
-     */
-    public void setSpOperateName(String spOperateName) {
-        this.spOperateName = spOperateName == null ? null : spOperateName.trim();
-    }
+    public static final String DB_SP_OPERATE_NAME = "sp_operate_name";
 
-    /**
-     * 父权限id
-     * @return sp_parent_id 父权限id
-     */
-    public Integer getSpParentId() {
-        return spParentId;
-    }
+    public static final String SP_PARENT_ID = "spParentId";
 
-    /**
-     * 父权限id
-     * @param spParentId 父权限id
-     */
-    public void setSpParentId(Integer spParentId) {
-        this.spParentId = spParentId;
-    }
+    public static final String DB_SP_PARENT_ID = "sp_parent_id";
 
-    /**
-     * 位置排序
-     * @return sp_orderd 位置排序
-     */
-    public Integer getSpOrderd() {
-        return spOrderd;
-    }
+    public static final String SP_ORDERD = "spOrderd";
 
-    /**
-     * 位置排序
-     * @param spOrderd 位置排序
-     */
-    public void setSpOrderd(Integer spOrderd) {
-        this.spOrderd = spOrderd;
-    }
+    public static final String DB_SP_ORDERD = "sp_orderd";
 
-    /**
-     * 创建时间
-     * @return sp_create_time 创建时间
-     */
-    public Date getSpCreateTime() {
-        return spCreateTime;
-    }
+    public static final String SP_CREATE_TIME = "spCreateTime";
 
-    /**
-     * 创建时间
-     * @param spCreateTime 创建时间
-     */
-    public void setSpCreateTime(Date spCreateTime) {
-        this.spCreateTime = spCreateTime;
-    }
+    public static final String DB_SP_CREATE_TIME = "sp_create_time";
 
-    /**
-     * 修改时间
-     * @return sp_update_time 修改时间
-     */
-    public Date getSpUpdateTime() {
-        return spUpdateTime;
-    }
+    public static final String SP_UPDATE_TIME = "spUpdateTime";
 
-    /**
-     * 修改时间
-     * @param spUpdateTime 修改时间
-     */
-    public void setSpUpdateTime(Date spUpdateTime) {
-        this.spUpdateTime = spUpdateTime;
-    }
-
-    public List<SysPrivilege> getChildrenSysPrivilege() {
-        return childrenSysPrivilege;
-    }
-
-    public void setChildrenSysPrivilege(List<SysPrivilege> childrenSysPrivilege) {
-        this.childrenSysPrivilege = childrenSysPrivilege;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", spId=").append(spId);
-        sb.append(", spName=").append(spName);
-        sb.append(", spUri=").append(spUri);
-        sb.append(", spType=").append(spType);
-        sb.append(", spOperateName=").append(spOperateName);
-        sb.append(", spParentId=").append(spParentId);
-        sb.append(", spOrderd=").append(spOrderd);
-        sb.append(", spCreateTime=").append(spCreateTime);
-        sb.append(", spUpdateTime=").append(spUpdateTime);
-        sb.append("]");
-        return sb.toString();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        SysPrivilege privilege = (SysPrivilege) o;
-        return Objects.equals(spId, privilege.spId);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(spId);
-    }
+    public static final String DB_SP_UPDATE_TIME = "sp_update_time";
 }

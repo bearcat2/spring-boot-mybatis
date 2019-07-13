@@ -3,15 +3,17 @@ package com.bearcat2.service.impl.system;
 import cn.hutool.core.util.StrUtil;
 import com.bearcat2.entity.common.LayuiResult;
 import com.bearcat2.entity.system.SysOperate;
-import com.bearcat2.entity.system.SysOperateExample;
-import com.bearcat2.service.common.CommonServiceImpl;
+import com.bearcat2.mapper.system.SysOperateMapper;
 import com.bearcat2.service.system.SysOperateService;
 import com.bearcat2.util.CommonUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tk.mybatis.mapper.entity.Example;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -24,22 +26,52 @@ import java.util.List;
  */
 @Service
 @Transactional(readOnly = true)
-public class SysOperateServiceImpl extends CommonServiceImpl<SysOperate, SysOperateExample> implements SysOperateService {
+public class SysOperateServiceImpl implements SysOperateService {
+
+    @Autowired
+    private SysOperateMapper sysOperateMapper;
 
     @Override
     public LayuiResult list(SysOperate sysOperate) {
-        SysOperateExample example = new SysOperateExample();
+        Example example = new Example(SysOperate.class);
         example.setOrderByClause("so_orderd");
-        SysOperateExample.Criteria criteria = example.createCriteria();
+        Example.Criteria criteria = example.createCriteria();
         if (StrUtil.isNotBlank(sysOperate.getSoName())) {
-            criteria.andSoNameLike(CommonUtil.buildLikeQueryParam(sysOperate.getSoName()));
+            criteria.andLike(SysOperate.SO_NAME, CommonUtil.buildLikeQueryParam(sysOperate.getSoName()));
         }
         if (StrUtil.isNotBlank(sysOperate.getSoShowName())) {
-            criteria.andSoShowNameLike(CommonUtil.buildLikeQueryParam(sysOperate.getSoShowName()));
+            criteria.andLike(SysOperate.SO_SHOW_NAME, CommonUtil.buildLikeQueryParam(sysOperate.getSoShowName()));
         }
         PageHelper.startPage(sysOperate.getPage(), sysOperate.getLimit());
-        List<SysOperate> sysOperates = this.selectByExample(example);
+        List<SysOperate> sysOperates = this.sysOperateMapper.selectByExample(example);
         PageInfo<SysOperate> pageInfo = new PageInfo<>(sysOperates);
         return LayuiResult.success(pageInfo.getList(), pageInfo.getTotal());
     }
+
+    @Transactional
+    @Override
+    public int insert(SysOperate sysOperate) {
+        sysOperate.setSoUpdateTime(new Date());
+        sysOperate.setSoCreateTime(new Date());
+        return this.sysOperateMapper.insertSelective(sysOperate);
+    }
+
+    @Override
+    public SysOperate findById(Integer id) {
+        return this.sysOperateMapper.selectByPrimaryKey(id);
+    }
+
+    @Transactional
+    @Override
+    public int update(SysOperate sysOperate) {
+        sysOperate.setSoUpdateTime(new Date());
+        return this.sysOperateMapper.updateByPrimaryKeySelective(sysOperate);
+    }
+
+    @Transactional
+    @Override
+    public int deleteById(Integer id) {
+        return this.sysOperateMapper.deleteByPrimaryKey(id);
+    }
+
 }

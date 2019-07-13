@@ -6,10 +6,12 @@ import cn.hutool.crypto.SecureUtil;
 import com.bearcat2.entity.common.Constant;
 import com.bearcat2.entity.common.LayuiResult;
 import com.bearcat2.entity.common.LoginUser;
-import com.bearcat2.entity.system.*;
+import com.bearcat2.entity.system.SysPrivilege;
+import com.bearcat2.entity.system.SysUser;
+import com.bearcat2.entity.system.SysUserRole;
 import com.bearcat2.enumeration.CodeMsgEnum;
+import com.bearcat2.mapper.system.SysUserMapper;
 import com.bearcat2.mapper.system.SysUserRoleMapper;
-import com.bearcat2.service.common.CommonServiceImpl;
 import com.bearcat2.service.system.SysPrivilegeService;
 import com.bearcat2.service.system.SysUserService;
 import com.bearcat2.util.CommonUtil;
@@ -19,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,7 +39,10 @@ import java.util.stream.Collectors;
  */
 @Service
 @Transactional(readOnly = true)
-public class SysUserServiceImpl extends CommonServiceImpl<SysUser, SysUserExample> implements SysUserService {
+public class SysUserServiceImpl implements SysUserService {
+
+    @Autowired
+    private SysUserMapper sysUserMapper;
 
     @Autowired
     private SysPrivilegeService sysPrivilegeService;
@@ -50,10 +56,10 @@ public class SysUserServiceImpl extends CommonServiceImpl<SysUser, SysUserExampl
     @Override
     public LayuiResult login(String loginName, String password) {
         // 验证用户信息
-        SysUserExample example = new SysUserExample();
+        Example example = new Example(SysUser.class);
         example.createCriteria()
-                .andSuLoginNameEqualTo(loginName);
-        List<SysUser> sysUsers = super.selectByExample(example);
+                .andEqualTo(SysUser.SU_LOGIN_NAME, loginName);
+        List<SysUser> sysUsers = this.sysUserMapper.selectByExample(example);
         if (CollUtil.isEmpty(sysUsers)) {
             return LayuiResult.error(CodeMsgEnum.LOGIN_ERROR);
         }
@@ -112,24 +118,27 @@ public class SysUserServiceImpl extends CommonServiceImpl<SysUser, SysUserExampl
     @Override
     public LayuiResult list(SysUser sysUser) {
         // 获取用户列表,排除超级管理员
-        SysUserExample example = new SysUserExample();
-        SysUserExample.Criteria criteria = example.createCriteria()
-                .andSuLoginNameNotEqualTo(superAdmin);
+        Example example = new Example(SysUser.class);
+        Example.Criteria criteria = example.createCriteria()
+                .andNotEqualTo(SysUser.SU_LOGIN_NAME, superAdmin);
         if (StrUtil.isNotBlank(sysUser.getSuLoginName())) {
-            criteria.andSuLoginNameLike(CommonUtil.buildLikeQueryParam(sysUser.getSuLoginName()));
+            criteria.andLike(
+                    SysUser.SU_LOGIN_NAME
+                    , CommonUtil.buildLikeQueryParam(sysUser.getSuLoginName())
+            );
         }
         example.setOrderByClause("su_create_time desc");
         PageHelper.startPage(sysUser.getPage(), sysUser.getLimit());
-        List<SysUser> sysUsers = super.selectByExample(example);
+        List<SysUser> sysUsers = this.sysUserMapper.selectByExample(example);
         PageInfo<SysUser> pageInfo = new PageInfo<>(sysUsers);
         return LayuiResult.success(pageInfo.getList(), pageInfo.getTotal());
     }
 
     @Override
-    public List<Integer> findByUserId(Integer userId) {
-        SysUserRoleExample example = new SysUserRoleExample();
+    public List<Integer> findRoleIdsById(Integer userId) {
+        Example example = new Example(SysUserRole.class);
         example.createCriteria()
-                .andSurUserIdEqualTo(userId);
+                .andEqualTo(SysUserRole.SUR_USER_ID, userId);
         List<SysUserRole> sysUserRoles = this.sysUserRoleMapper.selectByExample(example);
         List<Integer> roleIds = sysUserRoles.stream()
                 .map(SysUserRole::getSurRoleId)
@@ -149,9 +158,9 @@ public class SysUserServiceImpl extends CommonServiceImpl<SysUser, SysUserExampl
     @Transactional
     @Override
     public int updateUserRoleRelationByUserId(Integer userId, Integer roleId) {
-        SysUserRoleExample example = new SysUserRoleExample();
+        Example example = new Example(SysUserRole.class);
         example.createCriteria()
-                .andSurUserIdEqualTo(userId);
+                .andEqualTo(SysUserRole.SUR_USER_ID, userId);
 
         SysUserRole sysUserRole = new SysUserRole();
         sysUserRole.setSurRoleId(roleId);
@@ -165,7 +174,7 @@ public class SysUserServiceImpl extends CommonServiceImpl<SysUser, SysUserExampl
         sysUser.setSuUpdateTime(new Date());
         sysUser.setSuPassword(SecureUtil.md5(sysUser.getSuPassword()));
         // 注意这里已在mybatis里设置,插入用户数据后会将自增生成的主键插入到SysUser对象的suId属性中
-        super.insertSelective(sysUser);
+        this.sysUserMapper.insertUseGeneratedKeys(sysUser);
 
         // 添加用户角色表
         this.insertUserRoleRelation(sysUser.getSuId(), roleId);
@@ -176,7 +185,7 @@ public class SysUserServiceImpl extends CommonServiceImpl<SysUser, SysUserExampl
     @Override
     public LayuiResult edit(SysUser sysUser, Integer roleId) {
         sysUser.setSuUpdateTime(new Date());
-        super.updateByPrimaryKeySelective(sysUser);
+        this.sysUserMapper.updateByPrimaryKeySelective(sysUser);
 
         // 修改对应的用户角色关系表
         this.updateUserRoleRelationByUserId(sysUser.getSuId(), roleId);
@@ -189,13 +198,24 @@ public class SysUserServiceImpl extends CommonServiceImpl<SysUser, SysUserExampl
         if (sysUser.getSuPassword().equalsIgnoreCase(newPassword)) {
             return LayuiResult.error(CodeMsgEnum.REPEAT_PASSWORD_ERROR);
         }
-        SysUser user = super.selectByPrimaryKey(sysUser.getSuId());
+        SysUser user = this.sysUserMapper.selectByPrimaryKey(sysUser.getSuId());
         if (!user.getSuPassword().equalsIgnoreCase(SecureUtil.md5(sysUser.getSuPassword()))) {
             return LayuiResult.error(CodeMsgEnum.OLD_PASSWORD_ERROR);
         }
         sysUser.setSuPassword(SecureUtil.md5(newPassword));
-        super.updateByPrimaryKeySelective(sysUser);
+        this.sysUserMapper.updateByPrimaryKeySelective(sysUser);
         return LayuiResult.success();
+    }
+
+    @Override
+    public SysUser findById(Integer id) {
+        return this.sysUserMapper.selectByPrimaryKey(id);
+    }
+
+    @Transactional
+    @Override
+    public int deleteById(Integer id) {
+        return this.sysUserMapper.deleteByPrimaryKey(id);
     }
 
     /**

@@ -1,171 +1,66 @@
 package com.bearcat2.entity.system;
 
 import com.bearcat2.entity.common.CommonEntity;
+import lombok.Data;
+import lombok.experimental.Accessors;
 
-import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
 
-public class SysRole extends CommonEntity implements Serializable {
+@Data
+@Accessors(chain = true)
+@Table(name = "sys_role")
+public class SysRole extends CommonEntity {
     /**
      * 角色id,自增
      */
+    @Id
+    @Column(name = "sr_id")
     private Integer srId;
 
     /**
      * 角色名
      */
+    @Column(name = "sr_name")
     private String srName;
 
     /**
      * 角色描述
      */
+    @Column(name = "sr_description")
     private String srDescription;
 
     /**
      * 创建时间
      */
+    @Column(name = "sr_create_time")
     private Date srCreateTime;
 
     /**
      * 修改时间
      */
+    @Column(name = "sr_update_time")
     private Date srUpdateTime;
 
-    private static final long serialVersionUID = 1L;
+    public static final String SR_ID = "srId";
 
-    /**
-     * 角色id,自增
-     *
-     * @return sr_id 角色id,自增
-     */
-    public Integer getSrId() {
-        return srId;
-    }
+    public static final String DB_SR_ID = "sr_id";
 
-    /**
-     * 角色id,自增
-     *
-     * @param srId 角色id,自增
-     */
-    public void setSrId(Integer srId) {
-        this.srId = srId;
-    }
+    public static final String SR_NAME = "srName";
 
-    /**
-     * 角色名
-     *
-     * @return sr_name 角色名
-     */
-    public String getSrName() {
-        return srName;
-    }
+    public static final String DB_SR_NAME = "sr_name";
 
-    /**
-     * 角色名
-     *
-     * @param srName 角色名
-     */
-    public void setSrName(String srName) {
-        this.srName = srName == null ? null : srName.trim();
-    }
+    public static final String SR_DESCRIPTION = "srDescription";
 
-    /**
-     * 角色描述
-     *
-     * @return sr_description 角色描述
-     */
-    public String getSrDescription() {
-        return srDescription;
-    }
+    public static final String DB_SR_DESCRIPTION = "sr_description";
 
-    /**
-     * 角色描述
-     *
-     * @param srDescription 角色描述
-     */
-    public void setSrDescription(String srDescription) {
-        this.srDescription = srDescription == null ? null : srDescription.trim();
-    }
+    public static final String SR_CREATE_TIME = "srCreateTime";
 
-    /**
-     * 创建时间
-     *
-     * @return sr_create_time 创建时间
-     */
-    public Date getSrCreateTime() {
-        return srCreateTime;
-    }
+    public static final String DB_SR_CREATE_TIME = "sr_create_time";
 
-    /**
-     * 创建时间
-     *
-     * @param srCreateTime 创建时间
-     */
-    public void setSrCreateTime(Date srCreateTime) {
-        this.srCreateTime = srCreateTime;
-    }
+    public static final String SR_UPDATE_TIME = "srUpdateTime";
 
-    /**
-     * 修改时间
-     *
-     * @return sr_update_time 修改时间
-     */
-    public Date getSrUpdateTime() {
-        return srUpdateTime;
-    }
-
-    /**
-     * 修改时间
-     *
-     * @param srUpdateTime 修改时间
-     */
-    public void setSrUpdateTime(Date srUpdateTime) {
-        this.srUpdateTime = srUpdateTime;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", srId=").append(srId);
-        sb.append(", srName=").append(srName);
-        sb.append(", srDescription=").append(srDescription);
-        sb.append(", srCreateTime=").append(srCreateTime);
-        sb.append(", srUpdateTime=").append(srUpdateTime);
-        sb.append("]");
-        return sb.toString();
-    }
-
-    @Override
-    public boolean equals(Object that) {
-        if (this == that) {
-            return true;
-        }
-        if (that == null) {
-            return false;
-        }
-        if (getClass() != that.getClass()) {
-            return false;
-        }
-        SysRole other = (SysRole) that;
-        return (this.getSrId() == null ? other.getSrId() == null : this.getSrId().equals(other.getSrId()))
-                && (this.getSrName() == null ? other.getSrName() == null : this.getSrName().equals(other.getSrName()))
-                && (this.getSrDescription() == null ? other.getSrDescription() == null : this.getSrDescription().equals(other.getSrDescription()))
-                && (this.getSrCreateTime() == null ? other.getSrCreateTime() == null : this.getSrCreateTime().equals(other.getSrCreateTime()))
-                && (this.getSrUpdateTime() == null ? other.getSrUpdateTime() == null : this.getSrUpdateTime().equals(other.getSrUpdateTime()));
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((getSrId() == null) ? 0 : getSrId().hashCode());
-        result = prime * result + ((getSrName() == null) ? 0 : getSrName().hashCode());
-        result = prime * result + ((getSrDescription() == null) ? 0 : getSrDescription().hashCode());
-        result = prime * result + ((getSrCreateTime() == null) ? 0 : getSrCreateTime().hashCode());
-        result = prime * result + ((getSrUpdateTime() == null) ? 0 : getSrUpdateTime().hashCode());
-        return result;
-    }
+    public static final String DB_SR_UPDATE_TIME = "sr_update_time";
 }

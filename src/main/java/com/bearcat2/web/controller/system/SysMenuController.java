@@ -11,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -43,15 +42,15 @@ public class SysMenuController {
 
     @GetMapping("/edit")
     public String editUi(TreeTableNode treeTableNode, Model model) {
-        model.addAttribute("menu", this.sysPrivilegeService.selectByPrimaryKey(treeTableNode.getId()));
+        SysPrivilege sysPrivilege = this.sysPrivilegeService.findById(treeTableNode.getId());
+        model.addAttribute("menu", sysPrivilege);
         return "system/menu/edit";
     }
 
     @ResponseBody
     @PostMapping("/edit")
     public LayuiResult edit(SysPrivilege sysPrivilege) {
-        sysPrivilege.setSpUpdateTime(new Date());
-        this.sysPrivilegeService.updateByPrimaryKeySelective(sysPrivilege);
+        this.sysPrivilegeService.update(sysPrivilege);
         return LayuiResult.success();
     }
 
@@ -63,16 +62,14 @@ public class SysMenuController {
     @ResponseBody
     @PostMapping("/add")
     public LayuiResult add(SysPrivilege sysPrivilege) {
-        sysPrivilege.setSpCreateTime(new Date());
-        sysPrivilege.setSpUpdateTime(new Date());
-        this.sysPrivilegeService.insertSelective(sysPrivilege);
+        this.sysPrivilegeService.insert(sysPrivilege);
         return LayuiResult.success();
     }
 
     @ResponseBody
     @PostMapping("/delete")
     public LayuiResult delete(TreeTableNode treeTableNode) {
-        this.sysPrivilegeService.deleteByPrimaryKey(treeTableNode.getId());
+        this.sysPrivilegeService.deleteById(treeTableNode.getId());
         return LayuiResult.success();
     }
 

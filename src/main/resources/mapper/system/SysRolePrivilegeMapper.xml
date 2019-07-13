@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bearcat2.mapper.system.SysRolePrivilegeMapper">
+  <resultMap id="BaseResultMap" type="com.bearcat2.entity.system.SysRolePrivilege">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="srp_id" jdbcType="INTEGER" property="srpId" />
+    <result column="srp_role_id" jdbcType="INTEGER" property="srpRoleId" />
+    <result column="srp_privilege_id" jdbcType="INTEGER" property="srpPrivilegeId" />
+  </resultMap>
+</mapper>

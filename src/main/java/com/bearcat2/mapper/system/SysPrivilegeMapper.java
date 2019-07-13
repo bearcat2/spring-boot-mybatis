@@ -1,12 +1,12 @@
 package com.bearcat2.mapper.system;
 
 import com.bearcat2.entity.system.SysPrivilege;
-import com.bearcat2.entity.system.SysPrivilegeExample;
 import com.bearcat2.mapper.CommonMapper;
 
 import java.util.List;
 
-public interface SysPrivilegeMapper extends CommonMapper<SysPrivilege, SysPrivilegeExample> {
+public interface SysPrivilegeMapper extends CommonMapper<SysPrivilege> {
+
     /**
      * 查找用户下拥有的所有菜单
      *

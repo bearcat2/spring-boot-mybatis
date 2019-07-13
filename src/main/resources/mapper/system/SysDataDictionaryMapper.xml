@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bearcat2.mapper.system.SysDataDictionaryMapper">
+  <resultMap id="BaseResultMap" type="com.bearcat2.entity.system.SysDataDictionary">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="sdr_id" jdbcType="INTEGER" property="sdrId" />
+    <result column="sdr_name" jdbcType="VARCHAR" property="sdrName" />
+    <result column="sdr_value" jdbcType="VARCHAR" property="sdrValue" />
+    <result column="sdr_parent_id" jdbcType="INTEGER" property="sdrParentId" />
+    <result column="sdr_level" jdbcType="INTEGER" property="sdrLevel" />
+    <result column="sdr_order" jdbcType="INTEGER" property="sdrOrder" />
+  </resultMap>
+</mapper>

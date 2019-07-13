@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bearcat2.mapper.system.SysRoleMapper">
+  <resultMap id="BaseResultMap" type="com.bearcat2.entity.system.SysRole">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="sr_id" jdbcType="INTEGER" property="srId" />
+    <result column="sr_name" jdbcType="VARCHAR" property="srName" />
+    <result column="sr_description" jdbcType="VARCHAR" property="srDescription" />
+    <result column="sr_create_time" jdbcType="TIMESTAMP" property="srCreateTime" />
+    <result column="sr_update_time" jdbcType="TIMESTAMP" property="srUpdateTime" />
+  </resultMap>
+</mapper>

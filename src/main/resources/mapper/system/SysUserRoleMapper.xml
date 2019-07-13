@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bearcat2.mapper.system.SysUserRoleMapper">
+  <resultMap id="BaseResultMap" type="com.bearcat2.entity.system.SysUserRole">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="sur_id" jdbcType="INTEGER" property="surId" />
+    <result column="sur_user_id" jdbcType="INTEGER" property="surUserId" />
+    <result column="sur_role_id" jdbcType="INTEGER" property="surRoleId" />
+  </resultMap>
+</mapper>

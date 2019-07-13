@@ -5,18 +5,21 @@ import cn.hutool.core.util.StrUtil;
 import com.bearcat2.dao.redis.RedisDao;
 import com.bearcat2.dao.redis.RedisNameSpace;
 import com.bearcat2.entity.common.*;
-import com.bearcat2.entity.system.*;
+import com.bearcat2.entity.system.SysOperate;
+import com.bearcat2.entity.system.SysPrivilege;
+import com.bearcat2.entity.system.SysRolePrivilege;
+import com.bearcat2.entity.system.SysUserRole;
 import com.bearcat2.enumeration.CodeMsgEnum;
+import com.bearcat2.mapper.system.SysOperateMapper;
 import com.bearcat2.mapper.system.SysPrivilegeMapper;
 import com.bearcat2.mapper.system.SysRolePrivilegeMapper;
 import com.bearcat2.mapper.system.SysUserRoleMapper;
-import com.bearcat2.service.common.CommonServiceImpl;
-import com.bearcat2.service.system.SysOperateService;
 import com.bearcat2.service.system.SysPrivilegeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -31,7 +34,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @Transactional(readOnly = true)
-public class SysPrivilegeServiceImpl extends CommonServiceImpl<SysPrivilege, SysPrivilegeExample> implements SysPrivilegeService {
+public class SysPrivilegeServiceImpl implements SysPrivilegeService {
 
     @Autowired
     private SysPrivilegeMapper sysPrivilegeMapper;
@@ -46,7 +49,7 @@ public class SysPrivilegeServiceImpl extends CommonServiceImpl<SysPrivilege, Sys
     private RedisDao redisDao;
 
     @Autowired
-    private SysOperateService sysOperateService;
+    private SysOperateMapper sysOperateMapper;
 
     @Value("${server.servlet.session.timeout}")
     private Integer sessionTimeout;
@@ -84,19 +87,22 @@ public class SysPrivilegeServiceImpl extends CommonServiceImpl<SysPrivilege, Sys
 
     @Override
     public List<SysPrivilege> findAllMenu() {
-        SysPrivilegeExample example = new SysPrivilegeExample();
-        example.createCriteria()
-                .andSpTypeIn(Arrays.asList(Constant.MODULE_PRIVILEGE_TYPE, Constant.MENU_PRIVILEGE_TYPE));
+        Example example = new Example(SysPrivilege.class);
         example.setOrderByClause("sp_orderd");
-        return super.selectByExample(example);
+        example.createCriteria()
+                .andIn(
+                        SysPrivilege.SP_TYPE
+                        , Arrays.asList(Constant.MODULE_PRIVILEGE_TYPE, Constant.MENU_PRIVILEGE_TYPE)
+                );
+        return this.sysPrivilegeMapper.selectByExample(example);
     }
 
     @Override
     public List<SysPrivilege> findAllPrivilege() {
-        SysPrivilegeExample example = new SysPrivilegeExample();
+        Example example = new Example(SysPrivilege.class);
         example.createCriteria()
-                .andSpTypeEqualTo(Constant.BUTTON_PRIVILEGE_TYPE);
-        return super.selectByExample(example);
+                .andEqualTo(SysPrivilege.SP_TYPE, Constant.BUTTON_PRIVILEGE_TYPE);
+        return this.sysPrivilegeMapper.selectByExample(example);
     }
 
     @Override
@@ -144,9 +150,9 @@ public class SysPrivilegeServiceImpl extends CommonServiceImpl<SysPrivilege, Sys
         Map<Integer, Integer> privilegers = getPrivilegerByRoleId(roleId);
         List<LayuiTreeNode> layuiTreeNodes = new ArrayList<>();
 
-        SysPrivilegeExample example = new SysPrivilegeExample();
+        Example example = new Example(SysPrivilege.class);
         example.setOrderByClause("sp_orderd");
-        List<SysPrivilege> sysPrivileges = this.selectByExample(example);
+        List<SysPrivilege> sysPrivileges = this.sysPrivilegeMapper.selectByExample(example);
         for (SysPrivilege sysPrivilege : sysPrivileges) {
             if (Constant.MODULE_PRIVILEGE_TYPE == sysPrivilege.getSpType()) {
                 LayuiTreeNode layuiTreeNode = new LayuiTreeNode();
@@ -167,9 +173,9 @@ public class SysPrivilegeServiceImpl extends CommonServiceImpl<SysPrivilege, Sys
      * @return
      */
     private Map<Integer, Integer> getPrivilegerByRoleId(Integer roleId) {
-        SysRolePrivilegeExample example = new SysRolePrivilegeExample();
+        Example example = new Example(SysRolePrivilege.class);
         example.createCriteria()
-                .andSrpRoleIdEqualTo(roleId);
+                .andEqualTo(SysRolePrivilege.SRP_ROLE_ID, roleId);
         List<SysRolePrivilege> sysRolePrivileges = this.sysRolePrivilegeMapper.selectByExample(example);
         Map<Integer, Integer> dataMap = new HashMap<>(sysRolePrivileges.size());
         for (SysRolePrivilege sysRolePrivilege : sysRolePrivileges) {
@@ -250,17 +256,17 @@ public class SysPrivilegeServiceImpl extends CommonServiceImpl<SysPrivilege, Sys
         }
         SysRolePrivilege sysRolePrivilege = sysRolePrivileges.get(0);
         Integer roleId = sysRolePrivilege.getSrpRoleId();
-        SysRolePrivilegeExample example = new SysRolePrivilegeExample();
+        Example example = new Example(SysRolePrivilege.class);
         example.createCriteria()
-                .andSrpRoleIdEqualTo(roleId);
+                .andEqualTo(SysRolePrivilege.SRP_ROLE_ID, roleId);
         this.sysRolePrivilegeMapper.deleteByExample(example);
 
-        this.sysRolePrivilegeMapper.insertBatch(sysRolePrivileges);
+        this.sysRolePrivilegeMapper.insertList(sysRolePrivileges);
 
         // 超管给角色重新分配权限,给该角色下所有用户存储一个权限改变标记,便于在权限改变校验拦截器中判断来实现在线实现权限改变
-        SysUserRoleExample sysUserRoleExample = new SysUserRoleExample();
+        Example sysUserRoleExample = new Example(SysUserRole.class);
         sysUserRoleExample.createCriteria()
-                .andSurRoleIdEqualTo(roleId);
+                .andEqualTo(SysUserRole.SUR_ROLE_ID, roleId);
         List<SysUserRole> sysUserRoles = this.sysUserRoleMapper.selectByExample(sysUserRoleExample);
         List<Integer> userIds = sysUserRoles.stream()
                 .map(SysUserRole::getSurId)
@@ -277,12 +283,12 @@ public class SysPrivilegeServiceImpl extends CommonServiceImpl<SysPrivilege, Sys
     @Override
     public AllotButtonTransfer getTransferData(Integer menuId) {
         // 获得该菜单下所拥有的按钮权限,并处理url取出按钮名称
-        SysPrivilegeExample example = new SysPrivilegeExample();
+        Example example = new Example(SysPrivilege.class);
         example.setOrderByClause("sp_orderd");
         example.createCriteria()
-                .andSpParentIdEqualTo(menuId)
-                .andSpTypeEqualTo(Constant.BUTTON_PRIVILEGE_TYPE);
-        List<SysPrivilege> sysPrivileges = super.selectByExample(example);
+                .andEqualTo(SysPrivilege.SP_PARENT_ID, menuId)
+                .andEqualTo(SysPrivilege.SP_TYPE, Constant.BUTTON_PRIVILEGE_TYPE);
+        List<SysPrivilege> sysPrivileges = this.sysPrivilegeMapper.selectByExample(example);
 
         // 取出菜单下所有操作名
         List<String> buttonNames = sysPrivileges.stream()
@@ -290,9 +296,9 @@ public class SysPrivilegeServiceImpl extends CommonServiceImpl<SysPrivilege, Sys
                 .collect(Collectors.toList());
 
         // 获取系统所有的按钮
-        SysOperateExample sysOperateExample = new SysOperateExample();
+        Example sysOperateExample = new Example(SysOperate.class);
         sysOperateExample.setOrderByClause("so_orderd");
-        List<SysOperate> sysOperates = this.sysOperateService.selectByExample(sysOperateExample);
+        List<SysOperate> sysOperates = this.sysOperateMapper.selectByExample(sysOperateExample);
 
         AllotButtonTransfer allotButtonTransfer = new AllotButtonTransfer();
         List<AllotButtonTransfer.Transfer> data = allotButtonTransfer.getData();
@@ -318,11 +324,11 @@ public class SysPrivilegeServiceImpl extends CommonServiceImpl<SysPrivilege, Sys
 
         // 这里的按钮权限不可能为空,前端做了控制所以可以放心的取第一条数据
         SysPrivilege sysPrivilege = newSysPrivileges.get(0);
-        SysPrivilegeExample example = new SysPrivilegeExample();
+        Example example = new Example(SysPrivilege.class);
         example.createCriteria()
-                .andSpParentIdEqualTo(sysPrivilege.getSpParentId())
-                .andSpTypeEqualTo(Constant.BUTTON_PRIVILEGE_TYPE);
-        List<SysPrivilege> oldSysPrivileges = super.selectByExample(example);
+                .andEqualTo(SysPrivilege.SP_PARENT_ID, sysPrivilege.getSpParentId())
+                .andEqualTo(SysPrivilege.SP_TYPE, Constant.BUTTON_PRIVILEGE_TYPE);
+        List<SysPrivilege> oldSysPrivileges = this.sysPrivilegeMapper.selectByExample(example);
         if (CollUtil.isEmpty(oldSysPrivileges)) {
             // 该菜单原来没有分配按钮,那么用户选择的新权限都添加权限表中
             for (SysPrivilege newSysPrivilege : newSysPrivileges) {
@@ -342,16 +348,16 @@ public class SysPrivilegeServiceImpl extends CommonServiceImpl<SysPrivilege, Sys
                 .collect(Collectors.toList());
         if (newSysPrivileges.size() == 1 && StrUtil.isBlank(newSysPrivileges.get(0).getSpOperateName())) {
             // 用户没有选择新的权限过来,说明用户想要删除原先所有的权限
-            SysPrivilegeExample sysPrivilegeExample = new SysPrivilegeExample();
+            Example sysPrivilegeExample = new Example(SysPrivilege.class);
             sysPrivilegeExample.createCriteria()
-                    .andSpParentIdEqualTo(newSysPrivileges.get(0).getSpParentId())
-                    .andSpTypeEqualTo(Constant.BUTTON_PRIVILEGE_TYPE);
-            super.deleteByExample(sysPrivilegeExample);
+                    .andEqualTo(SysPrivilege.SP_PARENT_ID, newSysPrivileges.get(0).getSpParentId())
+                    .andEqualTo(SysPrivilege.SP_TYPE, Constant.BUTTON_PRIVILEGE_TYPE);
+            this.sysPrivilegeMapper.deleteByExample(sysPrivilegeExample);
 
             // 权限都删除了,权限角色关系表也就没有存在的必要,同步删除角色权限关系表
-            SysRolePrivilegeExample sysRolePrivilegeExample = new SysRolePrivilegeExample();
+            Example sysRolePrivilegeExample = new Example(SysRolePrivilege.class);
             sysRolePrivilegeExample.createCriteria()
-                    .andSrpPrivilegeIdIn(buttonPrivilegeIds);
+                    .andIn(SysRolePrivilege.SRP_PRIVILEGE_ID, buttonPrivilegeIds);
             this.sysRolePrivilegeMapper.deleteByExample(sysRolePrivilegeExample);
             return LayuiResult.success();
         }
@@ -382,12 +388,12 @@ public class SysPrivilegeServiceImpl extends CommonServiceImpl<SysPrivilege, Sys
         // 删除原有的而现在用户已取消的权限
         oldSysPrivileges.removeAll(deletePrivileges);
         for (SysPrivilege oldSysPrivilege : oldSysPrivileges) {
-            super.deleteByPrimaryKey(oldSysPrivilege.getSpId());
+            this.sysPrivilegeMapper.deleteByPrimaryKey(oldSysPrivilege.getSpId());
 
             // 权限都删除了,权限角色关系表也就没有存在的必要,同步删除角色权限关系表
-            SysRolePrivilegeExample sysRolePrivilegeExample = new SysRolePrivilegeExample();
+            Example sysRolePrivilegeExample = new Example(SysRolePrivilege.class);
             sysRolePrivilegeExample.createCriteria()
-                    .andSrpPrivilegeIdEqualTo(oldSysPrivilege.getSpId());
+                    .andEqualTo(SysRolePrivilege.SRP_PRIVILEGE_ID, oldSysPrivilege.getSpId());
             this.sysRolePrivilegeMapper.deleteByExample(sysRolePrivilegeExample);
         }
 
@@ -396,6 +402,31 @@ public class SysPrivilegeServiceImpl extends CommonServiceImpl<SysPrivilege, Sys
             addSysPrivilege(privilege);
         }
         return LayuiResult.success();
+    }
+
+    @Override
+    public SysPrivilege findById(Integer id) {
+        return this.sysPrivilegeMapper.selectByPrimaryKey(id);
+    }
+
+    @Transactional
+    @Override
+    public int update(SysPrivilege sysPrivilege) {
+        sysPrivilege.setSpUpdateTime(new Date());
+        return this.sysPrivilegeMapper.updateByPrimaryKey(sysPrivilege);
+    }
+
+    @Transactional
+    @Override
+    public int insert(SysPrivilege sysPrivilege) {
+        sysPrivilege.setSpCreateTime(new Date());
+        sysPrivilege.setSpUpdateTime(new Date());
+        return this.sysPrivilegeMapper.insertSelective(sysPrivilege);
+    }
+
+    @Override
+    public int deleteById(Integer id) {
+        return this.sysPrivilegeMapper.deleteByPrimaryKey(id);
     }
 
     /**
@@ -418,8 +449,6 @@ public class SysPrivilegeServiceImpl extends CommonServiceImpl<SysPrivilege, Sys
         privilege.setSpParentId(sysPrivilege.getSpParentId());
         privilege.setSpCreateTime(new Date());
         privilege.setSpUpdateTime(new Date());
-        super.insertSelective(privilege);
+        this.sysPrivilegeMapper.insertSelective(privilege);
     }
-
-
 }

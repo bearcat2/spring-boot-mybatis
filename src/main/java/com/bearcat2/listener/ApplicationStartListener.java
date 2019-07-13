@@ -3,13 +3,13 @@ package com.bearcat2.listener;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.bearcat2.entity.system.SysUser;
-import com.bearcat2.entity.system.SysUserExample;
-import com.bearcat2.service.system.SysUserService;
+import com.bearcat2.mapper.system.SysUserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.Date;
 import java.util.List;
@@ -26,7 +26,7 @@ import java.util.List;
 public class ApplicationStartListener implements ApplicationRunner {
 
     @Autowired
-    private SysUserService sysUserService;
+    private SysUserMapper sysUserMapper;
 
     @Value("${bearcat2.superUser.username}")
     private String superAdmin;
@@ -47,10 +47,10 @@ public class ApplicationStartListener implements ApplicationRunner {
      */
     private void insertSuperAdmin() {
         // 1.判断数据库中是否存在超级原理员
-        SysUserExample example = new SysUserExample();
+        Example example = new Example( SysUser.class);
         example.createCriteria()
-                .andSuLoginNameEqualTo(superAdmin);
-        List<SysUser> sysUsers = this.sysUserService.selectByExample(example);
+                .andEqualTo(SysUser.SU_LOGIN_NAME,superAdmin);
+        List<SysUser> sysUsers = this.sysUserMapper.selectByExample(example);
         // 2. 存在直接返回
         if (CollUtil.isNotEmpty(sysUsers)) {
             return;
@@ -62,6 +62,6 @@ public class ApplicationStartListener implements ApplicationRunner {
         sysUser.setSuPassword(SecureUtil.md5(superAdminPassword));
         sysUser.setSuCreateTime(new Date());
         sysUser.setSuUpdateTime(new Date());
-        this.sysUserService.insertSelective(sysUser);
+        this.sysUserMapper.insertSelective(sysUser);
     }
 }

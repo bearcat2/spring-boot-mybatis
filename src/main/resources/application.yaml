@@ -72,11 +72,17 @@ spring:
 
 # mybatis 配置
 mybatis:
-    # mybatis主配置文件所在路径
-    config-location: classpath:mybatis/mybatis.cfg.xml
-    # 指定mapper映射文件的位置
+    type-aliases-package: com.bearcat2.entity
+    # 指定xml映射文件位置
     mapper-locations:
-        - classpath:mybatis/mapper/**/*.xml
+        - classpath:mapper/**/*.xml
+
+# 通用mapper配置
+mapper:
+    mappers:
+        - com.bearcat2.mapper.CommonMapper
+    # 该配置指定在插入数据时忽略空串
+    not-empty: true
 
 # pagehelper分页插件配置
 pagehelper:

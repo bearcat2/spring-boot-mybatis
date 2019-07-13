@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bearcat2.mapper.system.SysOperateMapper">
+  <resultMap id="BaseResultMap" type="com.bearcat2.entity.system.SysOperate">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="so_id" jdbcType="INTEGER" property="soId" />
+    <result column="so_name" jdbcType="VARCHAR" property="soName" />
+    <result column="so_show_name" jdbcType="VARCHAR" property="soShowName" />
+    <result column="so_orderd" jdbcType="INTEGER" property="soOrderd" />
+    <result column="so_create_time" jdbcType="TIMESTAMP" property="soCreateTime" />
+    <result column="so_create_user" jdbcType="VARCHAR" property="soCreateUser" />
+    <result column="so_update_time" jdbcType="TIMESTAMP" property="soUpdateTime" />
+    <result column="so_update_user" jdbcType="VARCHAR" property="soUpdateUser" />
+  </resultMap>
+</mapper>

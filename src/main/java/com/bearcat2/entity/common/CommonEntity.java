@@ -3,6 +3,7 @@ package com.bearcat2.entity.common;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Transient;
 import java.io.Serializable;
 
 /**
@@ -17,10 +18,14 @@ import java.io.Serializable;
 @Setter
 public class CommonEntity implements Serializable {
 
+    private static final long serialVersionUID = 6667922572485781040L;
+
     /** 当前所在页码,默认为第一页 */
+    @Transient
     private Integer page = 1;
 
     /** 每页显示多少条数据,默认显示10条 */
+    @Transient
     private Integer limit = 10;
 
 }

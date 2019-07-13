@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bearcat2.mapper.system.SysUserMapper">
+  <resultMap id="BaseResultMap" type="com.bearcat2.entity.system.SysUser">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="su_id" jdbcType="INTEGER" property="suId" />
+    <result column="su_login_name" jdbcType="VARCHAR" property="suLoginName" />
+    <result column="su_real_name" jdbcType="VARCHAR" property="suRealName" />
+    <result column="su_password" jdbcType="VARCHAR" property="suPassword" />
+    <result column="su_create_time" jdbcType="TIMESTAMP" property="suCreateTime" />
+    <result column="su_update_time" jdbcType="TIMESTAMP" property="suUpdateTime" />
+  </resultMap>
+</mapper>

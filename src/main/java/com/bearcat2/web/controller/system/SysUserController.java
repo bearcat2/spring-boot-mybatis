@@ -72,9 +72,9 @@ public class SysUserController {
 
     @GetMapping(value = {"/edit", "/basicInfo"})
     public String editUi(SysUser sysUser, Model model) {
-        model.addAttribute("sysUser", this.sysUserService.selectByPrimaryKey(sysUser.getSuId()));
+        model.addAttribute("sysUser", this.sysUserService.findById(sysUser.getSuId()));
         model.addAttribute("roles", this.sysRoleService.findAll());
-        model.addAttribute("sysUserRoles", this.sysUserService.findByUserId(sysUser.getSuId()));
+        model.addAttribute("sysUserRoles", this.sysUserService.findRoleIdsById(sysUser.getSuId()));
         return "system/user/edit";
     }
 
@@ -86,7 +86,7 @@ public class SysUserController {
 
     @GetMapping(value = "/detail")
     public String detailUi(SysUser sysUser, Model model) {
-        model.addAttribute("sysUser", this.sysUserService.selectByPrimaryKey(sysUser.getSuId()));
+        model.addAttribute("sysUser", this.sysUserService.findById(sysUser.getSuId()));
         return "system/user/detail";
     }
 
@@ -105,13 +105,13 @@ public class SysUserController {
     @ResponseBody
     @PostMapping("/delete")
     public LayuiResult delete(SysUser sysUser) {
-        this.sysUserService.deleteByPrimaryKey(sysUser.getSuId());
+        this.sysUserService.deleteById(sysUser.getSuId());
         return LayuiResult.success();
     }
 
     @GetMapping("/updatePassword")
     public String updatePasswordUi(Integer suId, Model model) {
-        model.addAttribute("sysUser", this.sysUserService.selectByPrimaryKey(suId));
+        model.addAttribute("sysUser", this.sysUserService.findRoleIdsById(suId));
         return "system/user/updatePassword";
     }
 
