@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>任务列表</title>
+
+    <link rel="stylesheet" href="../../../static/libs/layui/css/layui.css" th:href="@{/libs/layui/css/layui.css}">
+    <link rel="stylesheet" href="../../../static/css/global.css" th:href="@{/css/global.css}">
+</head>
+<body>
+
+<div class="layui-row">
+    <div class="layui-col-sm12">
+        <form id="searchForm">
+            <div class="bearcat2-input">
+                <span>任务名：</span>
+                <div class="layui-input-inline">
+                    <input class="layui-input" name="sjName">
+                </div>
+            </div>
+
+            <div class="bearcat2-input">
+                <span>任务分组：</span>
+                <div class="layui-input-inline">
+                    <input class="layui-input" name="sjGroup">
+                </div>
+            </div>
+        </form>
+
+        <div class="bearcat2-input">
+            <button class="layui-btn" id="search">搜索</button>
+            <button class="layui-btn layui-btn-danger" id="clear">清空</button>
+            <button class="layui-btn" id="add">新增</button>
+        </div>
+    </div>
+</div>
+
+<table id="dataTable" lay-filter="dataTableFilter"></table>
+
+<div>
+    <!--定义页面层所需的一些配置，比如title，width,height等,如果宽高未设置默认为auto.-->
+    <input type="hidden" id="addConfig" data-title="新增任务" data-width="420" data-height="380">
+    <input type="hidden" id="editConfig" data-title="编辑任务" data-width="420" data-height="380">
+</div>
+
+<script type="text/html" id="toolBar">
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="stopJob">停止任务</a>
+    <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="runningJob">运行任务</a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+</script>
+
+<script src="../../../static/libs/layui/layui.js" th:src="@{/libs/layui/layui.js}"></script>
+<script src="../../../static/js/global.js" th:src="@{/js/global.js}"></script>
+<script src="../../../static/js/system/job/list.js" th:src="@{/js/system/job/list.js}"></script>
+
+</body>
+</html>

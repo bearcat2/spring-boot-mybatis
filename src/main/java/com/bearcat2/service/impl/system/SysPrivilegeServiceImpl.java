@@ -195,7 +195,7 @@ public class SysPrivilegeServiceImpl implements SysPrivilegeService {
                              Map<Integer, Integer> privilegers) {
         List<LayuiTreeNode> childrens = new ArrayList<>();
         for (SysPrivilege sysPrivilege : sysPrivileges) {
-            if (sysPrivilege.getSpParentId().equals(layuiTreeNode.getId())) {
+            if (layuiTreeNode.getId().equals(sysPrivilege.getSpParentId())) {
                 LayuiTreeNode children = new LayuiTreeNode();
                 children.setId(sysPrivilege.getSpId());
                 children.setTitle(sysPrivilege.getSpName());

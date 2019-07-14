@@ -102,6 +102,16 @@
             <version>${druid-version}</version>
         </dependency>
 
+        <!--quartz相关依赖-->
+        <dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz-jobs</artifactId>
+        </dependency>
+
         <!--java工具类集合-->
         <dependency>
             <groupId>cn.hutool</groupId>

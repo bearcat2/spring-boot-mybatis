@@ -1,0 +1,68 @@
+<form class="layui-form" id="layui-form-page">
+    <div class="layui-form-item">
+        <label class="layui-form-label">任务名</label>
+        <div class="layui-input-block">
+            <input type="text" name="sjName" placeholder="请输入任务名" class="layui-input" lay-verify="required">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">分组名</label>
+        <div class="layui-input-block">
+            <input type="text" name="sjGroup" placeholder="请输入分组名" class="layui-input" lay-verify="required">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">任务状态</label>
+        <div class="layui-input-block">
+            <select name="sjStatus" lay-verify="required">
+                <option value="1">停止</option>
+                <option value="2" selected>运行</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">corn表达式</label>
+        <div class="layui-input-block">
+            <input type="text" name="sjCronExpression" placeholder="请输入corn表达式" class="layui-input"
+                   lay-verify="required">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">调用类名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="sjBeanClass" placeholder="请输入调用类名称" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">springBean</label>
+        <div class="layui-input-block">
+            <input type="text" name="sjSpringBeanName" placeholder="请输入springBean" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">方法名</label>
+        <div class="layui-input-block">
+            <input type="text" name="sjMethodName" placeholder="请输入方法名" class="layui-input" lay-verify="required">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">描述</label>
+        <div class="layui-input-block">
+            <textarea name="sjDescription" placeholder="请输入描述内容" class="layui-textarea"></textarea>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="form">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>

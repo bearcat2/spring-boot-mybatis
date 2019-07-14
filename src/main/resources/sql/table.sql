@@ -24,7 +24,26 @@ CREATE TABLE `sys_data_dictionary` (
   `sdr_level` int(11) NOT NULL COMMENT '层级关系',
   `sdr_order` int(11) DEFAULT NULL COMMENT '序号',
   PRIMARY KEY (`sdr_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='数据字典表';
+
+/*Table structure for table `sys_job` */
+
+DROP TABLE IF EXISTS `sys_job`;
+
+CREATE TABLE `sys_job` (
+  `sj_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '系统任务id',
+  `sj_name` varchar(64) NOT NULL COMMENT '任务名称',
+  `sj_group` varchar(64) NOT NULL COMMENT '任务分组',
+  `sj_status` int(11) NOT NULL COMMENT '任务状态(1:停止;2:运行)',
+  `sj_cron_expression` varchar(64) NOT NULL COMMENT 'cron表达式',
+  `sj_description` varchar(255) DEFAULT NULL COMMENT '描述',
+  `sj_bean_class` varchar(128) DEFAULT NULL COMMENT '调用类名称(包名+类名)',
+  `sj_spring_bean_name` varchar(128) DEFAULT NULL COMMENT 'spring bean名称(IOC容器中bean名称)',
+  `sj_method_name` varchar(64) NOT NULL COMMENT '任务调用方法名',
+  `sj_create_time` datetime NOT NULL COMMENT '任务创建时间',
+  `sj_update_time` datetime DEFAULT NULL COMMENT '任务修改时间',
+  PRIMARY KEY (`sj_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='系统任务表';
 
 /*Table structure for table `sys_operate` */
 
@@ -40,7 +59,7 @@ CREATE TABLE `sys_operate` (
   `so_update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `so_update_user` varchar(32) DEFAULT NULL COMMENT '更新人',
   PRIMARY KEY (`so_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COMMENT='系统操作表';
 
 /*Table structure for table `sys_privilege` */
 
@@ -57,7 +76,7 @@ CREATE TABLE `sys_privilege` (
   `sp_create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `sp_update_time` datetime DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`sp_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=97 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=103 DEFAULT CHARSET=utf8 COMMENT='系统权限表';
 
 /*Table structure for table `sys_role` */
 
@@ -70,7 +89,7 @@ CREATE TABLE `sys_role` (
   `sr_create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `sr_update_time` datetime DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`sr_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='系统角色表';
 
 /*Table structure for table `sys_role_privilege` */
 
@@ -81,7 +100,7 @@ CREATE TABLE `sys_role_privilege` (
   `srp_role_id` int(11) DEFAULT NULL COMMENT '角色表主键id',
   `srp_privilege_id` int(11) DEFAULT NULL COMMENT '权限表主键id',
   PRIMARY KEY (`srp_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=355 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=482 DEFAULT CHARSET=utf8 COMMENT='角色权限关系表';
 
 /*Table structure for table `sys_user` */
 
@@ -95,7 +114,7 @@ CREATE TABLE `sys_user` (
   `su_create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `su_update_time` datetime DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`su_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8 COMMENT='系统用户表';
 
 /*Table structure for table `sys_user_role` */
 
@@ -106,7 +125,7 @@ CREATE TABLE `sys_user_role` (
   `sur_user_id` int(11) DEFAULT NULL COMMENT '用户表主键',
   `sur_role_id` int(11) DEFAULT NULL COMMENT '角色表主键',
   PRIMARY KEY (`sur_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='用户角色关系表';
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.bearcat2.entity.system.SysUser;
 import com.bearcat2.mapper.system.SysUserMapper;
+import com.bearcat2.service.system.SysJobService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
@@ -28,18 +29,22 @@ public class ApplicationStartListener implements ApplicationRunner {
     @Autowired
     private SysUserMapper sysUserMapper;
 
+    @Autowired
+    private SysJobService sysJobService;
+
     @Value("${bearcat2.superUser.username}")
     private String superAdmin;
 
     @Value("${bearcat2.superUser.password}")
     private String superAdminPassword;
 
-    //private
-
     @Override
     public void run(ApplicationArguments args) throws Exception {
         // 像用户表中插入超级管理员
         insertSuperAdmin();
+
+        // 初始化系统任务
+        this.sysJobService.initSystemJob();
     }
 
     /**
@@ -47,9 +52,9 @@ public class ApplicationStartListener implements ApplicationRunner {
      */
     private void insertSuperAdmin() {
         // 1.判断数据库中是否存在超级原理员
-        Example example = new Example( SysUser.class);
+        Example example = new Example(SysUser.class);
         example.createCriteria()
-                .andEqualTo(SysUser.SU_LOGIN_NAME,superAdmin);
+                .andEqualTo(SysUser.SU_LOGIN_NAME, superAdmin);
         List<SysUser> sysUsers = this.sysUserMapper.selectByExample(example);
         // 2. 存在直接返回
         if (CollUtil.isNotEmpty(sysUsers)) {

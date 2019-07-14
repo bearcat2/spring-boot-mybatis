@@ -206,8 +206,7 @@ layui.define(['table', 'jquery', 'form'], function (exports) {
         var data = obj.data;
         //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
         var layEvent = obj.event;
-        //获得当前行 tr 的DOM对象
-        var tr = obj.tr;
+
         switch (layEvent) {
             case 'detail':
                 // 查看
@@ -226,6 +225,10 @@ layui.define(['table', 'jquery', 'form'], function (exports) {
                 allotPrivilege(data);
                 break;
         }
+
+        if (layEvent === 'stopJob' || layEvent === 'runningJob') {
+            handleJobStatusChange(layEvent,data);
+        }
     });
 
     // 点击查看按钮触发该函数
@@ -240,6 +243,44 @@ layui.define(['table', 'jquery', 'form'], function (exports) {
         commonLayerPage(2, data);
     }
 
+    // 处理系统任务状态改变
+    function handleJobStatusChange(layEvent,data) {
+        var confirm_content = '';
+        var request_success_msg = '';
+        var request_params = {};
+        request_params.id = data.sjId;
+        if (layEvent === 'stopJob') {
+            request_params.status = 1;
+            confirm_content = '确认停止任务吗？';
+            request_success_msg = '任务停止成功';
+        } else if (layEvent === 'runningJob') {
+            request_params.status = 2;
+            confirm_content = '确认运行任务吗？';
+            request_success_msg = '任务运行成功';
+        }
+        layer.confirm(
+            confirm_content,
+            {
+                skin: 'layui-layer-lan'
+            },
+            function (layerIndex) {
+                // 确定按钮被点击,向后台发起删除请求,请求成功再关闭该询问框
+                $.post('updataStatus',request_params,function (res) {
+                    var msg = '';
+                    if (res.code === REQUEST_SUCCESS_CODE) {
+                        // 关闭询问框重载表格数据，并弹出提示消息
+                        layer.close(layerIndex);
+                        tableIns.reload();
+                        msg = request_success_msg;
+                    } else {
+                        msg = res.msg;
+                    }
+                    layer.msg(msg);
+                },'json');
+            }
+        );
+    }
+
     // 点击删除按钮触发该函数
     function deleteData(data) {
         layer.confirm(
@@ -249,27 +290,18 @@ layui.define(['table', 'jquery', 'form'], function (exports) {
             },
             function (layerIndex) {
                 // 确定按钮被点击,向后台发起删除请求,请求成功再关闭该询问框
-                $.ajax({
-                    url: 'delete',
-                    data: data,
-                    type: 'POST',
-                    dataType: 'json',
-                    success: function (data) {
-                        var msg = '';
-                        if (data.code === REQUEST_SUCCESS_CODE) {
-                            // 关闭询问框重载表格数据，并弹出提示消息
-                            layer.close(layerIndex);
-                            tableIns.reload();
-                            msg = '数据删除成功';
-                        } else {
-                            msg = data.msg;
-                        }
-                        layer.msg(msg);
-                    },
-                    error: function (data) {
-                        console.error("调用出错", data);
+                $.post('delete',data,function (res) {
+                    var msg = '';
+                    if (res.code === REQUEST_SUCCESS_CODE) {
+                        // 关闭询问框重载表格数据，并弹出提示消息
+                        layer.close(layerIndex);
+                        tableIns.reload();
+                        msg = '数据删除成功';
+                    } else {
+                        msg = res.msg;
                     }
-                });
+                    layer.msg(msg);
+                },'json');
             }
         );
     }

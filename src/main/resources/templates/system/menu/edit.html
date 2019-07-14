@@ -48,8 +48,9 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">上级菜单</label>
                 <div class="layui-input-block">
-                    <input type="text" id="treeSelect" lay-filter="treeSelect" class="layui-input">
-                    <input type="hidden" id="spParentId" name="spParentId">
+                    <input type="text" id="treeSelect" lay-filter="treeSelect" class="layui-input" >
+                    <input type="hidden" id="spParentId" name="spParentId" lay-verify="required"
+                           lay-reqText="请选择上级菜单">
                 </div>
             </div>
 

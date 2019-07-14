@@ -34,12 +34,13 @@
                              targetProject="src/main/java"
                              type="XMLMAPPER"/>
 
-        <table tableName="sys_data_dictionary"/>
-        <table tableName="sys_operate"/>
-        <table tableName="sys_privilege"/>
-        <table tableName="sys_role"/>
-        <table tableName="sys_role_privilege"/>
-        <table tableName="sys_user"/>
-        <table tableName="sys_user_role"/>
+        <!--<table tableName="sys_data_dictionary"/>-->
+        <!--<table tableName="sys_operate"/>-->
+        <!--<table tableName="sys_privilege"/>-->
+        <!--<table tableName="sys_role"/>-->
+        <!--<table tableName="sys_role_privilege"/>-->
+        <!--<table tableName="sys_user"/>-->
+        <!--<table tableName="sys_user_role"/>-->
+        <table tableName="sys_job"/>
     </context>
 </generatorConfiguration>

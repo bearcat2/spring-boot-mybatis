@@ -1,8 +1,5 @@
 package com.bearcat2.entity.common;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import javax.persistence.Transient;
 import java.io.Serializable;
 
@@ -14,8 +11,6 @@ import java.io.Serializable;
  * @author: zhongzhipeng
  * @version: 1.0
  */
-@Getter
-@Setter
 public class CommonEntity implements Serializable {
 
     private static final long serialVersionUID = 6667922572485781040L;
@@ -28,4 +23,19 @@ public class CommonEntity implements Serializable {
     @Transient
     private Integer limit = 10;
 
+    public Integer getPage() {
+        return page;
+    }
+
+    public void setPage(Integer page) {
+        this.page = page;
+    }
+
+    public Integer getLimit() {
+        return limit;
+    }
+
+    public void setLimit(Integer limit) {
+        this.limit = limit;
+    }
 }

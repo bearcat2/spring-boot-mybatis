@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bearcat2.mapper.system.SysJobMapper">
+  <resultMap id="BaseResultMap" type="com.bearcat2.entity.system.SysJob">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="sj_id" jdbcType="INTEGER" property="sjId" />
+    <result column="sj_name" jdbcType="VARCHAR" property="sjName" />
+    <result column="sj_group" jdbcType="VARCHAR" property="sjGroup" />
+    <result column="sj_status" jdbcType="INTEGER" property="sjStatus" />
+    <result column="sj_cron_expression" jdbcType="VARCHAR" property="sjCronExpression" />
+    <result column="sj_description" jdbcType="VARCHAR" property="sjDescription" />
+    <result column="sj_bean_class" jdbcType="VARCHAR" property="sjBeanClass" />
+    <result column="sj_spring_bean_name" jdbcType="VARCHAR" property="sjSpringBeanName" />
+    <result column="sj_method_name" jdbcType="VARCHAR" property="sjMethodName" />
+    <result column="sj_create_time" jdbcType="TIMESTAMP" property="sjCreateTime" />
+    <result column="sj_update_time" jdbcType="TIMESTAMP" property="sjUpdateTime" />
+  </resultMap>
+</mapper>

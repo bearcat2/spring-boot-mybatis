@@ -3,6 +3,7 @@
 #### 介绍
 springboot整合mybatis实现通用的前端管理系统,该系统以RBAC(Resources-Based Access Control)基于资源的访问控制方式,实现权限管理。
 - 使用通用mapper简化单表的CRUD操作,并引入代码生成器插件生成数据表对应的实体,mapper接口及对应的映射文件
+- 整合quartz动态修改任务corn表达式,前端提供了一个管理页专门管理任务
 - 使用springmvc拦截器实现了，用户登录拦截,在线用户权限动态刷新,用户权限校验等功能。
 - 前端使用thymeleaf + Layui实现布局
 
