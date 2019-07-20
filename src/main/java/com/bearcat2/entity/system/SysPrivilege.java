@@ -1,6 +1,5 @@
 package com.bearcat2.entity.system;
 
-import com.bearcat2.entity.common.CommonEntity;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -14,7 +13,7 @@ import java.util.List;
 @Data
 @Accessors(chain = true)
 @Table(name = "sys_privilege")
-public class SysPrivilege extends CommonEntity {
+public class SysPrivilege {
     /**
      * 权限id
      */

@@ -1,6 +1,5 @@
 package com.bearcat2.entity.system;
 
-import com.bearcat2.entity.common.CommonEntity;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -11,7 +10,7 @@ import javax.persistence.Table;
 @Data
 @Accessors(chain = true)
 @Table(name = "sys_user_role")
-public class SysUserRole extends CommonEntity {
+public class SysUserRole {
     /**
      * 用户角色表主键,自增
      */

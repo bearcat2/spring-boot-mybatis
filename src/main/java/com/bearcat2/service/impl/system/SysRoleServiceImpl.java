@@ -2,6 +2,7 @@ package com.bearcat2.service.impl.system;
 
 import cn.hutool.core.util.StrUtil;
 import com.bearcat2.entity.common.LayuiResult;
+import com.bearcat2.entity.common.PagingSupport;
 import com.bearcat2.entity.system.SysRole;
 import com.bearcat2.entity.system.SysUserRole;
 import com.bearcat2.mapper.system.SysRoleMapper;
@@ -39,7 +40,7 @@ public class SysRoleServiceImpl implements SysRoleService {
     private SysUserRoleMapper sysUserRoleMapper;
 
     @Override
-    public LayuiResult list(SysRole sysRole) {
+    public LayuiResult pageList(SysRole sysRole, PagingSupport pagingSupport) {
         Example example = new Example(SysRole.class);
         Example.Criteria criteria = example.createCriteria();
         if (StrUtil.isNotBlank(sysRole.getSrName())) {
@@ -48,7 +49,7 @@ public class SysRoleServiceImpl implements SysRoleService {
                     , CommonUtil.buildLikeQueryParam(sysRole.getSrName())
             );
         }
-        PageHelper.startPage(sysRole.getPage(), sysRole.getLimit());
+        PageHelper.startPage(pagingSupport.getPage(), pagingSupport.getLimit());
         List<SysRole> sysRoles = this.sysRoleMapper.selectByExample(example);
         PageInfo<SysRole> pageInfo = new PageInfo<>(sysRoles);
         return LayuiResult.success(pageInfo.getList(), pageInfo.getTotal());

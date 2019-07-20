@@ -438,7 +438,7 @@ public class SysPrivilegeServiceImpl implements SysPrivilegeService {
     private void addSysPrivilege(SysPrivilege sysPrivilege) {
         SysPrivilege privilege = new SysPrivilege();
         privilege.setSpName(sysPrivilege.getSpName());
-        // eg : /sysUser/list => /sysUser/add
+        // eg : /sysUser/pageList => /sysUser/add
         String buttonUrl = StrUtil.format("{}/{}"
                 , StrUtil.subBefore(sysPrivilege.getSpUri(), StrUtil.SLASH, true)
                 , sysPrivilege.getSpOperateName()

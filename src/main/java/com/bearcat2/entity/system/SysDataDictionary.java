@@ -1,6 +1,5 @@
 package com.bearcat2.entity.system;
 
-import com.bearcat2.entity.common.CommonEntity;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -11,7 +10,7 @@ import javax.persistence.Table;
 @Data
 @Accessors(chain = true)
 @Table(name = "sys_data_dictionary")
-public class SysDataDictionary extends CommonEntity {
+public class SysDataDictionary{
     /**
      * 主键id,自增
      */

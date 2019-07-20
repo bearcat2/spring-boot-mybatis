@@ -32,7 +32,7 @@ public class CommonUtil {
     }
 
     /**
-     * 将 list 转成 set
+     * 将 pageList 转成 set
      *
      * @param dataList list集合数据
      * @return set 集合

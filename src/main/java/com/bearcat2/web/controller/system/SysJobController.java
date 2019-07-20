@@ -1,6 +1,7 @@
 package com.bearcat2.web.controller.system;
 
 import com.bearcat2.entity.common.LayuiResult;
+import com.bearcat2.entity.common.PagingSupport;
 import com.bearcat2.entity.system.SysJob;
 import com.bearcat2.service.system.SysJobService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +34,8 @@ public class SysJobController {
 
     @ResponseBody
     @PostMapping("/list")
-    public LayuiResult list(SysJob sysJob) {
-        return this.sysJobService.list(sysJob);
+    public LayuiResult list(SysJob sysJob, PagingSupport pagingSupport) {
+        return this.sysJobService.pageList(sysJob,pagingSupport);
     }
 
     @GetMapping("/add")

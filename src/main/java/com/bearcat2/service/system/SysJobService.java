@@ -1,6 +1,7 @@
 package com.bearcat2.service.system;
 
 import com.bearcat2.entity.common.LayuiResult;
+import com.bearcat2.entity.common.PagingSupport;
 import com.bearcat2.entity.system.SysJob;
 
 /**
@@ -16,10 +17,11 @@ public interface SysJobService {
     /**
      * 分页查询
      *
-     * @param sysJob 系统任务对象
-     * @return LayuiResult - 通用响应对象
+     * @param sysJob        系统任务对象
+     * @param pagingSupport 分支支持对象
+     * @return LayuiResult - 控制层通用返回结果 {@link LayuiResult}
      */
-    LayuiResult list(SysJob sysJob);
+    LayuiResult pageList(SysJob sysJob, PagingSupport pagingSupport);
 
     /**
      * 根据任务id 查找系统任务对象

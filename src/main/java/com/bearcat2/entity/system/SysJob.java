@@ -1,6 +1,5 @@
 package com.bearcat2.entity.system;
 
-import com.bearcat2.entity.common.CommonEntity;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -12,7 +11,7 @@ import java.util.Date;
 @Data
 @Accessors(chain = true)
 @Table(name = "sys_job")
-public class SysJob extends CommonEntity {
+public class SysJob {
     /**
      * 系统任务id
      */

@@ -3,6 +3,7 @@ package com.bearcat2.service.impl.system;
 import cn.hutool.core.util.StrUtil;
 import com.bearcat2.entity.common.CustomException;
 import com.bearcat2.entity.common.LayuiResult;
+import com.bearcat2.entity.common.PagingSupport;
 import com.bearcat2.entity.system.SysJob;
 import com.bearcat2.enumeration.JobStatusEnum;
 import com.bearcat2.mapper.system.SysJobMapper;
@@ -12,6 +13,7 @@ import com.bearcat2.util.ApplicationContextUtil;
 import com.bearcat2.util.CommonUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
@@ -33,6 +35,7 @@ import java.util.List;
  * @author: zhongzhipeng
  * @version: 1.0
  */
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 public class SysJobServiceImpl implements SysJobService {
@@ -44,7 +47,7 @@ public class SysJobServiceImpl implements SysJobService {
     private SchedulerFactoryBean schedulerFactoryBean;
 
     @Override
-    public LayuiResult list(SysJob sysJob) {
+    public LayuiResult pageList(SysJob sysJob, PagingSupport pagingSupport) {
         Example example = new Example(SysJob.class);
         // 动态条件查询
         Example.Criteria criteria = example.createCriteria();
@@ -59,7 +62,7 @@ public class SysJobServiceImpl implements SysJobService {
         }
         // 以更新时间降序
         example.orderBy(SysJob.SJ_UPDATE_TIME).desc();
-        PageHelper.startPage(sysJob.getPage(), sysJob.getLimit());
+        PageHelper.startPage(pagingSupport.getPage(), pagingSupport.getLimit());
         List<SysJob> sysJobs = this.sysJobMapper.selectByExample(example);
         PageInfo<SysJob> pageInfo = new PageInfo<>(sysJobs);
         return LayuiResult.success(pageInfo.getList(), pageInfo.getTotal());
@@ -184,6 +187,11 @@ public class SysJobServiceImpl implements SysJobService {
      * @param sysJob 系统任务对象
      */
     private void addQuartzJob(SysJob sysJob) {
+        if (sysJob.getSjStatus().equals(JobStatusEnum.STOP_STATUS.getStatus())) {
+            // 如果停车的任务为
+            log.info("任务状态是停车状态,添加失败,系统任务对象属性为 = {}", sysJob);
+            return;
+        }
         verifyTargetClassAndMethodIsSuccess(sysJob);
         verifyCornExpression(sysJob.getSjCronExpression());
         try {
@@ -247,7 +255,7 @@ public class SysJobServiceImpl implements SysJobService {
     /**
      * 验证目标类或方法是否正确
      *
-     * @param job
+     * @param job 系统任务对象
      */
     private void verifyTargetClassAndMethodIsSuccess(SysJob job) {
         Object obj = null;
@@ -268,6 +276,7 @@ public class SysJobServiceImpl implements SysJobService {
         Class clazz = obj.getClass();
         Method method = null;
         try {
+            //noinspection unchecked,ConfusingArgumentToVarargsMethod
             method = clazz.getMethod(job.getSjMethodName(), null);
         } catch (Exception e) {
             throw new CustomException("反射创建目标方法发生异常", e);

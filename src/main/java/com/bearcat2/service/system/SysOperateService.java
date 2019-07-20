@@ -1,6 +1,7 @@
 package com.bearcat2.service.system;
 
 import com.bearcat2.entity.common.LayuiResult;
+import com.bearcat2.entity.common.PagingSupport;
 import com.bearcat2.entity.system.SysOperate;
 
 /**
@@ -17,9 +18,10 @@ public interface SysOperateService {
      * 分页查询
      *
      * @param sysOperate 系统操作对象
-     * @return 通用layui
+     * @param pagingSupport 分支支持对象
+     * @return LayuiResult - 控制层通用返回结果 {@link LayuiResult}
      */
-    LayuiResult list(SysOperate sysOperate);
+    LayuiResult pageList(SysOperate sysOperate, PagingSupport pagingSupport);
 
     /**
      * 插入系统操作数据

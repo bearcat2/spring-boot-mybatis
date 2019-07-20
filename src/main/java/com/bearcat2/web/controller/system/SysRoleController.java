@@ -2,6 +2,7 @@ package com.bearcat2.web.controller.system;
 
 import com.bearcat2.entity.common.LayuiResult;
 import com.bearcat2.entity.common.LayuiTreeNode;
+import com.bearcat2.entity.common.PagingSupport;
 import com.bearcat2.entity.system.SysRole;
 import com.bearcat2.entity.system.SysRolePrivilege;
 import com.bearcat2.service.system.SysPrivilegeService;
@@ -38,8 +39,8 @@ public class SysRoleController {
 
     @ResponseBody
     @PostMapping("/list")
-    public LayuiResult list(SysRole sysRole) {
-        return this.sysRoleService.list(sysRole);
+    public LayuiResult list(SysRole sysRole, PagingSupport pagingSupport) {
+        return this.sysRoleService.pageList(sysRole, pagingSupport);
     }
 
     @GetMapping("/edit")

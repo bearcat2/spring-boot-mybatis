@@ -1,6 +1,7 @@
 package com.bearcat2.service.system;
 
 import com.bearcat2.entity.common.LayuiResult;
+import com.bearcat2.entity.common.PagingSupport;
 import com.bearcat2.entity.system.SysUser;
 
 import java.util.List;
@@ -13,51 +14,58 @@ import java.util.List;
  * @author: zhongzhipeng
  * @version: 1.0
  */
-public interface SysUserService  {
+public interface SysUserService {
 
     /**
      * 用户登录
      *
      * @param loginName 登录名
      * @param password  密码
-     * @return
+     * @return LayuiResult 控制层通用响应对象 {@link LayuiResult}
      */
     LayuiResult login(String loginName, String password);
 
     /**
      * 分页查询
      *
-     * @param sysUser
-     * @return
+     * @param sysUser       系统用户对象
+     * @param pagingSupport 分支支持对象
+     * @return LayuiResult - 控制层通用返回结果 {@link LayuiResult}
      */
-    LayuiResult list(SysUser sysUser);
+    LayuiResult pageList(SysUser sysUser, PagingSupport pagingSupport);
 
     /**
      * 根据用户id查询对应的用户角色关系
+     *
+     * @param userId 用户id
+     * @return 改用户用户的角色id集合
      */
     List<Integer> findRoleIdsById(Integer userId);
 
     /**
      * 添加用户角色关系表
+     *
      * @param userId 用户id
      * @param roleId 角色id
-     * @return
+     * @return 影响数据库表行数
      */
     int insertUserRoleRelation(Integer userId, Integer roleId);
 
     /**
      * 修改用户角色关系表
+     *
      * @param userId 用户id
      * @param roleId 角色id
-     * @return
+     * @return 影响数据库表行数
      */
     int updateUserRoleRelationByUserId(Integer userId, Integer roleId);
 
     /**
      * 修改密码
-     * @param sysUser 系统用户对象
+     *
+     * @param sysUser     系统用户对象
      * @param newPassword 新密码
-     * @return
+     * @return LayuiResult 控制层通用响应对象 {@link LayuiResult}
      */
     LayuiResult updatePassword(SysUser sysUser, String newPassword);
 
@@ -79,18 +87,25 @@ public interface SysUserService  {
 
     /**
      * 添加用户
-     * @param sysUser
-     * @param roleId
-     * @return
+     *
+     * @param sysUser 系统用户对象
+     * @param roleId  角色id
+     * @return LayuiResult 控制层通用响应对象 {@link LayuiResult}
      */
     LayuiResult add(SysUser sysUser, Integer roleId);
 
     /**
      * 编辑用户
-     * @param sysUser
-     * @param roleId
-     * @return
+     *
+     * @param sysUser 系统用户对象
+     * @param roleId  角色id
+     * @return LayuiResult 控制层通用响应对象 {@link LayuiResult}
      */
     LayuiResult edit(SysUser sysUser, Integer roleId);
 
+    /**
+     * 获取系统所用用户集合
+     * @return List<SysUser> - 系统用户集合
+     */
+    List<SysUser> listAll();
 }

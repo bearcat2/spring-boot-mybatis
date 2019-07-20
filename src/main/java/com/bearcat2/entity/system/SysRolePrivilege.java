@@ -1,6 +1,5 @@
 package com.bearcat2.entity.system;
 
-import com.bearcat2.entity.common.CommonEntity;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -11,7 +10,7 @@ import javax.persistence.Table;
 @Data
 @Accessors(chain = true)
 @Table(name = "sys_role_privilege")
-public class SysRolePrivilege extends CommonEntity {
+public class SysRolePrivilege  {
     /**
      * 角色权限表主键id,自增
      */

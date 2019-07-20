@@ -2,6 +2,7 @@ package com.bearcat2.service.impl.system;
 
 import cn.hutool.core.util.StrUtil;
 import com.bearcat2.entity.common.LayuiResult;
+import com.bearcat2.entity.common.PagingSupport;
 import com.bearcat2.entity.system.SysOperate;
 import com.bearcat2.mapper.system.SysOperateMapper;
 import com.bearcat2.service.system.SysOperateService;
@@ -32,7 +33,7 @@ public class SysOperateServiceImpl implements SysOperateService {
     private SysOperateMapper sysOperateMapper;
 
     @Override
-    public LayuiResult list(SysOperate sysOperate) {
+    public LayuiResult pageList(SysOperate sysOperate, PagingSupport pagingSupport) {
         Example example = new Example(SysOperate.class);
         example.setOrderByClause("so_orderd");
         Example.Criteria criteria = example.createCriteria();
@@ -42,7 +43,7 @@ public class SysOperateServiceImpl implements SysOperateService {
         if (StrUtil.isNotBlank(sysOperate.getSoShowName())) {
             criteria.andLike(SysOperate.SO_SHOW_NAME, CommonUtil.buildLikeQueryParam(sysOperate.getSoShowName()));
         }
-        PageHelper.startPage(sysOperate.getPage(), sysOperate.getLimit());
+        PageHelper.startPage(pagingSupport.getPage(), pagingSupport.getLimit());
         List<SysOperate> sysOperates = this.sysOperateMapper.selectByExample(example);
         PageInfo<SysOperate> pageInfo = new PageInfo<>(sysOperates);
         return LayuiResult.success(pageInfo.getList(), pageInfo.getTotal());

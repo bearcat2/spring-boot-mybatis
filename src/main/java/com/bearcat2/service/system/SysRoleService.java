@@ -1,6 +1,7 @@
 package com.bearcat2.service.system;
 
 import com.bearcat2.entity.common.LayuiResult;
+import com.bearcat2.entity.common.PagingSupport;
 import com.bearcat2.entity.system.SysRole;
 import com.bearcat2.entity.system.SysUserRole;
 
@@ -19,15 +20,16 @@ public interface SysRoleService {
     /**
      * 分页查询
      *
-     * @param sysRole
-     * @return
+     * @param sysRole       系统角色对象
+     * @param pagingSupport 分支支持对象
+     * @return LayuiResult - 控制层通用返回结果 {@link LayuiResult}
      */
-    LayuiResult list(SysRole sysRole);
+    LayuiResult pageList(SysRole sysRole, PagingSupport pagingSupport);
 
     /**
      * 查找系统所有角色
      *
-     * @return
+     * @return 角色集合
      */
     List<SysRole> findAll();
 
@@ -35,7 +37,7 @@ public interface SysRoleService {
      * 根据用户下拥有的角色
      *
      * @param userId 用户id
-     * @return
+     * @return 角色集合
      */
     List<SysUserRole> findByUserId(Integer userId);
 

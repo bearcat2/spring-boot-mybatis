@@ -2,6 +2,7 @@ package com.bearcat2.web.controller.system;
 
 import com.bearcat2.entity.common.LayuiResult;
 import com.bearcat2.entity.common.LoginUser;
+import com.bearcat2.entity.common.PagingSupport;
 import com.bearcat2.entity.system.SysOperate;
 import com.bearcat2.service.system.SysOperateService;
 import com.bearcat2.util.CommonUtil;
@@ -37,8 +38,8 @@ public class SysOperateController {
 
     @ResponseBody
     @PostMapping("/list")
-    public LayuiResult list(SysOperate sysOperate) {
-        return this.sysOperateService.list(sysOperate);
+    public LayuiResult list(SysOperate sysOperate, PagingSupport pagingSupport) {
+        return this.sysOperateService.pageList(sysOperate,pagingSupport);
     }
 
     @GetMapping("/add")

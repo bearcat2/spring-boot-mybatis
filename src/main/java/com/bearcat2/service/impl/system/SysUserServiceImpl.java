@@ -6,6 +6,7 @@ import cn.hutool.crypto.SecureUtil;
 import com.bearcat2.entity.common.Constant;
 import com.bearcat2.entity.common.LayuiResult;
 import com.bearcat2.entity.common.LoginUser;
+import com.bearcat2.entity.common.PagingSupport;
 import com.bearcat2.entity.system.SysPrivilege;
 import com.bearcat2.entity.system.SysUser;
 import com.bearcat2.entity.system.SysUserRole;
@@ -116,7 +117,7 @@ public class SysUserServiceImpl implements SysUserService {
     }
 
     @Override
-    public LayuiResult list(SysUser sysUser) {
+    public LayuiResult pageList(SysUser sysUser, PagingSupport pagingSupport) {
         // 获取用户列表,排除超级管理员
         Example example = new Example(SysUser.class);
         Example.Criteria criteria = example.createCriteria()
@@ -128,7 +129,7 @@ public class SysUserServiceImpl implements SysUserService {
             );
         }
         example.setOrderByClause("su_create_time desc");
-        PageHelper.startPage(sysUser.getPage(), sysUser.getLimit());
+        PageHelper.startPage(pagingSupport.getPage(), pagingSupport.getLimit());
         List<SysUser> sysUsers = this.sysUserMapper.selectByExample(example);
         PageInfo<SysUser> pageInfo = new PageInfo<>(sysUsers);
         return LayuiResult.success(pageInfo.getList(), pageInfo.getTotal());
@@ -190,6 +191,11 @@ public class SysUserServiceImpl implements SysUserService {
         // 修改对应的用户角色关系表
         this.updateUserRoleRelationByUserId(sysUser.getSuId(), roleId);
         return LayuiResult.success();
+    }
+
+    @Override
+    public List<SysUser> listAll() {
+        return this.sysUserMapper.selectAll();
     }
 
     @Transactional
