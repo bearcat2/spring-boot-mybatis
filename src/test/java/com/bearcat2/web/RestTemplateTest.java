@@ -5,8 +5,11 @@ import com.bearcat2.entity.test.Demo;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
@@ -74,8 +77,44 @@ public class RestTemplateTest extends SpringBootMybatisApplicationTests {
 
     @Test
     public void testAdd() throws Exception {
+        // 传递对象,RestTemplate 内部默认会将对象序列化成 json串, 服务端接收时需用 @RequestBody 注解标记请求参数
         Demo demo = new Demo(5, "徐七");
         Boolean result = this.restTemplate.postForObject(TEST_ADDRESS_PREFIX + "add", demo, Boolean.class);
+        log.info("testAdd method 请求结果 = {}", result);
+    }
+
+    @Test
+    public void testAdd1() throws Exception {
+        // 传递Map集合,RestTemplate 内部默认会将Map集合序列化成 json串, 服务端接收时需用 @RequestBody 注解标记请求参数
+        Map<String, Object> params = new HashMap<>();
+        params.put("id", 9);
+        params.put("name", "你懂得");
+        Boolean result = this.restTemplate.postForObject(TEST_ADDRESS_PREFIX + "add", params, Boolean.class);
+        log.info("testAdd1 method 请求结果 = {}", result);
+    }
+
+    @Test
+    public void testAdd2() throws Exception {
+        // 传递 MultiValueMap 集合,RestTemplate 内部默认会将Map集合序列化成 key-value键值对
+        MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
+        params.add("id", 10);
+        params.add("name", "你懂得1");
+        Boolean result = this.restTemplate.postForObject(TEST_ADDRESS_PREFIX + "add1", params, Boolean.class);
+        log.info("testAdd2 method 请求结果 = {}", result);
+    }
+
+    @Test
+    public void testAdd3() throws Exception {
+        // 带请求头的 key - value 类型 post 请求
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("customHeader", "bearcat2");
+
+        MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
+        params.add("id", 10);
+        params.add("name", "你懂得1");
+
+        HttpEntity<MultiValueMap> httpEntity = new HttpEntity<>(params, httpHeaders);
+        Boolean result = this.restTemplate.postForObject(TEST_ADDRESS_PREFIX + "add1", httpEntity, Boolean.class);
         log.info("testAdd method 请求结果 = {}", result);
     }
 

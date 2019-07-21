@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p> Description: RestTeamplate 测试控制器 </p>
@@ -56,6 +57,15 @@ public class TestRestTemplateController {
         return true;
     }
 
+    @PostMapping("/add1")
+    public Boolean add1(Demo demo, @RequestHeader Map<String, Object> requestHeader) {
+        log.info("请求头 = {}", requestHeader);
+        log.info("原始集合元素内容 = {}", demos);
+        demos.add(demo);
+        log.info("添加元素,集合元素内容 = {}", demos);
+        return true;
+    }
+
     @PutMapping("/update")
     public void update(@RequestBody Demo demo) {
         log.info("原始集合元素内容 = {}", demos);
@@ -75,7 +85,7 @@ public class TestRestTemplateController {
                 break;
             }
         }
-        if(index != -1){
+        if (index != -1) {
             demos.remove(index);
         }
         log.info("删除元素,集合元素内容 = {}", demos);
