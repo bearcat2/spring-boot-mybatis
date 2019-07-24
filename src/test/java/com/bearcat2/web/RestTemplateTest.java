@@ -27,7 +27,7 @@ import java.util.Map;
 public class RestTemplateTest extends SpringBootMybatisApplicationTests {
 
     /** 测试地址前缀 */
-    public static final String TEST_ADDRESS_PREFIX = "http://localhost:8080/testRestTemplate/";
+    private static final String TEST_ADDRESS_PREFIX = "http://localhost:8080/testRestTemplate/";
 
     @Autowired
     private RestTemplate restTemplate;

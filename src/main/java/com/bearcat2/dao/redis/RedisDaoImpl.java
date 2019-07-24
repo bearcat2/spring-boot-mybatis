@@ -25,6 +25,7 @@ public class RedisDaoImpl implements RedisDao {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
+    @Override
     public boolean set(String key, Object value) {
         if (value == null || StrUtil.isBlank(key)) {
             return false;
@@ -38,6 +39,7 @@ public class RedisDaoImpl implements RedisDao {
         return true;
     }
 
+    @Override
     public boolean setEx(String key, Object value, int expireTime) {
         if (value == null || StrUtil.isBlank(key)) {
             return false;
@@ -51,6 +53,7 @@ public class RedisDaoImpl implements RedisDao {
         return true;
     }
 
+    @Override
     public <T> T get(String key, Class<T> returnClass) {
         if (StrUtil.isBlank(key) || returnClass == null) {
             return null;
@@ -67,6 +70,7 @@ public class RedisDaoImpl implements RedisDao {
         }
     }
 
+    @Override
     public <T> T get(String key, TypeReference<T> typeReference) {
         if (StrUtil.isBlank(key) || typeReference == null) {
             return null;

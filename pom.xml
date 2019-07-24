@@ -20,7 +20,7 @@
         <druid-version>1.1.16</druid-version>
         <mybatis-version>2.0.1</mybatis-version>
         <pagehelper-version>1.2.10</pagehelper-version>
-        <hutoo-version>4.5.7</hutoo-version>
+        <hutoo-version>4.5.18</hutoo-version>
         <fastjson-version>1.2.54</fastjson-version>
         <mapper-version>2.1.5</mapper-version>
     </properties>
