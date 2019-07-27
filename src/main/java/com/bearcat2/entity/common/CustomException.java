@@ -8,8 +8,9 @@ import lombok.Getter;
  * <p> Title: CustomException </p>
  * <p> Create Time: 2019/7/6 22:59 </p>
  *
- * @author: zhongzhipeng
- * @version: 1.0
+ * @author zhongzhipeng
+ * @see CodeMsgEnum
+ * @since 1.0
  */
 @SuppressWarnings("serial")
 public class CustomException extends RuntimeException {

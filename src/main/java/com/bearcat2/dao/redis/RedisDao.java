@@ -4,14 +4,13 @@ import com.alibaba.fastjson.TypeReference;
 
 /**
  * <p> Description: redis 数据访问对象</p>
- *
- * redis命令手册参见：https://www.redis.net.cn/order/
+ * <a href="https://www.redis.net.cn/order">redis命令手册参见</a>
  *
  * <p> Title: RedisDao </p>
  * <p> Create Time: 2019/7/4 23:30 </p>
  *
- * @author: zhongzhipeng
- * @version: 1.0
+ * @author zhongzhipeng
+ * @since 1.0
  */
 public interface RedisDao {
 
@@ -62,6 +61,7 @@ public interface RedisDao {
 
     /**
      * 删除key
+     *
      * @param key 键
      * @return 删除成功返回 true 失败返回false
      */

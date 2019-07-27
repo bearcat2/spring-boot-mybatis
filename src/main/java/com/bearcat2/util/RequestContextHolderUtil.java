@@ -11,12 +11,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- * <p> Description: 不依赖web模块的对象从当前请求中获取 servlet 相关的请求响应对象 </p>
+ * <p> Description: 不依赖web模块的对象从当前请求中获取servlet相关的请求响应对象 </p>
  * <p> Title: RequestContextHolderUtil </p>
  * <p> Create Time: 2018/12/4 9:58 </p>
  *
- * @author: zhongzhipeng
- * @version: 1.0
+ * @author zhongzhipeng
+ * @since 1.0
  */
 public class RequestContextHolderUtil {
 

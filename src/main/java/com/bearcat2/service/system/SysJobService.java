@@ -9,8 +9,8 @@ import com.bearcat2.entity.system.SysJob;
  * <p> Title: SysJobService </p>
  * <p> Create Time: 2019/7/13 22:12 </p>
  *
- * @author: zhongzhipeng
- * @version: 1.0
+ * @author zhongzhipeng
+ * @since 1.0
  */
 public interface SysJobService {
 

@@ -10,8 +10,9 @@ import org.springframework.stereotype.Component;
  * <p> Title: CustomSystemExceptionHandler </p>
  * <p> Create Time: 2019/7/6 23:00 </p>
  *
- * @author: zhongzhipeng
- * @version: 1.0
+ * @author zhongzhipeng
+ * @see CustomException
+ * @since 1.0
  */
 @Order(1)
 @Component

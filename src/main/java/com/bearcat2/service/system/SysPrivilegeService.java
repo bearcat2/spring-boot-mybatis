@@ -12,8 +12,8 @@ import java.util.List;
  * <p> Title: SysPrivilegeService </p>
  * <p> Create Time: 2019/5/11 23:07 </p>
  *
- * @author: zhongzhipeng
- * @version: 1.0
+ * @author zhongzhipeng
+ * @since 1.0
  */
 public interface SysPrivilegeService {
 
@@ -21,7 +21,7 @@ public interface SysPrivilegeService {
      * 查找用户下拥有的所有菜单
      *
      * @param userId 用户id
-     * @return
+     * @return 系统权限集合
      */
     List<SysPrivilege> findMenuByUserId(Integer userId);
 
@@ -29,23 +29,28 @@ public interface SysPrivilegeService {
      * 查找用户下拥有的所有权限
      *
      * @param userId 用户id
-     * @return
+     * @return 用户下拥有的所有权限
      */
     List<SysPrivilege> findPrivilegeByUserId(Integer userId);
 
     /**
      * 获取系统所有菜单
      *
-     * @return
+     * @return 系统所有菜单
      */
     List<SysPrivilege> findAllMenu();
 
+    /**
+     * 获取系统所有权限
+     *
+     * @return 系统所有权限
+     */
     List<SysPrivilege> findAllPrivilege();
 
     /**
      * 查找系统配置的所有权限
      *
-     * @return
+     * @return 系统配置的所有权限
      */
     HashMap<String, Integer> findAllPrivilegeMap();
 
@@ -75,7 +80,7 @@ public interface SysPrivilegeService {
      * 给当前角色分配权限
      *
      * @param sysRolePrivileges 角色权限集合
-     * @return
+     * @return LayuiResult - 控制层通用响应对象
      */
     LayuiResult allotPrivilege(List<SysRolePrivilege> sysRolePrivileges);
 
@@ -83,7 +88,7 @@ public interface SysPrivilegeService {
      * 获取按钮管理穿梭框数据
      *
      * @param menuId 菜单id
-     * @return
+     * @return AllotButtonTransfer - 前端分配按钮穿梭框数据
      */
     AllotButtonTransfer getTransferData(Integer menuId);
 
@@ -93,7 +98,7 @@ public interface SysPrivilegeService {
      * 所以判断空的条件是有且仅有一条数据且operateName为空
      *
      * @param sysPrivileges 权限对象
-     * @return
+     * @return LayuiResult - 控制层通用响应对象
      */
     LayuiResult allotButton(List<SysPrivilege> sysPrivileges);
 

@@ -26,8 +26,9 @@ import java.util.List;
  * <p>Title: SysRoleServiceImpl </p>
  * <p>Create Time: 2018/8/17 18:57 </p>
  *
- * @author: zhongzhipeng
- * @version: 1.0
+ * @author zhongzhipeng
+ * @see SysRoleService
+ * @since 1.0
  */
 @Service
 @Transactional(readOnly = true)

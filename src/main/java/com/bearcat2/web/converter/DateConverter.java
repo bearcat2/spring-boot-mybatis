@@ -13,8 +13,8 @@ import java.util.Date;
  * <p> Title: DateConverter </p>
  * <p> Create Time: 2019/6/16 15:49 </p>
  *
- * @author: zhongzhipeng
- * @version: 1.0
+ * @author zhongzhipeng
+ * @since 1.0
  */
 @Slf4j
 public class DateConverter implements Converter<String, Date> {
@@ -36,7 +36,7 @@ public class DateConverter implements Converter<String, Date> {
                 parse = DateUtil.parse(dateStr);
             } catch (Exception e1) {
                 // 向上层抛异常
-                throw new RuntimeException("【DateConverter】默认日期解析发生异常了",e1);
+                throw new RuntimeException("【DateConverter】默认日期解析发生异常了", e1);
             }
         }
         return parse.toJdkDate();

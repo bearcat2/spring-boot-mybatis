@@ -10,8 +10,8 @@ import java.util.List;
  * <p> Title: AllotButtonTransfer </p>
  * <p> Create Time: 2019/6/26 18:26 </p>
  *
- * @author: zhongzhipeng
- * @version: 1.0
+ * @author zhongzhipeng
+ * @since  1.0
  */
 @Data
 public class AllotButtonTransfer {

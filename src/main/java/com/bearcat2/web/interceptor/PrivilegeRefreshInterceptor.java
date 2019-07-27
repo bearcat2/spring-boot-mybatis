@@ -20,8 +20,9 @@ import java.util.List;
  * <p> Title: PrivilegeRefreshInterceptor </p>
  * <p> Create Time: 2019/7/5 21:48 </p>
  *
- * @author: zhongzhipeng
- * @version: 1.0
+ * @author zhongzhipeng
+ * @see org.springframework.web.servlet.HandlerInterceptor
+ * @since 1.0
  */
 @Component
 public class PrivilegeRefreshInterceptor implements HandlerInterceptor {

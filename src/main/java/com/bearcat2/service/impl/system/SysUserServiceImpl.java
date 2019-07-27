@@ -35,24 +35,28 @@ import java.util.stream.Collectors;
  * <p> Title: SysUserServiceImpl </p>
  * <p> Create Time: 2019/5/11 23:08 </p>
  *
- * @author: zhongzhipeng
- * @version: 1.0
+ * @author zhongzhipeng
+ * @see SysUserService
+ * @since 1.0
  */
 @Service
 @Transactional(readOnly = true)
 public class SysUserServiceImpl implements SysUserService {
 
     @Autowired
-    private SysUserMapper sysUserMapper;
+    private SysPrivilegeService sysPrivilegeService;
 
     @Autowired
-    private SysPrivilegeService sysPrivilegeService;
+    private SysUserMapper sysUserMapper;
 
     @Autowired
     private SysUserRoleMapper sysUserRoleMapper;
 
     @Value("${bearcat2.superUser.username}")
     private String superAdmin;
+
+    @Value("${bearcat2.superUser.password}")
+    private String superAdminPassword;
 
     @Override
     public LayuiResult login(String loginName, String password) {
@@ -84,7 +88,7 @@ public class SysUserServiceImpl implements SysUserService {
     /**
      * 处理超级用户登录
      *
-     * @return
+     * @return LayuiResult - 控制层通用响应对象
      */
     private LayuiResult handleSuperUserLogin(SysUser sysUser) {
         // 超级管理员, 注意添加用户那要做个限制,登录名不能为 admin
@@ -141,10 +145,9 @@ public class SysUserServiceImpl implements SysUserService {
         example.createCriteria()
                 .andEqualTo(SysUserRole.SUR_USER_ID, userId);
         List<SysUserRole> sysUserRoles = this.sysUserRoleMapper.selectByExample(example);
-        List<Integer> roleIds = sysUserRoles.stream()
+        return sysUserRoles.stream()
                 .map(SysUserRole::getSurRoleId)
                 .collect(Collectors.toList());
-        return roleIds;
     }
 
     @Transactional
@@ -198,6 +201,38 @@ public class SysUserServiceImpl implements SysUserService {
         return this.sysUserMapper.selectAll();
     }
 
+    @Override
+    public void insertSuperAdmin() {
+        // 1.判断数据库中是否存在超级原理员
+        Example example = new Example(SysUser.class);
+        example.createCriteria()
+                .andEqualTo(SysUser.SU_LOGIN_NAME, superAdmin);
+        List<SysUser> sysUsers = this.sysUserMapper.selectByExample(example);
+
+        // 2. 不存在插入超管信息
+        if (CollUtil.isEmpty(sysUsers)) {
+            SysUser sysUser = new SysUser();
+            sysUser.setSuLoginName(superAdmin);
+            sysUser.setSuRealName(superAdmin);
+            sysUser.setSuPassword(SecureUtil.md5(superAdminPassword));
+            sysUser.setSuCreateTime(new Date());
+            sysUser.setSuUpdateTime(new Date());
+            this.sysUserMapper.insertSelective(sysUser);
+            return;
+        }
+
+        // 3. 存在判断密码是否和配置文件中一致,一致直接返回,否则更新密码
+        SysUser sysUser = sysUsers.get(0);
+        if (sysUser.getSuPassword().equalsIgnoreCase(SecureUtil.md5(superAdminPassword))) {
+            // 密码一致,直接返回
+            return;
+        }
+
+        // 走到这程序没有返回,说明密码不一致,更新密码
+        sysUser.setSuPassword(SecureUtil.md5(superAdminPassword));
+        this.sysUserMapper.updateByPrimaryKeySelective(sysUser);
+    }
+
     @Transactional
     @Override
     public LayuiResult updatePassword(SysUser sysUser, String newPassword) {
@@ -228,7 +263,7 @@ public class SysUserServiceImpl implements SysUserService {
      * 处理模块
      *
      * @param sysPrivileges 用户拥有的权限集合
-     * @return
+     * @return 用户拥有的权限集合
      */
     private List<SysPrivilege> handleModule(List<SysPrivilege> sysPrivileges) {
         List<SysPrivilege> modules = new ArrayList<>();
@@ -247,7 +282,7 @@ public class SysUserServiceImpl implements SysUserService {
      *
      * @param sysPrivileges 用户拥有的权限集合
      * @param sysPrivilege  父权限id
-     * @return
+     * @return 模块下所有菜单
      */
     private List<SysPrivilege> fillMenu(List<SysPrivilege> sysPrivileges, SysPrivilege sysPrivilege) {
         List<SysPrivilege> childrenMenus = new ArrayList<>();

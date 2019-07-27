@@ -23,8 +23,8 @@ import javax.servlet.http.HttpSession;
  * <p>Title: SysUserController </p>
  * <p>Create Time: 2018/8/16 15:12 </p>
  *
- * @author: zhongzhipeng
- * @version: 1.0
+ * @author zhongzhipeng
+ * @since 1.0
  */
 @Controller
 @RequestMapping("/sysUser")
@@ -71,7 +71,7 @@ public class SysUserController {
     @ResponseBody
     @PostMapping("/list")
     public LayuiResult list(SysUser sysUser, PagingSupport pagingSupport) {
-        return this.sysUserService.pageList(sysUser,pagingSupport);
+        return this.sysUserService.pageList(sysUser, pagingSupport);
     }
 
     @GetMapping(value = {"/edit", "/basicInfo"})
@@ -121,9 +121,9 @@ public class SysUserController {
 
     @ResponseBody
     @PostMapping("/updatePassword")
-    public LayuiResult updatePassword(SysUser sysUser, String newPassword,HttpSession session) {
+    public LayuiResult updatePassword(SysUser sysUser, String newPassword, HttpSession session) {
         LayuiResult layuiResult = this.sysUserService.updatePassword(sysUser, newPassword);
-        if(layuiResult.getCode() == CodeMsgEnum.SUCCESS.getCode()){
+        if (layuiResult.getCode() == CodeMsgEnum.SUCCESS.getCode()) {
             // 修改密码成功移除登录标记重新登录
             session.removeAttribute(Constant.LOGIN_USER_SESSION_ATTR);
         }

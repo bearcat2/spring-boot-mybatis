@@ -12,8 +12,8 @@ import java.util.List;
  * <p> Title: LayuiTreeNode </p>
  * <p> Create Time: 2019/6/19 22:24 </p>
  *
- * @author: zhongzhipeng
- * @version: 1.0
+ * @author zhongzhipeng
+ * @since 1.0
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)

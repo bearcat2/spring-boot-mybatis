@@ -5,8 +5,8 @@ package com.bearcat2.dao.redis;
  * <p> Title: RedisNameSpace </p>
  * <p> Create Time: 2019/7/5 21:19 </p>
  *
- * @author: zhongzhipeng
- * @version: 1.0
+ * @author zhongzhipeng
+ * @since 1.0
  */
 public interface RedisNameSpace {
 

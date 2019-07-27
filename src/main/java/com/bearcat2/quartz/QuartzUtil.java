@@ -8,6 +8,14 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Method;
 
+/**
+ * <p> Description: Quqrtz工具类 </p>
+ * <p> Title: QuartzUtil </p>
+ * <p> Create Time: 2019/7/28 7:01 </p>
+ *
+ * @author zhongzhipeng
+ * @since 1.0
+ */
 @Slf4j
 public class QuartzUtil {
 

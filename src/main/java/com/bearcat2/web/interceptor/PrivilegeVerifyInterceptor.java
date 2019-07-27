@@ -23,8 +23,9 @@ import java.util.Set;
  * <p>Title: PrivilegeVerifyInterceptor </p>
  * <p>Create Time: 2018/8/16 20:07 </p>
  *
- * @author: zhongzhipeng
- * @version: 1.0
+ * @author zhongzhipeng
+ * @see org.springframework.web.servlet.HandlerInterceptor
+ * @since 1.0
  */
 @Component
 public class PrivilegeVerifyInterceptor implements HandlerInterceptor {

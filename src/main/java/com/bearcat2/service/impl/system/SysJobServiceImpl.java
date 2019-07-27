@@ -29,11 +29,13 @@ import java.util.List;
  * <p> Description: 系统任务service 接口实现类 </p>
  * <p> Title: SysJobServiceImpl </p>
  * <p> Create Time: 2019/7/13 22:13 </p>
- * 参见：https://juejin.im/entry/592e938e0ce4630057a868de
- * 在线corn表达式生成器：http://cron.qqe2.com/
+ * <a href="https://juejin.im/entry/592e938e0ce4630057a868de">例子参见</a>
+ * <a href="http://cron.qqe2.com">在线corn表达式生成器</a>
  *
- * @author: zhongzhipeng
- * @version: 1.0
+ * @author zhongzhipeng
+ * @see SysJobService
+ * @see SchedulerFactoryBean
+ * @since 1.0
  */
 @Slf4j
 @Service
@@ -258,7 +260,7 @@ public class SysJobServiceImpl implements SysJobService {
      * @param job 系统任务对象
      */
     private void verifyTargetClassAndMethodIsSuccess(SysJob job) {
-        Object obj = null;
+        Object obj;
         try {
             if (StrUtil.isNotBlank(job.getSjSpringBeanName())) {
                 obj = ApplicationContextUtil.getBean(job.getSjSpringBeanName());
@@ -274,7 +276,7 @@ public class SysJobServiceImpl implements SysJobService {
             throw new CustomException("未找到目标类");
         }
         Class clazz = obj.getClass();
-        Method method = null;
+        Method method;
         try {
             //noinspection unchecked,ConfusingArgumentToVarargsMethod
             method = clazz.getMethod(job.getSjMethodName(), null);

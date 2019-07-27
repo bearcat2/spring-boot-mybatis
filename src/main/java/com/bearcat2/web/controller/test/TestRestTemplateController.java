@@ -13,8 +13,8 @@ import java.util.Map;
  * <p> Title: TestRestTemplateController </p>
  * <p> Create Time: 2019/7/20 22:12 </p>
  *
- * @author: zhongzhipeng
- * @version: 1.0
+ * @author zhongzhipeng
+ * @since 1.0
  */
 @Slf4j
 @RestController

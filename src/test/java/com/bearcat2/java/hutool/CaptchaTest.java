@@ -20,8 +20,8 @@ import java.util.Enumeration;
  * <p> Title: CaptchaTest </p>
  * <p> Create Time: 2019/6/14 22:32 </p>
  *
- * @author: zhongzhipeng
- * @version: 1.0
+ * @author zhongzhipeng
+ * @since 1.0
  */
 @Slf4j
 public class CaptchaTest {

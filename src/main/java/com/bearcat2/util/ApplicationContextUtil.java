@@ -10,8 +10,9 @@ import org.springframework.stereotype.Component;
  * <p> Title: ApplicationContextHelper </p>
  * <p> Create Time: 2018/12/4 10:30 </p>
  *
- * @author: zhongzhipeng
- * @version: 1.0
+ * @author zhongzhipeng
+ * @see org.springframework.context.ApplicationContextAware
+ * @since 1.0
  */
 @Component
 public class ApplicationContextUtil implements ApplicationContextAware {

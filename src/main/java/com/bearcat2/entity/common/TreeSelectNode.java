@@ -10,8 +10,8 @@ import java.util.List;
  * <p> Title: TreeSelectNode </p>
  * <p> Create Time: 2019/6/17 20:18 </p>
  *
- * @author: zhongzhipeng
- * @version: 1.0
+ * @author zhongzhipeng
+ * @since 1.0
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)

@@ -29,12 +29,19 @@ import java.util.stream.Collectors;
  * <p>Title: SysPrivilegeServiceImpl </p>
  * <p>Create Time: 2018/8/16 16:20 </p>
  *
- * @author: zhongzhipeng
- * @version: 1.0
+ * @author zhongzhipeng
+ * @see SysPrivilegeService
+ * @since 1.0
  */
 @Service
 @Transactional(readOnly = true)
 public class SysPrivilegeServiceImpl implements SysPrivilegeService {
+
+    @Value("${server.servlet.session.timeout}")
+    private Integer sessionTimeout;
+
+    @Value("${bearcat2.systemName}")
+    private String systemName;
 
     @Autowired
     private SysPrivilegeMapper sysPrivilegeMapper;
@@ -46,16 +53,10 @@ public class SysPrivilegeServiceImpl implements SysPrivilegeService {
     private SysUserRoleMapper sysUserRoleMapper;
 
     @Autowired
-    private RedisDao redisDao;
-
-    @Autowired
     private SysOperateMapper sysOperateMapper;
 
-    @Value("${server.servlet.session.timeout}")
-    private Integer sessionTimeout;
-
-    @Value("${bearcat2.systemName}")
-    private String systemName;
+    @Autowired
+    private RedisDao redisDao;
 
     @Override
     public List<SysPrivilege> findMenuByUserId(Integer userId) {
@@ -170,7 +171,7 @@ public class SysPrivilegeServiceImpl implements SysPrivilegeService {
      * 获取角色下的权限,key 为 权限id,value为角色id
      *
      * @param roleId 角色id
-     * @return
+     * @return 角色拥有的权限集合
      */
     private Map<Integer, Integer> getPrivilegerByRoleId(Integer roleId) {
         Example example = new Example(SysRolePrivilege.class);
@@ -187,9 +188,9 @@ public class SysPrivilegeServiceImpl implements SysPrivilegeService {
     /**
      * 设置模块下菜单
      *
-     * @param sysPrivileges
-     * @param layuiTreeNode
-     * @param privilegers
+     * @param sysPrivileges 所有权限集合
+     * @param layuiTreeNode layui Tree 数据源
+     * @param privilegers   角色拥有的权限集合
      */
     private void setChildren(List<SysPrivilege> sysPrivileges, LayuiTreeNode layuiTreeNode,
                              Map<Integer, Integer> privilegers) {
@@ -271,11 +272,14 @@ public class SysPrivilegeServiceImpl implements SysPrivilegeService {
         List<Integer> userIds = sysUserRoles.stream()
                 .map(SysUserRole::getSurId)
                 .collect(Collectors.toList());
+
         // 将用户集合放入redis,将缓存有效期设置为session有效期,即session失效了必然会重新登录获取最新权限
         for (Integer userId : userIds) {
             this.redisDao.setEx(
                     String.format(RedisNameSpace.PRIVILEGE_REFRESH_FLAG, userId)
-                    , userId, sessionTimeout);
+                    , userId
+                    , sessionTimeout
+            );
         }
         return LayuiResult.success();
     }
@@ -432,8 +436,7 @@ public class SysPrivilegeServiceImpl implements SysPrivilegeService {
     /**
      * 添加系统权限
      *
-     * @param sysPrivilege
-     * @return
+     * @param sysPrivilege 系统权限对象
      */
     private void addSysPrivilege(SysPrivilege sysPrivilege) {
         SysPrivilege privilege = new SysPrivilege();

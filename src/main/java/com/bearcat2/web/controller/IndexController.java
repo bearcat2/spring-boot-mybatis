@@ -17,8 +17,8 @@ import javax.servlet.http.HttpSession;
  * <p> Title: IndexController </p>
  * <p> Create Time: 2019/5/12 21:21 </p>
  *
- * @author: zhongzhipeng
- * @version: 1.0
+ * @author zhongzhipeng
+ * @since 1.0
  */
 @Controller
 public class IndexController {

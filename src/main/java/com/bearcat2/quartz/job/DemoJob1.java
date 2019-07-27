@@ -7,8 +7,8 @@ import lombok.extern.slf4j.Slf4j;
  * <p> Title: DemoJob1 </p>
  * <p> Create Time: 2019/7/14 15:44 </p>
  *
- * @author: zhongzhipeng
- * @version: 1.0
+ * @author zhongzhipeng
+ * @since 1.0
  */
 @Slf4j
 public class DemoJob1 {

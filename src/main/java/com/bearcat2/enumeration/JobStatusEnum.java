@@ -8,8 +8,8 @@ import lombok.Getter;
  * <p> Title: JobStatusEnum </p>
  * <p> Create Time: 2019/7/13 21:31 </p>
  *
- * @author: zhongzhipeng
- * @version: 1.0
+ * @author zhongzhipeng
+ * @since 1.0
  */
 @Getter
 @AllArgsConstructor

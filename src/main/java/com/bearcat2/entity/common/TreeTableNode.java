@@ -7,8 +7,8 @@ import lombok.Data;
  * <p> Title: TreeTableNode </p>
  * <p> Create Time: 2019/6/16 18:58 </p>
  *
- * @author: zhongzhipeng
- * @version: 1.0
+ * @author zhongzhipeng
+ * @since 1.0
  */
 @Data
 public class TreeTableNode {
@@ -28,6 +28,6 @@ public class TreeTableNode {
     /** 序号 */
     private Integer orderd;
 
-    /** 类型 (1:模块;2:菜单)*/
+    /** 类型 (1:模块;2:菜单) */
     private Integer type;
 }

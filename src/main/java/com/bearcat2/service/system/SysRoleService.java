@@ -12,8 +12,8 @@ import java.util.List;
  * <p>Title: SysRoleService </p>
  * <p>Create Time: 2018/8/17 18:56 </p>
  *
- * @author: zhongzhipeng
- * @version: 1.0
+ * @author zhongzhipeng
+ * @since 1.0
  */
 public interface SysRoleService {
 

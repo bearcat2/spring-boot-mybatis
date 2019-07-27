@@ -14,15 +14,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.util.List;
 
 /**
- * <p> Description: springmvc 配置类 </p>
+ * <p> Description: SpringMvc 配置类 </p>
  * <p> Title: SpringmvcConfig </p>
  * <p> Create Time: 2019/5/12 19:29 </p>
  *
- * @author: zhongzhipeng
- * @version: 1.0
+ * @author zhongzhipeng
+ * @since 1.0
  */
 @Configuration
-public class SpringmvcConfig implements WebMvcConfigurer {
+public class SpringMvcConfig implements WebMvcConfigurer {
 
     @Autowired
     private LoginInterceptor loginInterceptor;

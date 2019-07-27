@@ -105,7 +105,13 @@ public interface SysUserService {
 
     /**
      * 获取系统所用用户集合
+     *
      * @return List<SysUser> - 系统用户集合
      */
     List<SysUser> listAll();
+
+    /**
+     * 插入超级管理员
+     */
+    void insertSuperAdmin();
 }

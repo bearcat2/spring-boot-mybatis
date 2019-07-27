@@ -8,8 +8,8 @@ import lombok.Setter;
  * <p> Title: PagingSupport </p>
  * <p> Create Time: 2019/7/20 22:31 </p>
  *
- * @author: zhongzhipeng
- * @version: 1.0
+ * @author zhongzhipeng
+ * @since 1.0
  */
 @Getter
 @Setter

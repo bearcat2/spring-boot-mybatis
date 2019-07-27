@@ -5,8 +5,8 @@ package com.bearcat2.entity.common;
  * <p> Title: Constant </p>
  * <p> Create Time: 2019/6/14 22:49 </p>
  *
- * @author: zhongzhipeng
- * @version: 1.0
+ * @author zhongzhipeng
+ * @since 1.0
  */
 public class Constant {
 

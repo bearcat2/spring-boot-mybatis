@@ -19,8 +19,8 @@ import java.util.List;
  * <p>Title: SysRoleController </p>
  * <p>Create Time: 2018/8/17 19:06 </p>
  *
- * @author: zhongzhipeng
- * @version: 1.0
+ * @author zhongzhipeng
+ * @since 1.0
  */
 @Controller
 @RequestMapping("/sysRole")

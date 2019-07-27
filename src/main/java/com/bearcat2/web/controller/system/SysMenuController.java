@@ -18,8 +18,8 @@ import java.util.List;
  * <p>Title: SysPrivilegeController </p>
  * <p>Create Time: 2018/8/17 19:05 </p>
  *
- * @author: zhongzhipeng
- * @version: 1.0
+ * @author zhongzhipeng
+ * @since 1.0
  */
 @Controller
 @RequestMapping("/sysMenu")

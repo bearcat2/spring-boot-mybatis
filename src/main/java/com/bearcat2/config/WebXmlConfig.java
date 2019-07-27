@@ -9,12 +9,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * <p> Description: 模拟web项目中的 web.xml 文件,配置系统中所需的 listener , filter,servlet等组件</p>
+ * <p> Description: 模拟web项目中的web.xml文件,配置系统中所需的listener,filter,servlet等组件</p>
  * <p> Title: WebXmlConfig </p>
  * <p> Create Time: 2019/7/21 13:14 </p>
  *
- * @author: zhongzhipeng
- * @version: 1.0
+ * @author zhongzhipeng
+ * @since 1.0
  */
 @Configuration
 public class WebXmlConfig {

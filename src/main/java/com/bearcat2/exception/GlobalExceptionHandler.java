@@ -18,8 +18,9 @@ import java.util.List;
  * <p> Title: GlobalExceptionHandler </p>
  * <p> Create Time: 2019/7/6 22:41 </p>
  *
- * @author: zhongzhipeng
- * @version: 1.0
+ * @author zhongzhipeng
+ * @see SystemExceptionHandler
+ * @since 1.0
  */
 @Slf4j
 @ControllerAdvice
@@ -59,8 +60,8 @@ public class GlobalExceptionHandler {
     /**
      * 记录错误日志到文件中
      *
-     * @param request        请求对象
-     * @param ex             异常对象
+     * @param request     请求对象
+     * @param ex          异常对象
      * @param layuiResult 通用响应结果
      */
     private void saveLogToFile(HttpServletRequest request, Exception ex, HandlerMethod handlerMethod, LayuiResult layuiResult) {

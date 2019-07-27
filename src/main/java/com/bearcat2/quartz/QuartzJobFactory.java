@@ -10,8 +10,10 @@ import org.quartz.JobExecutionException;
  * <p> Title: QuartzJobFactory </p>
  * <p> Create Time: 2019/7/13 21:40 </p>
  *
- * @author: zhongzhipeng
- * @version: 1.0
+ * @author zhongzhipeng
+ * @see org.quartz.Job
+ * @see QuartzUtil
+ * @since 1.0
  */
 public class QuartzJobFactory implements Job {
 

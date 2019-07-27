@@ -16,8 +16,8 @@ import java.util.*;
  * <p> Title: CommonUtil </p>
  * <p> Create Time: 2019/5/11 22:43 </p>
  *
- * @author: zhongzhipeng
- * @version: 1.0
+ * @author zhongzhipeng
+ * @since 1.0
  */
 public class CommonUtil {
 

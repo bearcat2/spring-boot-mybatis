@@ -9,8 +9,9 @@ import lombok.Getter;
  * <p> Title: LayuiResult </p>
  * <p> Create Time: 2019/5/11 22:02 </p>
  *
- * @author: zhongzhipeng
- * @version: 1.0
+ * @author zhongzhipeng
+ * @see CodeMsgEnum
+ * @since 1.0
  */
 @Getter
 // jackson 序列化忽略掉值为 null 的属性

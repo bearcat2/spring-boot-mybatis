@@ -13,8 +13,9 @@ import javax.servlet.http.HttpServletResponse;
  * <p>Title: LoginInterceptor </p>
  * <p>Create Time: 2018/8/16 15:36 </p>
  *
- * @author: zhongzhipeng
- * @version: 1.0
+ * @author zhongzhipeng
+ * @see org.springframework.web.servlet.HandlerInterceptor
+ * @since 1.0
  */
 @Component
 public class LoginInterceptor implements HandlerInterceptor {

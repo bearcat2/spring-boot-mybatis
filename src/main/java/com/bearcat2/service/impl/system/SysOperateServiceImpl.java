@@ -22,8 +22,9 @@ import java.util.List;
  * <p> Title: SysOperateServiceImpl </p>
  * <p> Create Time: 2019/6/26 18:23 </p>
  *
- * @author: zhongzhipeng
- * @version: 1.0
+ * @author zhongzhipeng
+ * @see SysOperateService
+ * @since 1.0
  */
 @Service
 @Transactional(readOnly = true)

@@ -9,15 +9,15 @@ import com.bearcat2.entity.system.SysOperate;
  * <p> Title: SysOperateService </p>
  * <p> Create Time: 2019/6/26 18:20 </p>
  *
- * @author: zhongzhipeng
- * @version: 1.0
+ * @author zhongzhipeng
+ * @since 1.0
  */
 public interface SysOperateService {
 
     /**
      * 分页查询
      *
-     * @param sysOperate 系统操作对象
+     * @param sysOperate    系统操作对象
      * @param pagingSupport 分支支持对象
      * @return LayuiResult - 控制层通用返回结果 {@link LayuiResult}
      */

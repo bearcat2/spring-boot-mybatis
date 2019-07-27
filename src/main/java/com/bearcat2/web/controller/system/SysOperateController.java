@@ -21,8 +21,8 @@ import javax.servlet.http.HttpSession;
  * <p> Title: SysOperateController </p>
  * <p> Create Time: 2019/6/26 18:31 </p>
  *
- * @author: zhongzhipeng
- * @version: 1.0
+ * @author zhongzhipeng
+ * @since 1.0
  */
 @Controller
 @RequestMapping("/sysOperate")
@@ -39,7 +39,7 @@ public class SysOperateController {
     @ResponseBody
     @PostMapping("/list")
     public LayuiResult list(SysOperate sysOperate, PagingSupport pagingSupport) {
-        return this.sysOperateService.pageList(sysOperate,pagingSupport);
+        return this.sysOperateService.pageList(sysOperate, pagingSupport);
     }
 
     @GetMapping("/add")

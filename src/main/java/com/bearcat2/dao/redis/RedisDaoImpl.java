@@ -15,8 +15,8 @@ import java.util.concurrent.TimeUnit;
  * <p> Title: RedisDaoImpl </p>
  * <p> Create Time: 2019/7/4 23:32 </p>
  *
- * @author: zhongzhipeng
- * @version: 1.0
+ * @author zhongzhipeng
+ * @since 1.0
  */
 @Slf4j
 @Repository

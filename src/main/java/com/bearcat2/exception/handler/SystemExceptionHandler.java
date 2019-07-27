@@ -9,8 +9,8 @@ import com.bearcat2.entity.common.LayuiResult;
  * <p> Title: SystemExceptionHandler </p>
  * <p> Create Time: 2019/7/6 22:49 </p>
  *
- * @author: zhongzhipeng
- * @version: 1.0
+ * @author zhongzhipeng
+ * @since 1.0
  */
 public interface SystemExceptionHandler {
     /**

@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
  * <p> Title: UnknowSystemExceptionHandler </p>
  * <p> Create Time: 2019/7/6 23:05 </p>
  *
- * @author: zhongzhipeng
- * @version: 1.0
+ * @author zhongzhipeng
+ * @since 1.0
  */
 @Order(Integer.MAX_VALUE)
 @Component
