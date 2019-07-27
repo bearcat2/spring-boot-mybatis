@@ -2,6 +2,7 @@ package com.bearcat2.exception.handler;
 
 import com.bearcat2.entity.common.CustomException;
 import com.bearcat2.entity.common.LayuiResult;
+import com.bearcat2.enumeration.CodeMsgEnum;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -27,6 +28,11 @@ public class CustomSystemExceptionHandler implements SystemExceptionHandler {
     public LayuiResult handleException(Exception ex) {
         // 自定义异常目前只返回错误码及对应提示消息,后续可自行扩展
         CustomException customException = (CustomException) ex;
-        return LayuiResult.error(customException.getCodeMsgEnum());
+        CodeMsgEnum codeMsgEnum = customException.getCodeMsgEnum();
+        if (codeMsgEnum == null) {
+            codeMsgEnum = CodeMsgEnum.CUSTOM_EXCEPTION;
+            codeMsgEnum.setMsg(ex.getMessage());
+        }
+        return LayuiResult.error(codeMsgEnum);
     }
 }
