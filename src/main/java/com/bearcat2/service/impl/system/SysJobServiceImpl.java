@@ -113,11 +113,11 @@ public class SysJobServiceImpl implements SysJobService {
             return 0;
         }
 
-        // 3. 根据不同的任务状态处理任务
-        this.handleJobByStatus(jobStatusEnum, sysJob);
-
-        // 4. 修改数据库对应的状态
+        // 3. 修改数据库对应的状态
         sysJob.setSjStatus(status);
+
+        // 4. 根据不同的任务状态处理任务
+        this.handleJobByStatus(jobStatusEnum, sysJob);
         return this.update(sysJob);
     }
 
@@ -191,7 +191,7 @@ public class SysJobServiceImpl implements SysJobService {
     private void addQuartzJob(SysJob sysJob) {
         if (sysJob.getSjStatus().equals(JobStatusEnum.STOP_STATUS.getStatus())) {
             // 如果停车的任务为
-            log.info("任务状态是停车状态,添加失败,系统任务对象属性为 = {}", sysJob);
+            log.info("任务状态是停止状态,添加失败,系统任务对象属性为 = {}", sysJob);
             return;
         }
         verifyTargetClassAndMethodIsSuccess(sysJob);

@@ -38,7 +38,7 @@ public class CommonUtil {
      * @return set 集合
      */
     public static <T> Set<T> listToSet(List<T> dataList) {
-        return new HashSet<>(dataList);
+        return new LinkedHashSet<>(dataList);
     }
 
     /**

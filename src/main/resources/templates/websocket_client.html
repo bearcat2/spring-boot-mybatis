@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>websocket 客户端</title>
+</head>
+
+<link rel="stylesheet" href="../static/libs/layui/css/layui.css" th:href="@{/libs/layui/css/layui.css}">
+<body>
+
+<div>
+    <div>
+        <button id="connect" class="layui-btn layui-btn-sm">建立连接</button>
+        <button id="disconnect" disabled="disabled" class="layui-btn layui-btn-sm layui-btn-danger">断开连接</button>
+    </div>
+
+    <div id="conversationDiv" style="margin-top: 30px;">
+        <div class="layui-inline">
+            <div class="layui-input-inline" style="width: 300px;">
+                <input type="text" id="content" class="layui-input"/>
+            </div>
+            <button id="sendMessage" class="layui-btn  layui-btn-warm">发送消息</button>
+        </div>
+        <div id="response">
+
+        </div>
+    </div>
+</div>
+
+<script src="../static/libs/layui/layui.js" th:src="@{/libs/layui/layui.js}"></script>
+<script src="../static/js/sockjs.min.js" th:src="@{/js/sockjs.min.js}"></script>
+<script src="../static/js/stomp.min.js" th:src="@{/js/stomp.min.js}"></script>
+
+<script type="text/javascript">
+    layui.use(['jquery', 'layer'], function () {
+        var $ = layui.jquery,
+            layer = layui.layer;
+        var stompClient = null;
+
+        // 控制元素的可见性
+        function setConnected(connected) {
+            document.getElementById("connect").disabled = connected;
+            document.getElementById("disconnect").disabled = !connected;
+            document.getElementById("conversationDiv").style.visibility = connected ? 'visible' : 'hidden';
+            $("#response").html();
+        }
+
+        // 建立连接
+        function connect() {
+            var socket = new SockJS('http://localhost:8080/stomp');
+            stompClient = Stomp.over(socket);
+            stompClient.connect({}, function (frame) {
+                setConnected(true);
+                console.log('Connected:' + frame);
+
+                // 订阅频道
+                stompClient.subscribe('/topic/getServerResponse', function (response) {
+                    // console.log(response);
+                    // console.log(response.body);
+                    showResponseMessage(response.body);
+                });
+            });
+        }
+
+        // 断开链接
+        function disconnect() {
+            if (stompClient != null) {
+                stompClient.disconnect();
+            }
+            setConnected(false);
+            console.log('Disconnected');
+        }
+
+        // 点击开启连接
+        $('#connect').click(function () {
+            connect();
+        });
+
+        // 点击关闭连接
+        $('#disconnect').click(function () {
+            disconnect();
+        });
+
+        // 点击发送消息
+        $('#sendMessage').click(function () {
+            var content = $('#content').val();
+            if (content === '') {
+                layer.msg('发送内容不能为空');
+            }
+
+            stompClient.send("/receivedClientMessage", {}, content);
+        });
+
+        // 显示服务端响应消息
+        function showResponseMessage(message) {
+            var responseMessage = '<p>' + message + '</p>';
+            $("#response").append(responseMessage);
+        }
+    });
+</script>
+
+</body>
+</html>
