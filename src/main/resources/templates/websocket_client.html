@@ -11,7 +11,7 @@
 <div>
     <div>
         <button id="connect" class="layui-btn layui-btn-sm">建立连接</button>
-        <button id="disconnect" disabled="disabled" class="layui-btn layui-btn-sm layui-btn-danger">断开连接</button>
+        <button id="disconnect" class="layui-btn layui-btn-sm layui-btn-danger">断开连接</button>
     </div>
 
     <div id="conversationDiv" style="margin-top: 30px;">
@@ -20,9 +20,13 @@
                 <input type="text" id="content" class="layui-input"/>
             </div>
             <button id="sendMessage" class="layui-btn  layui-btn-warm">发送消息</button>
+            <button id="cleanMessage" class="layui-btn  layui-btn-danger">清空消息区</button>
         </div>
-        <div id="response">
 
+        <div style="margin-top: 20px;">
+            <h2>消息区</h2>
+            <hr>
+            <div id="response"></div>
         </div>
     </div>
 </div>
@@ -36,22 +40,15 @@
         var $ = layui.jquery,
             layer = layui.layer;
         var stompClient = null;
-
-        // 控制元素的可见性
-        function setConnected(connected) {
-            document.getElementById("connect").disabled = connected;
-            document.getElementById("disconnect").disabled = !connected;
-            document.getElementById("conversationDiv").style.visibility = connected ? 'visible' : 'hidden';
-            $("#response").html();
-        }
+        var isConnected = false;
 
         // 建立连接
         function connect() {
             var socket = new SockJS('http://localhost:8080/stomp');
             stompClient = Stomp.over(socket);
             stompClient.connect({}, function (frame) {
-                setConnected(true);
                 console.log('Connected:' + frame);
+                isConnected = true;
 
                 // 订阅频道
                 stompClient.subscribe('/topic/getServerResponse', function (response) {
@@ -65,9 +62,9 @@
         // 断开链接
         function disconnect() {
             if (stompClient != null) {
+                isConnected = false;
                 stompClient.disconnect();
             }
-            setConnected(false);
             console.log('Disconnected');
         }
 
@@ -83,17 +80,26 @@
 
         // 点击发送消息
         $('#sendMessage').click(function () {
+            if (!isConnected) {
+                layer.msg('请先建立连接');
+                return;
+            }
             var content = $('#content').val();
             if (content === '') {
                 layer.msg('发送内容不能为空');
+                return;
             }
-
             stompClient.send("/receivedClientMessage", {}, content);
+        });
+
+        // 清空消息区
+        $('#cleanMessage').click(function () {
+            $("#response").html('');
         });
 
         // 显示服务端响应消息
         function showResponseMessage(message) {
-            var responseMessage = '<p>' + message + '</p>';
+            var responseMessage = '<p style="margin-top: 10px;">' + message + '</p>';
             $("#response").append(responseMessage);
         }
     });

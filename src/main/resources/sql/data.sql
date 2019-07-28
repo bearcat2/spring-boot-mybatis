@@ -28,7 +28,8 @@ insert  into `sys_data_dictionary`(`sdr_id`,`sdr_name`,`sdr_value`,`sdr_parent_i
 /*Data for the table `sys_job` */
 
 insert  into `sys_job`(`sj_id`,`sj_name`,`sj_group`,`sj_status`,`sj_cron_expression`,`sj_description`,`sj_bean_class`,`sj_spring_bean_name`,`sj_method_name`,`sj_create_time`,`sj_update_time`) values 
-(1,'demo','systemJob',2,'0/5 * * * * ?','run',NULL,'demoJob','run','2019-07-14 22:38:11','2019-07-15 00:35:35');
+(1,'demo','systemJob',1,'0/5 * * * * ?','run',NULL,'demoJob','run','2019-07-14 22:38:11','2019-07-28 15:33:23'),
+(2,'demo1','systemJob',1,'0/8 * * * * ?','通过调用类生成调度任务','com.bearcat2.quartz.job.DemoJob1',NULL,'run','2019-07-20 22:35:30','2019-07-28 15:33:24');
 
 /*Data for the table `sys_operate` */
 
@@ -43,27 +44,29 @@ insert  into `sys_operate`(`so_id`,`so_name`,`so_show_name`,`so_orderd`,`so_crea
 /*Data for the table `sys_privilege` */
 
 insert  into `sys_privilege`(`sp_id`,`sp_name`,`sp_uri`,`sp_type`,`sp_operate_name`,`sp_parent_id`,`sp_orderd`,`sp_create_time`,`sp_update_time`) values 
-(1,'用户管理','/sysUser/pageList',2,NULL,6,1,'2018-08-16 15:56:34','2019-06-16 22:16:14'),
+(1,'用户管理','/sysUser/list',2,NULL,6,1,'2018-08-16 15:56:34','2019-06-16 22:16:14'),
 (6,'系统管理','',1,NULL,0,6,'2018-08-17 18:33:01','2019-06-16 22:18:48'),
 (8,'新增','/sysRole/add',3,'add',11,NULL,'2018-08-17 19:21:07','2018-08-17 19:21:16'),
 (9,'修改','/sysRole/edit',3,'edit',11,NULL,'2018-08-17 19:21:09','2018-08-17 19:21:14'),
 (10,'删除','/sysRole/delete',3,'delete',11,NULL,'2018-08-17 19:21:10','2018-08-17 19:21:18'),
-(11,'角色管理','/sysRole/pageList',2,NULL,6,2,'2018-08-17 19:21:32','2018-08-17 19:21:20'),
-(12,'菜单管理','/sysMenu/pageList',2,NULL,6,3,NULL,'2019-07-14 16:40:24'),
+(11,'角色管理','/sysRole/list',2,NULL,6,2,'2018-08-17 19:21:32','2018-08-17 19:21:20'),
+(12,'菜单管理','/sysMenu/list',2,NULL,6,3,NULL,'2019-07-14 16:40:24'),
 (14,'新增','/sysMenu/add',3,'add',12,NULL,'2018-08-17 19:21:38','2018-08-17 19:21:28'),
 (15,'修改','/sysMenu/edit',3,'edit',12,NULL,'2018-08-17 19:21:40','2018-08-17 19:21:30'),
 (16,'删除','/sysMenu/delete',3,'delete',12,NULL,'2018-08-17 19:21:42','2018-08-17 19:21:44'),
 (18,'分配权限','/sysMenu/allotPrivilege',3,'allotPrivilege',11,NULL,'2018-08-17 21:32:52','2018-08-17 21:32:54'),
-(20,'按钮管理','/sysOperate/pageList',2,NULL,6,4,'2019-06-26 15:44:52','2019-06-26 17:01:12'),
+(20,'按钮管理','/sysOperate/list',2,NULL,6,4,'2019-06-26 15:44:52','2019-06-26 17:01:12'),
 (46,'编辑','/sysUser/edit',3,'edit',1,NULL,'2019-07-01 23:09:29','2019-07-01 23:09:29'),
 (94,'查看详情','/sysUser/detail',3,'detail',1,NULL,'2019-07-01 23:54:09','2019-07-01 23:54:09'),
 (96,'删除','/sysUser/delete',3,'delete',1,NULL,'2019-07-01 23:55:26','2019-07-01 23:55:26'),
 (97,'新增','/sysUser/add',3,'add',1,NULL,'2019-07-13 17:04:54','2019-07-13 17:04:54'),
-(98,'任务管理','/sysJob/pageList',2,NULL,6,5,NULL,'2019-07-14 16:41:19'),
+(98,'任务管理','/sysJob/list',2,NULL,6,5,NULL,'2019-07-14 16:41:19'),
 (99,'新增','/sysOperate/add',3,'add',20,NULL,'2019-07-13 17:13:25','2019-07-13 17:13:25'),
 (100,'编辑','/sysOperate/edit',3,'edit',20,NULL,'2019-07-13 17:13:25','2019-07-13 17:13:25'),
 (101,'删除','/sysOperate/delete',3,'delete',20,NULL,'2019-07-13 17:13:25','2019-07-13 17:13:25'),
-(102,'分配按钮','/sysMenu/allotButton',3,'allotButton',12,NULL,'2019-07-13 17:17:07','2019-07-13 17:17:07');
+(102,'分配按钮','/sysMenu/allotButton',3,'allotButton',12,NULL,'2019-07-13 17:17:07','2019-07-13 17:17:07'),
+(103,'测试模块','',1,NULL,0,10,NULL,'2019-07-28 18:03:04'),
+(104,'websocket测试','/testWebSocket/index',2,NULL,103,1,'2019-07-28 17:48:24','2019-07-28 17:48:24');
 
 /*Data for the table `sys_role` */
 
@@ -120,7 +123,6 @@ insert  into `sys_user`(`su_id`,`su_login_name`,`su_real_name`,`su_password`,`su
 (4,'zzp','zzp','e10adc3949ba59abbe56e057f20f883e','2018-08-17 20:15:41','2018-08-17 20:15:41'),
 (5,'wangwu','王五','123456','2019-05-06 22:44:37','2019-05-06 22:44:37'),
 (20,'2','2','c81e728d9d4c2f636f067f89cc14862c','2019-07-06 23:43:36','2019-07-06 23:43:36'),
-(24,'e','e','e1671797c52e15f763380b45e841ec32','2019-07-06 23:53:56','2019-07-06 23:53:56'),
 (26,'admin','admin','e10adc3949ba59abbe56e057f20f883e','2019-07-07 22:11:43','2019-07-07 22:11:43');
 
 /*Data for the table `sys_user_role` */

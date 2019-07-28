@@ -43,7 +43,7 @@ CREATE TABLE `sys_job` (
   `sj_create_time` datetime NOT NULL COMMENT '任务创建时间',
   `sj_update_time` datetime DEFAULT NULL COMMENT '任务修改时间',
   PRIMARY KEY (`sj_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='系统任务表';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='系统任务表';
 
 /*Table structure for table `sys_operate` */
 
@@ -76,7 +76,7 @@ CREATE TABLE `sys_privilege` (
   `sp_create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `sp_update_time` datetime DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`sp_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=103 DEFAULT CHARSET=utf8 COMMENT='系统权限表';
+) ENGINE=InnoDB AUTO_INCREMENT=105 DEFAULT CHARSET=utf8 COMMENT='系统权限表';
 
 /*Table structure for table `sys_role` */
 
